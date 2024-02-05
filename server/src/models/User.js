@@ -7,7 +7,6 @@ const UserSchema = new mongoose.Schema(
       require: true,
       min: 3,
       max: 20,
-      unique: true,
     },
     phonenumber: {
       type: String,
@@ -22,11 +21,11 @@ const UserSchema = new mongoose.Schema(
     },
     avatarPicture: {
       type: String,
-      default: "",
+      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQXtLutHYPumK-y3M4mrBbupa3O3foGz0WcMc-oMu80A&s",
     },
-    backgroundPicure: {
+    backgroundPicture: {
       type: String,
-      default: "",
+      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1dKSyQWsTU7VPPyYFifkT_L7N7VCjbO8aIA&usqp=CAU",
     },
     gender: {
       type: Number,

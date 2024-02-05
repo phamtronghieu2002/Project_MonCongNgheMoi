@@ -15,3 +15,20 @@ export const handleRegister = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+export const handleLogin = async (req, res) => {
+  const { phonenumber,password} = req.body;
+  if (!phonenumber|| !password) {
+    return res.status(400).json({ message: "missing params" });
+  }
+  const response = await authServices.login({
+
+    phonenumber,
+    password,
+    res
+  });
+  if (response) {
+    return res.status(200).json(response);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+};
