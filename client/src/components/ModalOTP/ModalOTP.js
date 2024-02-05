@@ -2,13 +2,14 @@ import './ModalOTP.scss';
 import { useLang } from '../../hooks';
 import { useState } from 'react';
 import OtpInput from 'react-otp-input';
+import clsx from 'clsx';
 
-export default function ModalOTP({ onClose ,onConfirm}) {
+export default function ModalOTP({ onClose, onConfirm }) {
     const [otp, setOtp] = useState('');
     const { t } = useLang();
     return (
         <div id="overlay">
-            <div className="modal" tabindex="-1" style={{ display: 'block' }}>
+            <div className="modal" style={{ display: 'block' }}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -36,9 +37,13 @@ export default function ModalOTP({ onClose ,onConfirm}) {
                             >
                                 {t('Login.modal.button.cancel')}
                             </button>
-                            <button 
-                            onClick={()=>{onConfirm(otp)}}
-                            type="button" className="btn btn-primary">
+                            <button
+                                onClick={() => {
+                                    onConfirm(otp);
+                                }}
+                                type="button"
+                                className={clsx('btn btn-primary', otp.length < 6 ? 'disabled' : '')}
+                            >
                                 {t('Login.modal.button.confirm')}
                             </button>
                         </div>
