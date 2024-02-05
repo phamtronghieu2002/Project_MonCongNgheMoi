@@ -1,4 +1,4 @@
-import { InitApiRoute } from "./routes/web";
+import { InitApiRoute } from "./routes";
 require("dotenv").config();
 import express from "express";
 import bodyParser from "body-parser";

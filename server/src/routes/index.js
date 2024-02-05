@@ -1,7 +1,6 @@
 import express from "express";
-
-const router = express.Router();
-
+import userRoute from "..//routes/user"
+import authRoute from "..//routes/auth"
 const InitApiRoute = (app) => {
   app.use(function (req, res, next) {
     res.header(
@@ -11,12 +10,10 @@ const InitApiRoute = (app) => {
     next();
   });
 
-router.get("/user",(req,res)=>{
-  console.log("loy vo");
-  return res.status(200).json("ok!")
-})
+  
 
-  app.use("/api/v1", router);
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/auth", authRoute);
 };
 
 export { InitApiRoute };
