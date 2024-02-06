@@ -3,7 +3,7 @@ import './style.scss';
 import { useLang } from '../../../hooks';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { useState } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import PhoneInput from 'react-phone-input-2';
 import clsx from 'clsx';
 import ModalOTP from '../../../components/ModalOTP/ModalOTP';
@@ -91,7 +91,6 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
                 <span> {t('Login.button.send_otp')}</span>
                 {loading && <span className="loader"></span>}
             </div>
-            <Toaster toastOptions={{ duration: 4000 }} />
             <div id="recaptcha-container"></div>
             {isOpenModalOTP && <ModalOTP onClose={handleOpenModal} onConfirm={onOTPVerify} />}
         </div>

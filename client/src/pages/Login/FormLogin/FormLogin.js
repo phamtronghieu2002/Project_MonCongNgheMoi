@@ -79,7 +79,6 @@ export default function FormLogin({}) {
                     {t('Login.button.forgot_password')}{' '}
                 </a>
             </div>
-            <Toaster toastOptions={{ duration: 4000 }} />
         </div>
     );
 }

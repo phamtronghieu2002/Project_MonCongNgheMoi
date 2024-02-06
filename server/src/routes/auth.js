@@ -9,6 +9,6 @@ router.post("/checkPhoneExit", authControler.handleCheckEixtsPhone);
 
 router.get("/profile", veryfyUser,authControler.handeleGetProfile);
 router.post("/refresh_token", authControler.handleFreshToken);
-
+router.post("/logout", authControler.handleLogout);
 
 export default router;

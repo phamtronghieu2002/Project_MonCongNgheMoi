@@ -35,8 +35,8 @@ function SettingPopper() {
             Icon: <i className="fa-solid fa-earth-americas"></i>,
             callback: () => {},
             subMenu: [
-                { title: 'tiếng việt', Icon: <VI classNameName="flag_language" />, callback: () => {handleChangeLanguage(configs.i18n.default)} },
-                { title: 'tiếng anh', Icon: <US classNameName="flag_language" />, callback: () => {handleChangeLanguage(configs.i18n.supportedLangs.en)} },
+                { title: 'tiếng việt', Icon: <VI className="flag_language" />, callback: () => {handleChangeLanguage(configs.i18n.default)} },
+                { title: 'tiếng anh', Icon: <US className="flag_language" />, callback: () => {handleChangeLanguage(configs.i18n.supportedLangs.en)} },
             ],
         },
     ];
@@ -47,11 +47,11 @@ function SettingPopper() {
             {header_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />
             ))}
-            <div classNameName="zmenu-separator"></div>
+            <div className="zmenu-separator"></div>
             {body_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />
             ))}
-            <div classNameName="zmenu-separator"></div>
+            <div className="zmenu-separator"></div>
             {foot_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />
             ))}

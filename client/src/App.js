@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PrivateRoutes, PublicRoutes } from './routes';
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './providers/Auth/AuthProvider';
+import { Toaster } from 'react-hot-toast';
 function App() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     return (
@@ -21,6 +22,7 @@ function App() {
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>
+            <Toaster duration={4000} />
         </div>
     );
 }
