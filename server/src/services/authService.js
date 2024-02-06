@@ -1,6 +1,9 @@
 import UserModel from "../models/User";
+import dotenv from "dotenv";
 import { hashPassword, comparePassword } from "..//utils/crypto";
-import { create_token, create_fresh_token } from "../utils/jwt";
+import { create_access_token, create_fresh_token } from "../utils/jwt";
+dotenv.config();
+import jwt from "jsonwebtoken";
 export const register = async ({ username, password, phonenumber, res }) => {
   try {
     const user = await UserModel.findOne({ phonenumber });
@@ -30,10 +33,8 @@ export const register = async ({ username, password, phonenumber, res }) => {
 
 export const login = async ({ phonenumber, password, res }) => {
   try {
- 
+    const user = await UserModel.findOne({ phonenumber });
 
-    const user = await UserModel.findOne({ phonenumber })
-console.log("user>>>>>>>>>>>>>>>>>>",user)
     if (!user) {
       return {
         errCode: 1,
@@ -55,16 +56,16 @@ console.log("user>>>>>>>>>>>>>>>>>>",user)
       username: user.username,
       backgroundPicture: user.backgroundPicture,
     };
-    const access_token = create_token(payload, "1h");
-    const fresh_token = create_fresh_token(payload, 258973);
+    const access_token = create_access_token(payload, "1m");
+    const fresh_token = create_fresh_token(payload, "3h");
 
     res
       .cookie("accessToken", access_token, {
-        expires: new Date(new Date().getTime() + 30 * 1000),
+        expires: new Date(new Date().getTime() + 31557600000),
         sameSite: "strict",
         httpOnly: true,
       })
-      .cookie("refreshToken", fresh_token, {
+      .cookie("freshToken", fresh_token, {
         expires: new Date(new Date().getTime() + 31557600000),
         sameSite: "strict",
         httpOnly: true,
@@ -76,7 +77,7 @@ console.log("user>>>>>>>>>>>>>>>>>>",user)
 
     const {
       password: hashedPassword,
-      phonenumber:phone,
+      phonenumber: phone,
       gender,
       birth,
       friends,
@@ -84,6 +85,8 @@ console.log("user>>>>>>>>>>>>>>>>>>",user)
       freshToken,
       createdAt,
       updatedAt,
+      _v,
+      keywords,
       ...rest
     } = response_user;
     console.log("user:>>>>", response_user);
@@ -116,5 +119,46 @@ export const checkPhoneExist = async ({ phonenumber }) => {
     };
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const createFreshToken = async (freshToken, res, req) => {
+ 
+  try {
+    const user = await UserModel.findOne({ freshToken });
+    if (user) {
+      const decoded_freshToken = jwt.verify(
+        freshToken,
+        process.env.FRESH_TOKEN_SECRET
+      );
+
+      const expiresIn = decoded_freshToken.exp - Math.floor(Date.now() / 1000);
+
+      delete decoded_freshToken.exp;
+      delete decoded_freshToken.iat;
+      const new_fresh_token = create_fresh_token(decoded_freshToken, expiresIn);
+      console.log("new fresh token>>>", new_fresh_token);
+      const new_access_token = create_access_token(decoded_freshToken, "1m");
+      console.log("new_access_token>>>", new_access_token);
+      res
+        .cookie("accessToken", new_access_token, {
+          expires: new Date(new Date().getTime() + 31557600000),
+          sameSite: "strict",
+          httpOnly: true,
+        })
+        .cookie("freshToken", new_fresh_token, {
+          expires: new Date(new Date().getTime() + 31557600000),
+          sameSite: "strict",
+          httpOnly: true,
+        });
+      user.freshToken = new_fresh_token;
+      await user.save();
+
+      return res.status(200).json("ok!!");
+    }
+    return res.status(401).json({ message: "unauthorized" });
+  } catch (error) {
+    console.error(error);
+    return res.status(401).json({ message: "unauthorized" });
   }
 };

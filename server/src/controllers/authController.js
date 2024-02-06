@@ -47,3 +47,21 @@ export const handleCheckEixtsPhone = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 }
+
+export const handeleGetProfile = async (req, res) => {
+  const user=req.user;
+ console.log("requser>>",user)
+  if (user) {
+    return res.status(200).json(user);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}
+
+export const handleFreshToken = async (req, res) => {
+
+  const freshToken = req.cookies.freshToken;
+
+   return await authServices.createFreshToken(freshToken,res,req)
+   
+  
+}
