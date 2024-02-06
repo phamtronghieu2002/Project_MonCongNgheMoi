@@ -1,8 +1,12 @@
-import OtpInput from 'react-otp-input';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { useLang } from '../../../hooks';
+import { ToastContainer, toast } from 'react-toastify';
+import OtpInput from 'react-otp-input';
 import FormAuthPhone from '../FormAuthPhone/FormAuthPhone';
-export default function FormRegister() {
+import clsx from 'clsx';
+import * as authServices from '../../../services/authService';
+export default function FormRegister({ onSuccess }) {
     const { t } = useLang();
     const [phoneRegister, setPhoneRegister] = useState('');
     const [isAuthPhone, setIsAuthPhone] = useState(false);
@@ -12,6 +16,29 @@ export default function FormRegister() {
         password: '',
         confirmPassword: '',
     });
+
+    const handleRegister = async () => {
+        if (dataForm.password !== dataForm.confirmPassword) {
+            toast("Password and confirm password don't match", {
+                type: 'error',
+            });
+            return;
+        }
+        try {
+            const res = await authServices.register({
+                username: dataForm.username,
+                password: dataForm.password,
+                phonenumber: '+84971754389',
+            });
+            toast(res.message);
+     
+                onSuccess();
+       
+        } catch (error) {
+            console.log(error);
+            toast.success(error.data.message || 'Register failed');
+        }
+    };
 
     const handleChangeInput = (e) => {
         setDataForm({
@@ -24,6 +51,7 @@ export default function FormRegister() {
         <FormAuthPhone setPhoneRegister={setPhoneRegister} setIsAuthPhone={setIsAuthPhone} />
     ) : (
         <div>
+            <ToastContainer />
             <div className="input-group flex-nowrap" style={{ paddingRight: '10px' }}>
                 <span
                     style={{
@@ -34,8 +62,7 @@ export default function FormRegister() {
                     className="input-group-text"
                     id="addon-wrapping"
                 >
-                    <i classname="fa-solid fa-user"></i>
-                    {/* <i className="fa-solid fa-lock"></i> */}
+                    <i className="fa-solid fa-user"></i>
                 </span>
                 <input
                     name="username"
@@ -78,7 +105,7 @@ export default function FormRegister() {
                     className="input-group-text"
                     id="addon-wrapping"
                 >
-                  <i classname="fa-solid fa-check"></i>
+                    <i className="fa-solid fa-check"></i>
                 </span>
                 <input
                     value={dataForm.confirmPassword}
@@ -90,8 +117,14 @@ export default function FormRegister() {
                     placeholder={t('Register.placeholder_repassword')}
                 />
             </div>
-            <div className="btn btn-primary w-100 mt-3">
-           { t('Login.button.register') }       
+            <div
+                onClick={handleRegister}
+                className={clsx(
+                    'btn btn-primary w-100 mt-3',
+                    dataForm.confirmPassword && dataForm.password && dataForm.username ? '' : 'disabled',
+                )}
+            >
+                {t('Login.button.register')}
             </div>
         </div>
     );

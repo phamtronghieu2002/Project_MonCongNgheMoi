@@ -10,8 +10,13 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 const app = express();
 const port = process.env.PORT || 3000;
-import jwt from "jsonwebtoken";
-app.use(cors());
+
+const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
@@ -35,13 +40,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 InitApiRoute(app);
 //verify token
 
-jwt.verify(
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YzA0MjQ2ZDdkNDA0NzU1MDg0NzMxMCIsImF2YXRhclBpY3R1cmUiOiIiLCJ1c2VybmFtZSI6ImhpZXUiLCJpYXQiOjE3MDcxMDcyMTgsImV4cCI6MTcwNzE5MzYxOH0.dvCzdxnneQDGpO17eZbn75cDsxzGwzkDZR9ur-hgZEU",
-  process.env.FRESH_TOKEN_SECRET,
-  (err, user) => {
-  console.log("user:>>>>", user); 
-  }
-);
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

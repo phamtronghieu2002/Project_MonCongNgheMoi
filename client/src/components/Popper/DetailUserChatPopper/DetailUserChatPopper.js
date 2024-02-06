@@ -1,8 +1,8 @@
 import "./style.scss";
 import ManuItemPopper from '../MenuItemPopper/MenuItemPopper';
 const header_menu = [
-    { title: 'Thông tin tài khoản', Icon: <i classname="fa-regular fa-user"></i>, callback: () => {} },
-    { title: 'Cài đặt', Icon: <i classname="fa-solid fa-gear"></i>, callback: () => {} },
+    { title: 'Thông tin tài khoản', Icon: <i className="fa-regular fa-user"></i>, callback: () => {} },
+    { title: 'Cài đặt', Icon: <i className="fa-solid fa-gear"></i>, callback: () => {} },
 ];
 
 const menus = [

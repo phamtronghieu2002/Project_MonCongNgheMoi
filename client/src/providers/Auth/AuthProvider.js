@@ -6,9 +6,7 @@ import React from "react";
 export const AuthContext = React.createContext();
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState({ auth: true, username: "" });
-  const [loading, setLoading] = useState(true);
-
+  const [user, setUser] = useState({ auth: true, data:{} });
   let navigate = useNavigate();
   useEffect(() => {
     // axios
@@ -32,11 +30,13 @@ export default function AuthProvider({ children }) {
   }, []);
 
 
-  const login = (username) => {
-
+  const login = (data) => {
+      setUser({ auth: true, data });
+      navigate('/');
   };
   const logout = () => {
- 
+    setUser({ auth: false, data:{} });
+    navigate('/login');
   };
   const getUser = () => {
     return user;
@@ -47,7 +47,7 @@ export default function AuthProvider({ children }) {
         login,
         logout,
         getUser,
-        loading,
+
       }}
     >
       {children}

@@ -1,46 +1,53 @@
-import axios from 'axios'
+import axios from "axios";
+import axiosRetry from "axios-retry";
 
-
+axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8081/api/v1',
-  });
-  instance.interceptors.response.use(
-    function (response) {
-      return response.data ? response.data : { status: response.status };
-    },
-    function (error) {
-      let res;
-      if (error.response) {
-        
-        res = {
-          status: error.response.status,
-          data: error.response.data,
-          statusText: error.response.statusText,
-          headers: error.response.headers,
-          config: error.config,
-        };
-
-        let errCode =res.status;
-        if(errCode === 401 || errCode === 403){
-          window.location.href = '/login';
-          localStorage.removeItem('user');
-        }
-      }
-      return Promise.reject(res || error);
-    }
-  );
- instance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+  baseURL: "http://localhost:8080/api/v1",
+});
+instance.interceptors.response.use(
+  function (response) {
+    return response.data ? response.data : { status: response.status };
   },
-  (error) => {
-    return Promise.reject(error);
+  function (error) {
+    let res;
+    if (error.response) {
+      res = {
+        status: error.response.status,
+        data: error.response.data,
+        statusText: error.response.statusText,
+        headers: error.response.headers,
+        config: error.config,
+      };
+      const status = res.status;
+      if (status === 401) {
+          axios
+          .post("http://localhost:8000/api/v1/auth/refresh_token")
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log("error fresh>>>");
+            const path = window.location.pathname;
+            if (path !== "/login") {
+              window.location.href = "/login";
+            }
+          });
+      }
+    }
+    return Promise.reject(res || error);
   }
 );
-  
-export default instance
+
+axiosRetry(instance, {
+  retries: 3, // number of retries
+  retryDelay: (retryCount) => {
+    console.log(`retry attempt: ${retryCount}`);
+    return retryCount * 500; // time interval between retries
+  },
+  retryCondition(error) {
+    return error.status === 401 
+  },
+});
+export default instance;

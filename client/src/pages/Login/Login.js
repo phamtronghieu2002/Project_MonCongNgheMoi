@@ -9,16 +9,17 @@ export default function Login() {
     const { i18n, t } = useLang();
 
     //0 is open tab register, 1 is open tab login
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(1);
 
     const handleChangeLanguage = (lang) => {
         i18n.changeLanguage(lang);
         localStorage.setItem('language', lang);
     };
-
+    // 0 is login and 1 is register
     const handleSelectTab = () => {
         setTab((tab) => (tab ? 0 : 1));
     };
+
     return (
         <div id="wp_login">
             <div className="bg-svg">
@@ -62,14 +63,14 @@ export default function Login() {
                 </div>
                 <div className="body mt-3">
                     <div className="tab_select">
-                        <div 
-                        
-                        onClick={handleSelectTab} className={clsx(!tab ? 'active' : '')}>
+                        <div onClick={handleSelectTab} className={clsx(!tab ? 'active' : '')}>
                             {t('Login.tab.register')}
                         </div>
-                        <div className={clsx(tab ? 'active':"")} onClick={handleSelectTab}>{t('Login.tab.login')}</div>
+                        <div className={clsx(tab ? 'active' : '')} onClick={handleSelectTab}>
+                            {t('Login.tab.login')}
+                        </div>
                     </div>
-                    <form>{tab ? <FormLogin /> : <FormRegister />}</form>
+                    <form>{tab ? <FormLogin /> : <FormRegister onSuccess={handleSelectTab} />}</form>
                 </div>
             </div>
 

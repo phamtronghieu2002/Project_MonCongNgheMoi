@@ -1,22 +1,21 @@
 import 'react-phone-input-2/lib/style.css';
-import PhoneInput from 'react-phone-input-2';
 import './style.scss';
-import clsx from 'clsx';
-import { useState } from 'react';
 import { useLang } from '../../../hooks';
-import ModalOTP from '../../../components/ModalOTP/ModalOTP';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
+import PhoneInput from 'react-phone-input-2';
+import clsx from 'clsx';
+import ModalOTP from '../../../components/ModalOTP/ModalOTP';
 import configs from '..//..//..//configs';
+import * as authServices from '../../../services/authService';
 export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
     const [phone, setPhone] = useState('');
     const [isOpenModalOTP, setIsOpenModalOTP] = useState(false);
     const [loading, setLoading] = useState(false);
     const { t } = useLang();
     const auth = configs.firebase.auth;
-    console.log('====================================');
-    console.log(phone);
-    console.log('====================================');
+
     const handleOpenModal = (isOpen) => {
         setIsOpenModalOTP(isOpen);
     };
@@ -26,28 +25,37 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
                 size: 'invisible',
                 callback: (response) => {
-                    // onSignup();
+                    onSignup();
                 },
                 'expired-callback': () => {},
             });
         }
     }
 
-    function onSignup() {
-        setLoading(true);
-        onCaptchVerify();
-        const appVerifier = window.recaptchaVerifier;
-        signInWithPhoneNumber(auth, `+${phone}`, appVerifier)
-            .then((confirmationResult) => {
-                window.confirmationResult = confirmationResult;
-                setLoading(false);
-                toast.success('OTP sended successfully!');
-                handleOpenModal(true);
-            })
-            .catch((error) => {
-                console.log(error);
-                setLoading(false);
-            });
+    async function onSignup() {
+        try {
+            const res = await authServices.checkExitPhone(`+${phone}`); // `+${phone}
+            if (res.errCode) {
+                toast.error(res.message);
+                return;
+            }
+            setLoading(true);
+            onCaptchVerify();
+            const appVerifier = window.recaptchaVerifier;
+            signInWithPhoneNumber(auth, `+${phone}`, appVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    setLoading(false);
+                    toast.success('OTP sended successfully!');
+                    handleOpenModal(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setLoading(false);
+                });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     function onOTPVerify(otp) {

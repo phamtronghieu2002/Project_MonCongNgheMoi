@@ -32,3 +32,18 @@ export const handleLogin = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+
+export const handleCheckEixtsPhone = async (req, res) => {
+  const { phonenumber } = req.body;
+  if (!phonenumber) {
+    return res.status(400).json({ message: "missing params" });
+  }
+  const response = await authServices.checkPhoneExist({
+    phonenumber,
+  });
+  if (response) {
+    return res.status(200).json(response);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}
