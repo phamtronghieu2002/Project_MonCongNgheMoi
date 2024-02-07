@@ -1,6 +1,7 @@
 import express from "express";
 import userRoute from "..//routes/user"
 import authRoute from "..//routes/auth"
+import converationRoute from "..//routes/conversation"
 const InitApiRoute = (app) => {
   app.use(function (req, res, next) {
     res.header(
@@ -14,6 +15,7 @@ const InitApiRoute = (app) => {
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/conversation", converationRoute);
 };
 
 export { InitApiRoute };

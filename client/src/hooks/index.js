@@ -1,2 +1,3 @@
 import useLang from "./useLang";
-export {useLang}
+import useInfor from "./useInfor";
+export {useLang,useInfor}

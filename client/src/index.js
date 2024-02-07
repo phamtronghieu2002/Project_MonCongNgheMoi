@@ -1,4 +1,4 @@
-import { GlobalStyle, I18nProvider, ThemeProvider } from "./providers";
+import { GlobalStyle, I18nProvider, ThemeProvider,UserChatProvider } from "./providers";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
@@ -10,7 +10,9 @@ root.render(
   <I18nProvider>
     <GlobalStyle>
         <ThemeProvider>
-          <App />
+         <UserChatProvider>
+           <App />
+         </UserChatProvider>
         </ThemeProvider>
     </GlobalStyle>
   </I18nProvider>

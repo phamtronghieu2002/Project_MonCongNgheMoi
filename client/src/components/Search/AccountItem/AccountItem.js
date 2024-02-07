@@ -1,7 +1,9 @@
 import './AccountItem.scss';
 function AccountItem({avatarPicture,username,_id}) {
     return (
-        <div className="account_item_search">
+        <div
+        
+         className="account_item_search">
             <img
                 src={avatarPicture}
                 className="avatar"

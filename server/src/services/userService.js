@@ -8,7 +8,10 @@ export const searchUser = async (keyword) => {
     try {
       const users = await UserModel.find(
         {
-          keywords: { $in: keyword },
+          $or: [
+            { keywords: { $in: keyword } },
+            {phonenumber: `+84${keyword.slice(1)}` }
+          ],
         },
         "_id avatarPicture username backgroundPicture"
       );

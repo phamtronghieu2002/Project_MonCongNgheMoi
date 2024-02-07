@@ -4,11 +4,13 @@ import { useLang } from '..//..//..//hooks';
 import { AuthContext } from '..//..//..//providers/Auth/AuthProvider';
 import { useContext } from 'react';
 import { toast } from 'react-hot-toast';
+import {useInfor} from '..//..//..//hooks';
 import * as authServices from '..//..//..//services/authService';
 
 function UserPopper() {
     const { t } = useLang();
     const { logout } = useContext(AuthContext);
+    const user = useInfor();
     const handleLogout = async () => {
         try {
             await authServices.logout();
@@ -31,7 +33,7 @@ function UserPopper() {
     ];
     return (
         <div id="wp_popper_user">
-            <h4 className="fw-bold ps-1">Phạm Trọng Hiếu</h4>
+            <h4 className="fw-bold ps-1">{user.username}</h4>
             <div className="zmenu-separator"></div>
             {main_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />
