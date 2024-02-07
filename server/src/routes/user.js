@@ -1,7 +1,8 @@
 import express from 'express';
 const router = express.Router();
+import * as userControler from '../controllers/userController';
 
-router.post("/")
+router.get("/search", userControler.handleSearchUser);
 
 
 

@@ -5,8 +5,10 @@ import { useState, useEffect, useRef } from 'react';
 import UserPopper from '../Popper/UserPopper/UserPopper';
 import SettingPopper from '../Popper/SettingPopper/SettingPopper';
 import configs from '../../configs';
+import useInfor from '../../hooks/useInfor';
 export default function SidebarNav() {
-
+        const user= useInfor();
+       
     const [isOpenPopper, setIsOpenPopper] = useState({
         user: false,
         setting: false,
@@ -46,7 +48,7 @@ export default function SidebarNav() {
                 <div onClick={handleUserClickOpenPopperUser} className="wp_avt">
                     <img
                         alt="avt"
-                        src="https://s120-ava-talk.zadn.vn/0/d/9/7/12/120/e9605516219e69b3d6465839d961b04e.jpg"
+                        src={user?.avatarPicture}
                         className="a-child"
                     />
                 </div>

@@ -4,19 +4,49 @@ import { hashPassword, comparePassword } from "..//utils/crypto";
 import { create_access_token, create_fresh_token } from "../utils/jwt";
 dotenv.config();
 import jwt from "jsonwebtoken";
+
+function generateKeywordsWithSpaces(str) {
+  const keywords = [];
+  const words = str.split(' ');
+
+  for (let i = 0; i < words.length; i++) {
+    let currentKeyword = '';
+    for (let j = 0; j < words[i].length; j++) {
+      currentKeyword += words[i][j];
+      keywords.push(currentKeyword);
+    }
+
+    if (i < words.length - 1) {
+      // Add space and combinations with the next word
+      currentKeyword += ' ';
+      keywords.push(currentKeyword);
+
+      words[i + 1].split('').forEach(char => {
+        currentKeyword += char;
+        keywords.push(currentKeyword);
+      });
+    }
+  }
+
+  return keywords;
+}
+
+
 export const register = async ({ username, password, phonenumber, res }) => {
   try {
-    const user = await UserModel.findOne({ phonenumber });
-    if (user) {
-      return {
-        errCode: 1,
-        message: "Phonenumber is already used",
-      };
-    }
+    // const user = await UserModel.findOne({ phonenumber });
+
+    // if (user) {
+    //   return {
+    //     errCode: 1,
+    //     message: "Phonenumber is already used",
+    //   };
+    // }
     const new_user = new UserModel({
       username,
       password: await hashPassword(password),
       phonenumber,
+      keywords: generateKeywordsWithSpaces(username),
     });
     await new_user.save();
     if (new_user) {
@@ -42,7 +72,6 @@ export const login = async ({ phonenumber, password, res }) => {
       };
     }
 
-    console.log("pass>>", user.password);
     if (!(await comparePassword(password, user.password))) {
       return {
         errCode: 2,
@@ -89,7 +118,7 @@ export const login = async ({ phonenumber, password, res }) => {
       keywords,
       ...rest
     } = response_user;
-    console.log("user:>>>>", response_user);
+
     return {
       errCode: 0,
       message: "Login successfully",
@@ -106,7 +135,6 @@ export const checkPhoneExist = async ({ phonenumber }) => {
   try {
     const user = await UserModel.findOne({ phonenumber });
 
-    console.log("user:>>>>", user);
     if (user) {
       return {
         errCode: 1,
@@ -123,7 +151,6 @@ export const checkPhoneExist = async ({ phonenumber }) => {
 };
 
 export const createFreshToken = async (freshToken, res, req) => {
- 
   try {
     const user = await UserModel.findOne({ freshToken });
     if (user) {
@@ -162,3 +189,4 @@ export const createFreshToken = async (freshToken, res, req) => {
     return res.status(401).json({ message: "unauthorized" });
   }
 };
+

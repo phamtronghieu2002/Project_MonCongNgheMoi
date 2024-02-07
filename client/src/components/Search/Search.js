@@ -1,9 +1,32 @@
 import './Search.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import SearchPopper from '../Popper/SearchPopper/SearchPopper';
+import { searchUser } from '../../services/userService';
 export default function Search() {
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
+    const [searhDebouce] = useDebounce(search, 200);
+    const [userSearch, setUserSearch] = useState([]);
+
+    useEffect(() => {
+        if(!searhDebouce)
+        {
+            setUserSearch([]);
+            return;
+        }
+        const handleSearchUser = async () => {
+            try {
+
+                const response = await searchUser(searhDebouce);
+                setUserSearch(response);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        handleSearchUser();
+    }, [searhDebouce]);
 
     const handleFocusSearch = () => {
         setIsSearch(true);
@@ -14,7 +37,7 @@ export default function Search() {
     };
     return (
         <div id="wp_search">
-            {isSearch && <SearchPopper />}
+            {isSearch && <SearchPopper userSearch={userSearch} />}
             <input
                 onFocus={handleFocusSearch}
                 type="text"

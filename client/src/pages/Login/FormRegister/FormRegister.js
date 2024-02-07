@@ -1,7 +1,6 @@
-import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { useLang } from '../../../hooks';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-hot-toast';
 import OtpInput from 'react-otp-input';
 import FormAuthPhone from '../FormAuthPhone/FormAuthPhone';
 import clsx from 'clsx';
@@ -9,7 +8,7 @@ import * as authServices from '../../../services/authService';
 export default function FormRegister({ onSuccess }) {
     const { t } = useLang();
     const [phoneRegister, setPhoneRegister] = useState('');
-    const [isAuthPhone, setIsAuthPhone] = useState(false);
+    const [isAuthPhone, setIsAuthPhone] = useState(true);
 
     const [dataForm, setDataForm] = useState({
         username: '',
@@ -28,9 +27,9 @@ export default function FormRegister({ onSuccess }) {
             const res = await authServices.register({
                 username: dataForm.username,
                 password: dataForm.password,
-                phonenumber: '+84971754389',
+                phonenumber: '+84971754388',
             });
-            toast(res.message);
+            toast.success(res.message);
      
                 onSuccess();
        
@@ -51,7 +50,7 @@ export default function FormRegister({ onSuccess }) {
         <FormAuthPhone setPhoneRegister={setPhoneRegister} setIsAuthPhone={setIsAuthPhone} />
     ) : (
         <div>
-            <ToastContainer />
+      
             <div className="input-group flex-nowrap" style={{ paddingRight: '10px' }}>
                 <span
                     style={{

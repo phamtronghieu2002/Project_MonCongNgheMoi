@@ -30,7 +30,7 @@ instance.interceptors.response.use(
           axios
           .post("http://localhost:8080/api/v1/refresh_token")
           .then((response) => {
-            console.log(response);
+        
           })
           .catch((error) => {
             console.log("error fresh>>>");
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
 axiosRetry(instance, {
   retries: 3, // number of retries
   retryDelay: (retryCount) => {
-    console.log(`retry attempt: ${retryCount}`);
+
     return retryCount * 500; // time interval between retries
   },
   retryCondition(error) {
