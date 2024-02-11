@@ -1,31 +1,31 @@
 import './Search.scss';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import SearchPopper from '../Popper/SearchPopper/SearchPopper';
 import { searchUser } from '../../services/userService';
+import SearchPopper from '../Popper/SearchPopper/SearchPopper';
 export default function Search() {
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
     const [searhDebouce] = useDebounce(search, 200);
-    const [userSearch, setUserSearch] = useState([]);
-
+    const [searchCoversations, setSearchCoversations] = useState([]);
+    console.log("searchCoversations",searchCoversations);
     useEffect(() => {
         if(!searhDebouce)
         {
-            setUserSearch([]);
+            setSearchCoversations([]);
             return;
         }
-        const handleSearchUser = async () => {
+        const handleSearchResult = async () => {
             try {
 
                 const response = await searchUser(searhDebouce);
-                setUserSearch(response);
+                setSearchCoversations(response);
             } catch (error) {
                 console.log(error);
             }
         };
 
-        handleSearchUser();
+        handleSearchResult();
     }, [searhDebouce]);
 
     const handleFocusSearch = () => {
@@ -37,7 +37,7 @@ export default function Search() {
     };
     return (
         <div id="wp_search">
-            {isSearch && <SearchPopper userSearch={userSearch} />}
+            {isSearch && <SearchPopper searchCoversations={searchCoversations} />}
             <input
                 onFocus={handleFocusSearch}
                 type="text"

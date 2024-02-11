@@ -1,12 +1,31 @@
 import './UserChat.scss';
-import { useState} from 'react';
+import { useEffect, useState,useContext} from 'react';
 import Search from '../../../components/Search/Search';
 import clsx from 'clsx';
 import AccountItem from './AccountItem/AccountItem';
+import * as conversationService from '../../../services/conversationService';
+import { AuthContext } from '../../../providers/Auth/AuthProvider';
 const UserChat = () => {
     const [acitve, setActive] = useState(1);
     const [openPopper,setOpenPopper]=useState("");
+    const [conversations,setConversations]=useState([]);
+    const {getUser} = useContext(AuthContext);
+    const user= getUser().data;
+    console.log("user",user);
+    console.log("conversations",conversations);
+    useEffect(() => {
+        const fetchConversations = async () => {
+            try {
+                const res = await conversationService.getConversationById(user._id);
+                setConversations(res);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchConversations();
 
+    }
+    ,[]);
     return (
         <div id="wp_user_chat">
             <Search />
@@ -20,12 +39,14 @@ const UserChat = () => {
             </div>
             <div className="usersChat">
           {
-            [1,2,3,4,5,6,7,8,9,10].map((item,index)=>(
+           conversations.length>0 && conversations.map((item,index)=>(
                 <AccountItem 
+                senderId={user._id}
                 key={index} 
-                id={item}
+                acc_index={index}
+                {...item}
                 openPopper={openPopper}
-                onDetail={()=>setOpenPopper(item)}
+                onDetail={()=>setOpenPopper(index)}
                 />
                 ))
           }

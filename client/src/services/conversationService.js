@@ -1,7 +1,7 @@
 import axios from './axios';
 
-export const createConversation = async (senderid, recieveid) => {
-    return axios.post('/conversation', { senderid, recieveid });
+export const createConversation = async (senderid, recieveid,type) => {
+    return axios.post('/conversation', { senderid, recieveid ,type});
 };
 
 

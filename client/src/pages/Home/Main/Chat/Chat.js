@@ -1,21 +1,24 @@
 import './Chat.scss';
 import { useLang } from '../../../../hooks';
+import { useContext } from 'react';
+import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
 function Chat() {
 
     const {t} =useLang();
+    const { conversation } = useContext(ConversationContext);
     return (
         <div id="chat_container">
             <div className="header">
                 <div className="infor">
                     <div className="avatar">
                         <img
-                            src="https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+                            src={conversation.conversation.infor.avatar}
                             alt="avatar"
                         />
                     </div>
                     <div>
                         <div className="name fw-bold">
-                            <span>Nguyễn Văn A</span>
+                            <span>{conversation.conversation.infor.name}</span>
                         </div>
 
                         <div className="status">

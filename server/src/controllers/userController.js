@@ -12,3 +12,16 @@ export const handleSearchUser  =async(req,res)=>{
      return res.status(500).json({ message: "Internal Server Error" });
    
    }
+
+
+   export const handleGetUserById = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "missing param" });
+    }
+    const response = await userServices.getUserById(id);
+    if (response) {
+      return res.status(200).json(response);
+    }
+    return res.status(500).json({ message: "Internal Server Error" });
+  }

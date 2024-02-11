@@ -7,7 +7,7 @@ function GroupItem({ name, avatar, memberNumber }) {
             </div>
             <div className="infor">
                 <div className="name">
-                        <i class="fa-solid fa-users"></i>
+                        <i className="fa-solid fa-users"></i>
                     <span>{name}</span>
                 </div>
                 <div className="member_number">

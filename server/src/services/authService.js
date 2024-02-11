@@ -80,12 +80,12 @@ export const login = async ({ phonenumber, password, res }) => {
     }
 
     const payload = {
-      id: user._id,
+      _id: user._id,
       avatarPicture: user.avatarPicture,
       username: user.username,
       backgroundPicture: user.backgroundPicture,
     };
-    const access_token = create_access_token(payload, "1m");
+    const access_token = create_access_token(payload, "1h");
     const fresh_token = create_fresh_token(payload, "3h");
 
     res

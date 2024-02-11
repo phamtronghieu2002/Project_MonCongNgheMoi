@@ -12,6 +12,10 @@ const MessageSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    keywords: {
+      type: Array,
+      default: [],
+    },
     createdBy: {
         type: String,
       },
