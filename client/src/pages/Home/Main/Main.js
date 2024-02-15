@@ -5,7 +5,7 @@ function Main() {
     return (
         <div id="main_container" className="d-flex">
         <Chat/>
-        <Aside/>
+        {/* <Aside/> */}
         </div>
     );
 }

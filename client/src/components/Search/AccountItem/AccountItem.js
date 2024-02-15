@@ -7,12 +7,17 @@ function AccountItem({ avatarPicture, username, groupPicture, groupName, _id, ty
     const { setConversation, conversation } = useContext(ConversationContext);
     const { getUser } = useContext(AuthContext);
     const user = getUser();
-
+    console.log(conversation)
     const avatar = avatarPicture || groupPicture;
     const name = username || groupName;
     const handleCreateConversation = async () => {
         try {
-            await conversationService.createConversation(user.data._id, _id, type);
+            const res = await conversationService.createConversation(user.data._id, _id, type);
+            setConversation({
+                active: true,
+                userInfor: { avatar, name, _id, type },
+                conversationId: res._id,
+            });
         } catch (error) {
             console.log(error);
         }
@@ -20,10 +25,6 @@ function AccountItem({ avatarPicture, username, groupPicture, groupName, _id, ty
     return (
         <div
             onClick={() => {
-                setConversation({
-                    ...conversation,
-                    conversation: { active: true, infor: { avatar, name, _id, type } },
-                });
                 handleCreateConversation();
             }}
             className="account_item_search"

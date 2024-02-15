@@ -1,63 +1,71 @@
+import React from 'react';
 import './AccountItem.scss';
 import DetailUserChatPopper from '../../../../components/Popper/DetailUserChatPopper/DetailUserChatPopper';
-import { useEffect, useState } from 'react';
-import * as userService from '../../../../services/userService';
-import React from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { useLang } from '../../../../hooks';
-function AccountItem({acc_index,onDetail,openPopper,members,isGroup,senderId}) {
-
+import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
+import * as userService from '../../../../services/userService';
+function AccountItem({ conversationId, onDetail, openPopper, members, isGroup, senderId}) {
     const { t } = useLang();
-      const [openDetail,setOpenDetail]=useState(false);
-      const [userChat,setUserChat]=useState(null);
-console.log("userChat",userChat);
-useEffect(() => {
-    window.addEventListener("click",()=>setOpenDetail(false));
-    if(openPopper===acc_index){
-        setTimeout(() => {
-            setOpenDetail(true);
-        }, 200);
-    }else{
-        openDetail &&  setOpenDetail(false);
-    }
+    const [openDetail, setOpenDetail] = useState(false);
+    const [userChat, setUserChat] = useState(null);
+    const {conversation,setConversation} = useContext(ConversationContext);
 
-},[openPopper])
-
-useEffect(()=>{
-    const fetchMember = async () => {
-        try {
-            if(isGroup){
-
-            }
-            const recieveid=members.find(id=>id!==senderId);
-            console.log("recieveid",recieveid);
-            const res = await userService.getUserById(recieveid);
-            setUserChat(res);
-        } catch (err) {
-            console.log(err);
+    useEffect(() => {
+        window.addEventListener('click', () => setOpenDetail(false));
+        if (openPopper === conversationId) {
+            setTimeout(() => {
+                setOpenDetail(true);
+            }, 200);
+        } else {
+            openDetail && setOpenDetail(false);
         }
-    }
-    fetchMember();
-},[])
+    }, [openPopper]);
+
+    useEffect(() => {
+        const fetchMember = async () => {
+            try {
+                if (isGroup) {
+                }
+                const recieverid = members.find((id) => id !== senderId);
+                console.log('recieverid', recieverid);
+                const res = await userService.getUserById(recieverid);
+                setUserChat(res);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchMember();
+    }, []);
 
     return (
-        <div  className="d-flex position-relative account_item_chat">
-          {openDetail && <DetailUserChatPopper/> }  
+        <div 
+        
+        onClick={() => {
+            setConversation({
+          
+                userInfor: { avatar: userChat.avatarPicture || userChat.groupPicture, name: userChat.username || userChat.groupname, _id: userChat._id, type: 'user' },
+                conversationId
+            })
+        }}
+        className="d-flex position-relative account_item_chat">
+            {openDetail && <DetailUserChatPopper />}
             <div className="avatar">
                 <img
                     className="single_chat_avatar"
-                    src={userChat && userChat.avatarPicture || userChat.groupPicture }
+                    src={userChat ? userChat.avatarPicture || userChat.groupPicture :""}
                     alt="avt"
                 />
             </div>
             <div className="infor">
-                <span className="display_name">{userChat && userChat.username || userChat.groupname }</span>
+                <span className="display_name">{userChat ? userChat.username || userChat.groupname :""}</span>
                 <br />
                 <span className="last_message">Hello</span>
             </div>
             <span className="timer_message">{`5 ${t('home.account_chat_item.timmer.day')}`}</span>
-            <button
-            onClick={onDetail}
-            className="detail_btn">...</button>
+            <button onClick={onDetail} className="detail_btn">
+                ...
+            </button>
 
             <div className="num_message_miss">1</div>
         </div>

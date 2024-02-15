@@ -1,10 +1,10 @@
 import * as conversationService from '../services/conversationService';
 export const handleCreateConversation = async (req, res) => {
-    const  {senderid,recieveid,type} = req.body;
-    if (!senderid || !recieveid) {
+    const  {senderid,recieverid,type} = req.body;
+    if (!senderid || !recieverid) {
       return res.status(400).json({ message: "missing param" });
     }
-    const response = await conversationService.createConversation(senderid, recieveid, type);
+    const response = await conversationService.createConversation(senderid, recieverid, type);
     if (response) {
       return res.status(200).json(response);
     }
@@ -18,7 +18,7 @@ export const handleCreateConversation = async (req, res) => {
       if (!senderid ) {
         return res.status(400).json({ message: "missing param" });
       }
-      const response = await conversationService.getConversationById(senderid);
+      const response = await conversationService.getConversationByUserId(senderid);
       if (response) {
         return res.status(200).json(response);
       }

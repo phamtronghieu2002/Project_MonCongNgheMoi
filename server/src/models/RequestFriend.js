@@ -6,7 +6,7 @@ const RequestFriend = new mongoose.Schema(
       type: String,
       required: true,
     },
-    recieveId: {
+    recieverId: {
       type: String,
       required: true,
     },

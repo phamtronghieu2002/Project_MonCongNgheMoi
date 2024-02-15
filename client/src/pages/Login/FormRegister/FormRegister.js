@@ -85,11 +85,12 @@ export default function FormRegister({ onSuccess }) {
                     <i className="fa-solid fa-lock"></i>
                 </span>
                 <input
+      
                     value={dataForm.password}
                     type="password"
                     name="password"
                     onChange={handleChangeInput}
-                    style={{ height: '35px' }}
+                    style={{ height: '35px' ,zIndex:0}}
                     className="form-control"
                     placeholder={t('Register.placeholder_password')}
                 />

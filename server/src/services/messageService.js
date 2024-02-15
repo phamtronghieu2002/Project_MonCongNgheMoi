@@ -1,17 +1,17 @@
 import MessageModel from "../models/Message.js";
 export const createMessage = async (
   senderid,
-  recieveid,
+  recieverid,
   content,
-  isSeen,
+
   conversationId
 ) => {
   try {
     const new_message = new MessageModel({
       senderId: senderid,
-      recieveId: recieveid,
+      recieverId: recieverid,
       content: content,
-      isSeen: isSeen,
+      isSeen: 0,
       conversationId: conversationId,
     });
     new_message.save();
@@ -20,3 +20,19 @@ export const createMessage = async (
     console.log(error);
   }
 };
+
+
+export const getMessageByConverationId = async (
+    conversationId
+  ) => {
+    
+    try {
+      const messages = await MessageModel.find({
+        conversationId: conversationId,
+      });
+      return messages;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  

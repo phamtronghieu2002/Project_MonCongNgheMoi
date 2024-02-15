@@ -11,12 +11,11 @@ const UserChat = () => {
     const [conversations,setConversations]=useState([]);
     const {getUser} = useContext(AuthContext);
     const user= getUser().data;
-    console.log("user",user);
-    console.log("conversations",conversations);
+
     useEffect(() => {
         const fetchConversations = async () => {
             try {
-                const res = await conversationService.getConversationById(user._id);
+                const res = await conversationService.getConversationByUserId(user._id);
                 setConversations(res);
             } catch (err) {
                 console.log(err);
@@ -41,12 +40,12 @@ const UserChat = () => {
           {
            conversations.length>0 && conversations.map((item,index)=>(
                 <AccountItem 
+                conversationId={item._id}
                 senderId={user._id}
                 key={index} 
-                acc_index={index}
                 {...item}
                 openPopper={openPopper}
-                onDetail={()=>setOpenPopper(index)}
+                onDetail={()=>setOpenPopper(item._id)}
                 />
                 ))
           }

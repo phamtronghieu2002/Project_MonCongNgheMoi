@@ -1,16 +1,16 @@
 import ConversationModel from "../models/Conversation.js";
 import MessageModel from "../models/Message.js";
-export const createConversation = async (senderid, recieveid, type) => {
+export const createConversation = async (senderid, recieverid, type) => {
   try {
     const conversation = await ConversationModel.findOne({
-      members: { $all: [senderid, recieveid] },
+      members: { $all: [senderid, recieverid] },
       isGroup: type,
     });
     if (conversation) {
       return conversation;
     }
     const new_conversation = new ConversationModel({
-      members: [senderid, recieveid],
+      members: [senderid, recieverid],
       isGroup: type,
     });
     const response = await new_conversation.save();
@@ -21,7 +21,7 @@ export const createConversation = async (senderid, recieveid, type) => {
     console.log(error);
   }
 };
-export const getConversationById = async (senderid) => {
+export const getConversationByUserId = async (senderid) => {
 
   try {
     const conversation = await ConversationModel.find({

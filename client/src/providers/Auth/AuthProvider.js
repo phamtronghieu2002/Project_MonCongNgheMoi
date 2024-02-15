@@ -37,8 +37,9 @@ export default function AuthProvider({ children }) {
       navigate('/');
   };
   const logout = () => {
-    setUser({ auth: false, data:{} });
-    navigate('/login');
+   window.location.href = configs.paths.login;
+   
+  
   };
   const getUser = () => {
     return user;

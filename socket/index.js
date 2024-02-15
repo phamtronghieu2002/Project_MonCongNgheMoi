@@ -26,19 +26,27 @@ const io = require("socket.io")(9000, {
   
     //take userId and socketId from user
     socket.on("addUser", (userId) => {
-    console.log("userId>>>",userId);
-    console.log("socketID>>>",socket.id);
+
       addUser(userId, socket.id);
+      console.log("users connection :>>>",users)
       io.emit("getUsers", users);
     });
   
     //send and get message
-    socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-      const user = getUser(receiverId);
-      io.to(user.socketId).emit("getMessage", {
-        senderId,
-        text,
-      });
+    socket.on("sendMessage", ({ senderId, recieverId, content ,conversationId}) => {
+      const user = getUser(recieverId);
+
+      if(user)
+      {
+        console.log("co emit">>user.socketId)
+        io.to(user.socketId).emit("getMessage", {
+          senderId,
+          content,
+          conversationId
+   
+        });
+      }
+
     });
   
     //when disconnect

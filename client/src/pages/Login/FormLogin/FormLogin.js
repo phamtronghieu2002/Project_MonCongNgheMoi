@@ -44,7 +44,7 @@ export default function FormLogin({}) {
                     }}
                 />
             </div>
-            <div className="input-group flex-nowrap mt-3" style={{ paddingRight: '10px' }}>
+            <div className="input-group flex-nowrap mt-3" style={{ paddingRight: '10px',zIndex:0 }}>
                 <span
                     style={{
                         padding: '0 0 0 10px',
@@ -61,7 +61,7 @@ export default function FormLogin({}) {
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
-                    style={{ height: '35px' }}
+                    style={{ height: '35px',zIndex: 0}}
                     type="password"
                     className="form-control"
                     placeholder={t('Login.placeholder.password')}
