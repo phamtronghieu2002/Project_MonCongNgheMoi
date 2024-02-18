@@ -25,3 +25,18 @@ export const handleCreateConversation = async (req, res) => {
       return res.status(500).json({ message: "Internal Server Error" });
     
       }
+
+      export const handleUpdateLastMessage = async (req, res) => {
+  
+        const {conversationId} = req.params;
+        const {lastMessage} =req.query
+        if (!conversationId || !lastMessage) {
+          return res.status(400).json({ message: "missing param" });  
+        }
+        const response = await conversationService.updateLastMessage(conversationId,lastMessage);
+        if (response) {
+          return res.status(200).json(response);
+        }
+        return res.status(500).json({ message: "Internal Server Error" });
+      
+        }

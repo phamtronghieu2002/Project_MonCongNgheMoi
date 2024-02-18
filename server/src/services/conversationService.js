@@ -22,26 +22,47 @@ export const createConversation = async (senderid, recieverid, type) => {
   }
 };
 export const getConversationByUserId = async (senderid) => {
-
   try {
     const conversation = await ConversationModel.find({
       members: { $in: [senderid] },
     });
     const consRes = [];
-    console.log("conversation>>>",conversation);
-    for(let i=0;i<conversation.length;i++){
+    if (conversation.length === 0) {
+      return conversation;
+    }
+    //check if conversation has message
+    for (let i = 0; i < conversation.length; i++) {
       const message = await MessageModel.findOne({
         conversationId: conversation[i]._id.toString(),
       });
-      console.log("message>>>",message);
+
       if (message) {
         consRes.push(conversation[i]);
-        console.log("consRes trong>>>",consRes);
+        console.log("consRes trong>>>", consRes);
       }
     }
 
-    console.log("consRes ngoai>>>",consRes);
     return consRes;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateLastMessage = async (conversationId, lastMessage) => {
+  try {
+
+    const updatedConversation = await ConversationModel.findOneAndUpdate(
+      { _id: conversationId },
+      { $set: { lastMessage, updatedAt: new Date() } },
+      { new: true, sort: { updatedAt: -1 } }
+    );
+
+
+    const sortedConversations = await ConversationModel.find({}).sort({ updatedAt: -1 });
+
+    console.log("sortedConversations>>>>",sortedConversations);
+
+    return updatedConversation;
   } catch (error) {
     console.log(error);
   }

@@ -1,30 +1,55 @@
 import './UserChat.scss';
-import { useEffect, useState,useContext} from 'react';
 import Search from '../../../components/Search/Search';
 import clsx from 'clsx';
 import AccountItem from './AccountItem/AccountItem';
 import * as conversationService from '../../../services/conversationService';
-import { AuthContext } from '../../../providers/Auth/AuthProvider';
+import * as messageService from '../../../services/messageService';
+import { useEffect, useState, useContext, useRef } from 'react';
+
+import { socketContext } from '../../../providers/Socket/SocketProvider';
 const UserChat = () => {
     const [acitve, setActive] = useState(1);
-    const [openPopper,setOpenPopper]=useState("");
-    const [conversations,setConversations]=useState([]);
-    const {getUser} = useContext(AuthContext);
-    const user= getUser().data;
+    const [openPopper, setOpenPopper] = useState('');
+    const [conversations, setConversations] = useState([]);
+    const { socket, currentUserId } = useContext(socketContext);
+    const currentUserIdRef = useRef(currentUserId);
+    const fetchConversations = async () => {
+        try {
+            const conversations = await conversationService.getConversationByUserId(currentUserIdRef.current);
+            for(let i=0;i<conversations.length;i++)
+            {
+                const conversationID = conversations[i]._id;
+                const messages = await messageService.getMessageByConversationId(conversationID);
+                let totalUnseen = 0;
+           
+                for(let j=0;j<messages.length;j++)
+                {
+                
+                    if(messages[j].senderId !== currentUserIdRef.current && !messages[j].isSeen)
+                    {
+                      
+                        totalUnseen=totalUnseen+1;
+                    }
+                }
+                conversations[i].totalUnseen = totalUnseen;
+       
+            }
+            setConversations([...conversations]);
+ 
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     useEffect(() => {
-        const fetchConversations = async () => {
-            try {
-                const res = await conversationService.getConversationByUserId(user._id);
-                setConversations(res);
-            } catch (err) {
-                console.log(err);
-            }
-        };
         fetchConversations();
+    }, []);
 
-    }
-    ,[]);
+    useEffect(() => {
+        // socket.on('reRenderConversations', ({ senderId, content, conversationId }) => {
+        //     fetchConversations();
+        // });
+    }, []);
     return (
         <div id="wp_user_chat">
             <Search />
@@ -37,18 +62,17 @@ const UserChat = () => {
                 </span>
             </div>
             <div className="usersChat">
-          {
-           conversations.length>0 && conversations.map((item,index)=>(
-                <AccountItem 
-                conversationId={item._id}
-                senderId={user._id}
-                key={index} 
-                {...item}
-                openPopper={openPopper}
-                onDetail={()=>setOpenPopper(item._id)}
-                />
-                ))
-          }
+                {[...conversations].length > 0 &&
+                    conversations.map((item, index) => (
+                        <AccountItem
+                            conversationId={item._id}
+                            senderId={currentUserId}
+                            key={index}
+                            {...item}
+                            openPopper={openPopper}
+                            onDetail={() => setOpenPopper(item._id)}
+                        />
+                    ))}
             </div>
         </div>
     );

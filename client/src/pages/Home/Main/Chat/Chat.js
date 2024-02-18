@@ -2,91 +2,122 @@ import './Chat.scss';
 import MessageItem from './MessageItem/MessageItem';
 import * as messageService from '..//..//..//..//services//messageService';
 import { useLang } from '../../../../hooks';
-import { useContext, useEffect, useState, useRef } from 'react';
-import { AuthContext } from '../../../../providers/Auth/AuthProvider';
+import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
-import { io } from 'socket.io-client';
+import { socketContext } from '../../../../providers/Socket/SocketProvider';
+
 function Chat() {
     const { t } = useLang();
     const [messages, setMessages] = useState([]);
+    const [messagesComponent, setMessagesComponent] = useState([]);
     const [textMessage, setTextMessage] = useState('');
     const { conversation } = useContext(ConversationContext);
-    const { getUser } = useContext(AuthContext);
-    const socket = useRef();
-    const user = getUser().data;
+    const { currentUserId, socket } = useContext(socketContext);
     const conversationId = useRef(conversation.conversationId);
     const refInput = useRef();
+    console.log('re-render');
+        const fuck =()=>{
+            console.log("xin chao ae")
+        }
+    const handleDataMessages = async (messages) => {
+        try {
+            const conversationID = conversationId.current;
+
+            console.log('co chay vao handleData', messages);
+
+            let texts = [];
+            const components = [];
+            let recieverId = '';
+
+            for (let i = 0; i < messages.length; i++) {
+                let text = messages[i].content;
+
+                if (messages[i].senderId === currentUserId) {
+                    if (texts.length > 0) {
+                        components.push(<MessageItem key={i-1} content={texts} />);
+
+                        texts = [];
+                    }
+                    components.push(<MessageItem key={i} content={text} own />);
+                } else {
+                    if (!recieverId && messages[i].senderId != currentUserId) {
+                        recieverId = messages[i].senderId;
+                    }
+                    texts.push(text);
+                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts} />);
+                }
+            }
+            // update status seen message
+            recieverId && (await messageService.updateStatus(recieverId, conversationID));
+
+            setMessagesComponent([...components]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
+    const fetchMessage = async () => {
+        try {
+            const messages = await messageService.getMessageByConversationId(conversation.conversationId);
+            setMessages([...messages]);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         conversationId.current = conversation.conversationId;
     }, [conversation.conversationId]);
 
-    const fetchMessage = async () => {
-        try {
-            console.log('====================================');
-            console.log('current in fetch>>>', conversationId);
-            console.log('====================================');
-            const conversationID = conversationId.current;
-            console.log('conversationID>>>>>>>>>>>>>><<<<', conversationID);
-            const messages = await messageService.getMessageByConversationId(conversationID);
 
-            let currentUserid = user._id;
-            let texts = [];
-            let components = [];
-            for (let i = 0; i < messages.length; i++) {
-                let text = messages[i].content;
-                if (messages[i].senderId == currentUserid) {
-                    if (texts.length > 0) {
-                        components.push(<MessageItem content={texts} />);
-                        texts = [];
-                    }
-                    components.push(<MessageItem content={text} own />);
-                } else {
-                    texts.push(text);
-                    i + 1 == messages.length && components.push(<MessageItem content={texts} />);
-                }
-            }
-            setMessages(components);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+// ***********************
+ 
+
+const callback= ({ conversationId, new_message }) => {
+    console.log('new_message', new_message);
+    fuck();
+    console.log(messages)
+    setMessages((prev) => {
+        console.log('lot vao day');
+        return [...prev, new_message];
+    });
+}
+
     useEffect(() => {
-        socket.current = io('http://localhost:9000');
-        socket.current.on('getMessage', (data) => {
-                if(data.conversationId === conversationId.current)
-                {
-                    fetchMessage();
-
-                }
-
-        });
-    }, [conversationId.current]);
+        console.log("dang ki")
+        socket.on('getMessage',callback);
+     return ()=>{
+        console.log("huy dang ki")
+        socket.off("getMessage",callback)
+     }
+    }, [callback]);
+// ***********************
     useEffect(() => {
         fetchMessage();
     }, [conversation.conversationId]);
 
     useEffect(() => {
-        socket.current.emit('addUser', user._id);
-        // socket.current.on('getUsers', (users) => {
-        //     console.log('users>>', users);
-        //     //   setOnlineUsers(
-        //     //     user.followings.filter((f) => users.some((u) => u.userId === f))
-        //     //   );
-        // });
-    }, []);
+        if (messages.length > 0) {
+            handleDataMessages(messages);
+        }
+    }, [messages]);
+
+
 
     const handleSendMessage = async () => {
         try {
             const data = {
-                senderId: user._id,
+                senderId: currentUserId,
                 recieverId: conversation.userInfor._id,
                 conversationId: conversation.conversationId,
                 content: textMessage,
             };
-            await messageService.sendMessage(data);
-            socket.current.emit('sendMessage', data);
-            fetchMessage();
+            const new_message = await messageService.sendMessage(data);
+            await messageService.updateLastMessage(conversation.conversationId, textMessage);
+            setMessages([...messages, new_message]);
+            socket.emit('sendMessage', { ...data, new_message });
             setTextMessage('');
             refInput.current.focus();
         } catch (error) {
@@ -147,7 +178,7 @@ function Chat() {
             </div>
 
             <div className="chat_content">
-                <div className="wrapper_scroll">{messages}</div>
+                <div className="wrapper_scroll">{messagesComponent}</div>
             </div>
 
             <div className="chat_input_container">

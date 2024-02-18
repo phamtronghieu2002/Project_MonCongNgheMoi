@@ -1,13 +1,13 @@
 import * as messageService from "../services/messageService.js";
 export const handleCreateMessage = async (req, res) => {
-  const { senderId, recieverId, content, conversationId } = req.body;
-  if (!senderId || !recieverId || !content  || !conversationId) {
+  const { senderId, content, conversationId } = req.body;
+  if (!senderId  || !content  || !conversationId) {
     return res.status(400).json({ message: "missing param" });
   }
 
   const response = await messageService.createMessage(
     senderId,
-    recieverId,
+
     content,
     conversationId
   );
@@ -31,3 +31,18 @@ export const handleGetMessageByConverationId = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+export const handleUpdateStatusSeenMessage = async (req, res) => {
+  const { senderId, conversationId } = req.body;
+  if (!senderId || !conversationId) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const response = await messageService.updatStatusSeenMessage(
+    senderId,
+    conversationId
+  );
+  if (response) {
+    return res.status(200).json(response);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}
