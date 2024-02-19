@@ -50,17 +50,15 @@ export const getConversationByUserId = async (senderid) => {
 
 export const updateLastMessage = async (conversationId, lastMessage) => {
   try {
-
-    const updatedConversation = await ConversationModel.findOneAndUpdate(
-      { _id: conversationId },
-      { $set: { lastMessage, updatedAt: new Date() } },
-      { new: true, sort: { updatedAt: -1 } }
+//update and sort by updateAt
+    const updatedConversation = await ConversationModel.findByIdAndUpdate(
+      conversationId,
+      { lastMessage: lastMessage },
+      { new: true }
     );
 
 
-    const sortedConversations = await ConversationModel.find({}).sort({ updatedAt: -1 });
-
-    console.log("sortedConversations>>>>",sortedConversations);
+ 
 
     return updatedConversation;
   } catch (error) {

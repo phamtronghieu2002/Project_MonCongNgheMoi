@@ -7,6 +7,7 @@ function SocketProvider({children}) {
     const {getUser}=useContext(AuthContext);
     const user=getUser().data;
   const  socket = io('ws://localhost:9000');
+  console.log("socket hhihi")
     useEffect(() => {
         if(!user._id) return
         socket.emit('addUser', user._id);
@@ -16,13 +17,12 @@ function SocketProvider({children}) {
         //     //     user.followings.filter((f) => users.some((u) => u.userId === f))
         //     //   );
         // });
-     if(window.location.pathname==='/phonebook'){
+    //  if(window.location.pathname==='/phonebook'){
       
-        socket.disconnect();
+    //     socket.disconnect();
       
-     }
-    //  console.log(window.location.pathname)
-    }, [window.location.pathname,user._id]);
+    //  }
+    }, [user._id]);
     return (
         <socketContext.Provider value={{socket,currentUserId:user._id}}>
             {children}

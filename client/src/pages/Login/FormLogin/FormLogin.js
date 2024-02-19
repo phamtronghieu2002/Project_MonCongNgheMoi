@@ -12,15 +12,14 @@ export default function FormLogin({}) {
     const [phonenumber, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const { login,getUser } = useContext(AuthContext);
-        console.log('userContext:>>>',getUser());
+   
     const handleLogin = async () => {
         try {
             const res = await authServices.login({ phonenumber, password });
 
             if (res.errCode === 0) {
                 const user = res.data;
-                login(user);
-                console.log('userContext:>>>',user);
+                login();
                 toast.success(res.message);
 
 

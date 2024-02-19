@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import React from "react";
 import axios from "..//..//services/axios";
 import configs from "..//..//configs";
@@ -8,7 +8,7 @@ export const AuthContext = React.createContext();
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState({ auth: false, data:{} });
-  let navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get("/auth/profile")
@@ -18,7 +18,7 @@ export default function AuthProvider({ children }) {
           console.log(user)
           const path = window.location.pathname;
           if (path === configs.paths.login) {
-            login(user);
+            login();
             return;
           }
           setUser({ auth: true, data:user});
@@ -32,14 +32,12 @@ export default function AuthProvider({ children }) {
   }, []);
 
 
-  const login = (data) => {
-      setUser({ auth: true, data });
-      navigate('/');
-  };
+const login=()=>{
+  window.location.href = configs.paths.home;
+}
+
   const logout = () => {
    window.location.href = configs.paths.login;
-   
-  
   };
   const getUser = () => {
     return user;
@@ -47,10 +45,9 @@ export default function AuthProvider({ children }) {
   return (
     <AuthContext.Provider
       value={{
-        login,
         logout,
         getUser,
-
+        login
       }}
     >
       {children}

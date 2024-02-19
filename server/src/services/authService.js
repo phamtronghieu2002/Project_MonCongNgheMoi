@@ -31,7 +31,6 @@ function generateKeywordsWithSpaces(str) {
   return keywords;
 }
 
-
 export const register = async ({ username, password, phonenumber, res }) => {
   try {
     // const user = await UserModel.findOne({ phonenumber });

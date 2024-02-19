@@ -15,10 +15,7 @@ function Chat() {
     const { currentUserId, socket } = useContext(socketContext);
     const conversationId = useRef(conversation.conversationId);
     const refInput = useRef();
-    console.log('re-render');
-        const fuck =()=>{
-            console.log("xin chao ae")
-        }
+  
     const handleDataMessages = async (messages) => {
         try {
             const conversationID = conversationId.current;
@@ -34,7 +31,7 @@ function Chat() {
 
                 if (messages[i].senderId === currentUserId) {
                     if (texts.length > 0) {
-                        components.push(<MessageItem key={i-1} content={texts} />);
+                        components.push(<MessageItem key={i - 1} content={texts} />);
 
                         texts = [];
                     }
@@ -51,19 +48,22 @@ function Chat() {
             recieverId && (await messageService.updateStatus(recieverId, conversationID));
 
             setMessagesComponent([...components]);
+            
         } catch (error) {
             console.log(error);
         }
     };
 
-
-
     const fetchMessage = async () => {
-        try {
-            const messages = await messageService.getMessageByConversationId(conversation.conversationId);
-            setMessages([...messages]);
-        } catch (error) {
-            console.log(error);
+        if(conversation.conversationId)
+        {
+
+            try {
+                const messages = await messageService.getMessageByConversationId(conversation.conversationId);
+                setMessages([...messages]);
+            } catch (error) {
+                console.log(error);
+            }
         }
     };
 
@@ -71,40 +71,32 @@ function Chat() {
         conversationId.current = conversation.conversationId;
     }, [conversation.conversationId]);
 
-
-// ***********************
+    // ***********************
  
 
-const callback= ({ conversationId, new_message }) => {
-    console.log('new_message', new_message);
-    fuck();
-    console.log(messages)
-    setMessages((prev) => {
-        console.log('lot vao day');
-        return [...prev, new_message];
-    });
-}
-
     useEffect(() => {
-        console.log("dang ki")
-        socket.on('getMessage',callback);
-     return ()=>{
-        console.log("huy dang ki")
-        socket.off("getMessage",callback)
-     }
-    }, [callback]);
-// ***********************
+        const onMessage =({ conversationId, new_message }) => {
+            console.log('new_message', new_message);
+       
+            console.log(messages);
+            setMessages((prev) => {
+                console.log('lot vao day');
+                return [...prev, new_message];
+            });
+        };
+        socket.on('getMessage', onMessage);
+       
+    }, []);
+    // ***********************
     useEffect(() => {
         fetchMessage();
     }, [conversation.conversationId]);
 
     useEffect(() => {
-        if (messages.length > 0) {
+      
             handleDataMessages(messages);
-        }
+      
     }, [messages]);
-
-
 
     const handleSendMessage = async () => {
         try {

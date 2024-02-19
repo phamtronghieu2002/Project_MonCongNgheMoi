@@ -1,14 +1,11 @@
-.hoho
-{
+.hoho {
     background: blue;
 }
 #wp_user_chat {
-    width:  344px;
+    width: 344px;
     border-right: 1px solid #e0e0e0;
 
-
     .filter_chat {
-
         border-bottom: 1px solid #e0e0e0;
         z-index: 0;
         position: relative;
@@ -33,15 +30,12 @@
         height: 100vh;
         position: relative;
         z-index: 0;
-overflow: scroll;
+        overflow: auto;
         .account_item_chat {
             @for $i from 1 through 4 {
                 &:nth-child(#{$i}) {
                     .wp_detail_user_chat_popper {
-                        top:110px;
-                      
-
-
+                        top: 110px;
                     }
                 }
             }
