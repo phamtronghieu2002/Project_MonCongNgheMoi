@@ -14,9 +14,10 @@ const UserChat = () => {
     const { socket, currentUserId } = useContext(socketContext);
    
     const currentUserIdRef = useRef(currentUserId);
-
+console.log("re-render",conversations)
     const fetchConversations = async () => {
         try {
+            
             const conversations = await conversationService.getConversationByUserId(currentUserIdRef.current);
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
@@ -58,7 +59,7 @@ const UserChat = () => {
                 </span>
             </div>
             <div className="usersChat">
-                {[...conversations].length > 0 &&
+                {conversations.length > 0 &&
                     conversations.map((item, index) => (
                         <AccountItem
                             activeFilter={activeFilter}

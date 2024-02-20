@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './AccountItem.scss';
 import DetailUserChatPopper from '../../../../components/Popper/DetailUserChatPopper/DetailUserChatPopper';
 import { useEffect, useState, useContext } from 'react';
@@ -23,7 +23,7 @@ function AccountItem({
     const [openDetail, setOpenDetail] = useState(false);
     const [userChat, setUserChat] = useState(null);
     const { conversation, setConversation } = useContext(ConversationContext);
-
+    
     useEffect(() => {
         window.addEventListener('click', () => setOpenDetail(false));
         if (openPopper === conversationId) {
@@ -36,20 +36,23 @@ function AccountItem({
     }, [openPopper]);
 
     useEffect(() => {
+        console.log("use Effect")
         const fetchMember = async () => {
             try {
                 if (isGroup) {
                 }
                 const recieverid = members.find((id) => id !== senderId);
                 console.log('recieverid', recieverid);
-                const res = await userService.getUserById(recieverid);
-                setUserChat(res);
+                const user = await userService.getUserById(recieverid);
+
+                console.log("user >>>>",user)
+                setUserChat(user);
             } catch (err) {
                 console.log(err);
             }
         };
         fetchMember();
-    }, []);
+    }, [members,conversationId]);
 
     return (
         <div
@@ -93,4 +96,4 @@ function AccountItem({
     );
 }
 
-export default React.memo(AccountItem);
+export default AccountItem;

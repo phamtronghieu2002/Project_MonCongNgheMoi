@@ -1,0 +1,41 @@
+.wp_slider
+{
+    overflow: hidden;
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    #carouselExampleDark{
+        width: 450px;
+        .carousel-control-next-icon, .carousel-control-prev-icon 
+        {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+    .carousel-indicators{
+        bottom: -160px;
+    }
+    .carousel-caption 
+    {
+
+        position: fixed;
+        right: 15%;
+        bottom: 3.25rem;
+        left: 45%;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+
+        text-align: center;
+    }
+    .carousel-control-prev {
+        left: -190px;
+    }
+    .carousel-control-next {
+        right: -190px;
+    }
+    .carousel-inner {
+       
+        overflow: hidden;
+    }
+}

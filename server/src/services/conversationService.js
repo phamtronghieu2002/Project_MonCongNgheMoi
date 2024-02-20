@@ -1,5 +1,5 @@
 import ConversationModel from "../models/Conversation.js";
-import MessageModel from "../models/Message.js";
+
 export const createConversation = async (senderid, recieverid, type) => {
   try {
     const conversation = await ConversationModel.findOne({
@@ -23,21 +23,23 @@ export const createConversation = async (senderid, recieverid, type) => {
 };
 export const getConversationByUserId = async (senderid) => {
   try {
-    const conversation = await ConversationModel.find({
-      members: { $in: [senderid] },
-    });
-    const consRes = [];
-    if (conversation.length === 0) {
-      return conversation;
-    }
-    //check if conversation has message
-    for (let i = 0; i < conversation.length; i++) {
-      const message = await MessageModel.findOne({
-        conversationId: conversation[i]._id.toString(),
-      });
 
-      if (message) {
-        consRes.push(conversation[i]);
+
+    const conversations = await ConversationModel.find({
+      members: { $in: [senderid] },
+    }).sort({ updatedAt: -1});
+    const consRes = [];
+    if (conversations.length === 0) {
+      return conversations;
+    }
+
+   
+    //check if conversation has message
+    for (let i = 0; i < conversations.length; i++) {
+   
+
+      if (conversations[i].lastMessage !== "") {
+        consRes.push(conversations[i]);
         console.log("consRes trong>>>", consRes);
       }
     }
@@ -51,16 +53,23 @@ export const getConversationByUserId = async (senderid) => {
 export const updateLastMessage = async (conversationId, lastMessage) => {
   try {
 //update and sort by updateAt
-    const updatedConversation = await ConversationModel.findByIdAndUpdate(
-      conversationId,
-      { lastMessage: lastMessage },
-      { new: true }
-    );
+const updatedConversation = await ConversationModel.findByIdAndUpdate(
+  conversationId,
+  {
+    $set: {
+      lastMessage: lastMessage,
+    },
+    $currentDate: {
+      updatedAt: true,
+    },
+  },
+  { new: true }
+);
 
+// Now, let's sort conversations based on updatedAt field
+const sortedConversations = await ConversationModel.find().sort({ updatedAt: -1 });
 
- 
-
-    return updatedConversation;
+return sortedConversations;
   } catch (error) {
     console.log(error);
   }
