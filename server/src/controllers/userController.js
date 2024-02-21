@@ -25,3 +25,17 @@ export const handleSearchUser  =async(req,res)=>{
     }
     return res.status(500).json({ message: "Internal Server Error" });
   }
+
+
+
+  export const handleCheckFriend = async (req, res) => {
+    const { senderId,friendId } = req.body;
+    if (!senderId || !friendId) {
+      return res.status(400).json({ message: "missing param" });
+    }
+    const response = await userServices.checkFriend(senderId,friendId);
+  
+      return res.status(200).json(response);
+   
+    return res.status(500).json({ message: "Internal Server Error" });
+  }

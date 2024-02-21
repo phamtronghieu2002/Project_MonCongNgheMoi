@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import Main from './Main/Main';
 import SidebarNav from '../../components/SidebarNav/SidebarNav';
-import SocialDashboard from './SocialDashboard/SocialDashboard';
+import SocialNav from './SocialDashboard/SocialNav'
 function Phonebook() {
  
     const [socialSelect, setSocialSelect] = useState({
@@ -16,7 +16,7 @@ function Phonebook() {
     return (
         <div id="wp_phonebook_page">
             <SidebarNav />
-            <SocialDashboard 
+            <SocialNav 
             setSocialSelect={setSocialSelect}
             
             />

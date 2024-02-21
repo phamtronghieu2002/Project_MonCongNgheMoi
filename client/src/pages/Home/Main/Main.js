@@ -9,7 +9,7 @@ function Main() {
 
     return (
         <div id="main_container" className="d-flex">
-            {conversation.conversationId ? (
+            {conversation._id ? (
                 <>
                     <Chat />
                     {/* <Aside/> */}

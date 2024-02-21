@@ -3,7 +3,7 @@ import Search from '../../../components/Search/Search';
 import SocialItem from './SocialItem/SocialItem';
 import { useLang } from '../../../hooks';
 
-function SocialDashboard({ setSocialSelect ,setCount}) {
+function SocialNav({ setSocialSelect ,setCount}) {
     const { t } = useLang();
     const socials = [
         {
@@ -33,7 +33,7 @@ function SocialDashboard({ setSocialSelect ,setCount}) {
             icon: <i className="fa-solid fa-envelope"></i>,
             callback: () => {
                 setSocialSelect({
-                    type: 'message',
+                    type: 'request_invite',
 
                     icon: <i className="fa-solid fa-envelope"></i>,
                 });
@@ -42,7 +42,7 @@ function SocialDashboard({ setSocialSelect ,setCount}) {
         },
     ];
     return (
-        <div id="wp_socialDashboard">
+        <div id="wp_SocialNav">
             <Search />
             <div className="list_social">
                 {socials.map((social, index) => (
@@ -53,4 +53,4 @@ function SocialDashboard({ setSocialSelect ,setCount}) {
     );
 }
 
-export default SocialDashboard;
+export default SocialNav;

@@ -8,7 +8,7 @@ function MessageItem({ senderId, receiverId, content, own }) {
         <div className={own ? 'message_item_own message-item' : 'message-item'}>
             {own || (
                 <div className="message-avatar">
-                    <img src={conversation.userInfor.avatar} alt="avatar" />
+                    <img src={conversation.recieveInfor.avatar} alt="avatar" />
                 </div>
             )}
             <div className="message-content">

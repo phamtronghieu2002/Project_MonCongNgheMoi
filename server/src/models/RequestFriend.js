@@ -13,6 +13,10 @@ const RequestFriend = new mongoose.Schema(
     status: {
       type: Number,
       enum: [0,1,2],
+      // 0: huy ket ban
+      // 1: dang cho
+      // 2: đã từ chối
+
     },
   }
 ,

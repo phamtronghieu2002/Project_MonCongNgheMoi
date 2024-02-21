@@ -58,13 +58,13 @@ function AccountItem({
         <div
             onClick={() => {
                 setConversation({
-                    userInfor: {
+                    recieveInfor: {
                         avatar: userChat.avatarPicture || userChat.groupPicture,
                         name: userChat.username || userChat.groupname,
                         _id: userChat._id,
-                        type: 'user',
+                        isGroup
                     },
-                    conversationId,
+                    _id:conversationId,
                 });
                 onClick();
                 onActiveFilter(conversationId);

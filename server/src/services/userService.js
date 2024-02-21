@@ -18,7 +18,7 @@ export const searchUser = async (keyword) => {
       "_id avatarPicture username backgroundPicture friends"
     );
     if (users.length > 0) {
-      resultSearch.push(...users.map((user) => ({ ...user._doc, type: 0 })));
+      resultSearch.push(...users.map((user) => ({ ...user._doc, isGroup: 0 })));
     }
     const groups = await GroupModel.find({
       keywords: { $in: keyword },
@@ -42,4 +42,12 @@ export const getUserById = async (id) => {
     console.log(error);
   }
 }
-
+export const checkFriend = async (senderId, friendId) => {
+  try {
+    const user = await UserModel.findOne({ _id: senderId });
+    console.log(user._doc);
+    return  user._doc.friends.includes(friendId)
+  } catch (error) {
+    console.log(error);
+  }
+}

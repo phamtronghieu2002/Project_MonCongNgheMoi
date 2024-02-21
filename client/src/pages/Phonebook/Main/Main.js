@@ -2,9 +2,10 @@ import './Main.scss';
 import { useLang } from '../../../hooks';
 import UserList from './UserList/UserList';
 import GroupList from './GroupList/GroupList';
+import FriendRequest from './FriendRequest/FriendRequest';
 function Main({ icon, type }) {
     const { t } = useLang();
-    const Component = type === 'friend' ? UserList : GroupList;
+    const Component = type === 'friend' ? UserList : type==='group'  ? GroupList : FriendRequest;
     const Langtitle =
         type === 'friend'
             ? t('home.social_list.friend')

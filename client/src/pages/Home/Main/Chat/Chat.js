@@ -1,6 +1,10 @@
 import './Chat.scss';
 import MessageItem from './MessageItem/MessageItem';
+import Notify from './Notify/Notify';
 import * as messageService from '..//..//..//..//services//messageService';
+import * as userService from '..//..//..//..//services//userService';
+import * as friendService from '..//..//..//..//services//requestFriendService';
+import { toast, Toaster } from 'react-hot-toast';
 import { useLang } from '../../../../hooks';
 import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
@@ -13,9 +17,34 @@ function Chat() {
     const [textMessage, setTextMessage] = useState('');
     const { conversation } = useContext(ConversationContext);
     const { currentUserId, socket } = useContext(socketContext);
-    const conversationId = useRef(conversation.conversationId);
+    const [isFriend, setIsFriend] = useState(true);
+    const [statusRequest, setStatusRequest] = useState(false);
+    const conversationId = useRef(conversation._id);
     const refInput = useRef();
-  
+
+    const handleSendRequestFriend = async () => {
+        try {
+            const senderId = currentUserId;
+            const recieverId = conversation.recieveInfor._id;
+            friendService.sendRequestFriend(senderId, recieverId);
+            setStatusRequest(true);
+            toast.success('Đã gửi yêu cầu kết bạn');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleCancelRequestFriend = async () => {
+        try {
+            const senderId = currentUserId;
+            const recieverId = conversation.recieveInfor._id;
+            friendService.cancelRequestFriend(0, senderId, recieverId);
+            setStatusRequest(false);
+            toast.success('Đã huy gửi yêu cầu kết bạn');
+        } catch (error) {
+            console.log(error);
+        }
+    };
     const handleDataMessages = async (messages) => {
         try {
             const conversationID = conversationId.current;
@@ -48,18 +77,15 @@ function Chat() {
             recieverId && (await messageService.updateStatus(recieverId, conversationID));
 
             setMessagesComponent([...components]);
-            
         } catch (error) {
             console.log(error);
         }
     };
 
     const fetchMessage = async () => {
-        if(conversation.conversationId)
-        {
-
+        if (conversation._id) {
             try {
-                const messages = await messageService.getMessageByConversationId(conversation.conversationId);
+                const messages = await messageService.getMessageByConversationId(conversation._id);
                 setMessages([...messages]);
             } catch (error) {
                 console.log(error);
@@ -67,17 +93,29 @@ function Chat() {
         }
     };
 
-    useEffect(() => {
-        conversationId.current = conversation.conversationId;
-    }, [conversation.conversationId]);
+    const checkFriend = async () => {
+        const senderId = currentUserId;
+        const friendId = conversation.recieveInfor._id;
+        const isGroup = conversation.recieveInfor.isGroup;
+        if (!isGroup) {
+            const isFriend = await userService.isFriend(senderId, friendId);
+            setIsFriend(isFriend.data);
+        }
+    };
 
-    // ***********************
- 
+    useEffect(() => {
+        conversationId.current = conversation._id;
+        checkFriend();
+        fetchMessage();
+        setStatusRequest(false)
+    }, [conversation._id]);
+
+
 
     useEffect(() => {
-        const onMessage =({ conversationId, new_message }) => {
+        const onMessage = ({ conversationId, new_message }) => {
             console.log('new_message', new_message);
-       
+
             console.log(messages);
             setMessages((prev) => {
                 console.log('lot vao day');
@@ -85,29 +123,23 @@ function Chat() {
             });
         };
         socket.on('getMessage', onMessage);
-       
     }, []);
-    // ***********************
-    useEffect(() => {
-        fetchMessage();
-    }, [conversation.conversationId]);
+
 
     useEffect(() => {
-      
-            handleDataMessages(messages);
-      
+        handleDataMessages(messages);
     }, [messages]);
 
     const handleSendMessage = async () => {
         try {
             const data = {
                 senderId: currentUserId,
-                recieverId: conversation.userInfor._id,
-                conversationId: conversation.conversationId,
+                recieverId: conversation.recieveInfor._id,
+                conversationId: conversation._id,
                 content: textMessage,
             };
             const new_message = await messageService.sendMessage(data);
-            await messageService.updateLastMessage(conversation.conversationId, textMessage);
+            await messageService.updateLastMessage(conversation._id, textMessage);
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
             setTextMessage('');
@@ -121,11 +153,11 @@ function Chat() {
             <div className="header">
                 <div className="infor">
                     <div className="avatar">
-                        <img src={conversation.userInfor.avatar} alt="avatar" />
+                        <img src={conversation.recieveInfor.avatar} alt="avatar" />
                     </div>
                     <div>
                         <div className="name fw-bold">
-                            <span>{conversation.userInfor.name}</span>
+                            <span>{conversation.recieveInfor.name}</span>
                         </div>
 
                         <div className="status">
@@ -170,6 +202,13 @@ function Chat() {
             </div>
 
             <div className="chat_content">
+                {!isFriend && (
+                    <Notify
+                        statusRequest={statusRequest}
+                        onSendRequestFriend={handleSendRequestFriend}
+                        onCancelRequestFriend={handleCancelRequestFriend}
+                    />
+                )}
                 <div className="wrapper_scroll">{messagesComponent}</div>
             </div>
 
