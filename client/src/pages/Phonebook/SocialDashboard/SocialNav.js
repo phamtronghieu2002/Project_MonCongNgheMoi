@@ -16,7 +16,7 @@ function SocialNav({ setSocialSelect ,setCount}) {
                     icon: <i className="fa-solid fa-user"></i>,
                 });
             },
-            title: t('home.social_list.friend'),
+            title: t('messenger.social_list.friend'),
         },
         {
             icon: <i className="fa-solid fa-user-group"></i>,
@@ -27,7 +27,7 @@ function SocialNav({ setSocialSelect ,setCount}) {
                     icon: <i className="fa-solid fa-user-group"></i>,
                 });
             },
-            title: t('home.social_list.group'),
+            title: t('messenger.social_list.group'),
         },
         {
             icon: <i className="fa-solid fa-envelope"></i>,
@@ -38,7 +38,7 @@ function SocialNav({ setSocialSelect ,setCount}) {
                     icon: <i className="fa-solid fa-envelope"></i>,
                 });
             },
-            title: t('home.social_list.request_invite'),
+            title: t('messenger.social_list.request_invite'),
         },
     ];
     return (

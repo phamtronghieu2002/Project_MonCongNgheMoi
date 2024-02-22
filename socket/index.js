@@ -58,6 +58,21 @@ io.on("connection", (socket) => {
     }
   );
 
+  socket.on("sendRequestFriend",({recieverId})=>{
+    const reciever = getUser(recieverId);
+    if (reciever) {
+      io.to(reciever.socketId).emit("getFriendRequest");
+    }
+  
+  })
+
+  socket.on("acceptFriendRequest",(senderId)=>{
+    const sender = getUser(senderId);
+    if (senderId) {
+      io.to(sender.socketId).emit("re-renderFriendRequest");
+    }
+  
+  })
   //when disconnect
   socket.on("disconnect", () => {
     console.log("a user disconnected!");

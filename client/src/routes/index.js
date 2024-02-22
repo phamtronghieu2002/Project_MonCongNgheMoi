@@ -1,5 +1,5 @@
 import configs from "../configs"
-import { Home,Login,Phonebook } from "../pages"
+import { Messenger,Login,Phonebook } from "../pages"
 const PublicRoutes=[
   {
     path:configs.paths.login,
@@ -14,8 +14,8 @@ const PrivateRoutes=[
     element:<Phonebook/>
   },
   {
-    path:configs.paths.home,
-    element:<Home/>
+    path:configs.paths.messenger,
+    element:<Messenger/>
   },
 ]
 

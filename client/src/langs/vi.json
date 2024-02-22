@@ -30,7 +30,7 @@
         "placeholder_password": "Mật Khẩu",
         "placeholder_repassword": "Nhập lại mật khẩu"
     },
-    "home": {
+    "messenger": {
         "popper": {
             "user": {
                 "profile": "thông tin cá nhân",

@@ -163,9 +163,9 @@ export const createFreshToken = async (freshToken, res, req) => {
       delete decoded_freshToken.exp;
       delete decoded_freshToken.iat;
       const new_fresh_token = create_fresh_token(decoded_freshToken, expiresIn);
-      console.log("new fresh token>>>", new_fresh_token);
+
       const new_access_token = create_access_token(decoded_freshToken, "1m");
-      console.log("new_access_token>>>", new_access_token);
+
       res
         .cookie("accessToken", new_access_token, {
           expires: new Date(new Date().getTime() + 31557600000),

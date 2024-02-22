@@ -31,7 +31,7 @@
         "placeholder_password": "enter your password",
         "placeholder_repassword": "confirm password"
     },
-    "home": {
+    "messenger": {
         "popper": {
             "user": {
                 "profile": "Profile",

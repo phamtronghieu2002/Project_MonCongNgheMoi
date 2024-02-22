@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     },
     avatarPicture: {
       type: String,
-      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQXtLutHYPumK-y3M4mrBbupa3O3foGz0WcMc-oMu80A&s",
+      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1dKSyQ"
     },
     backgroundPicture: {
       type: String,
@@ -39,10 +39,12 @@ const UserSchema = new mongoose.Schema(
     friends: {
       type: Array,
       default: [],
+      ref: "User",
     },
     groups: {
       type: Array,
       default: [],
+      ref: "Group",
     },
     keywords: {
       type: Array,
@@ -53,7 +55,7 @@ const UserSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { timestamps: true }
+  { timestamps: true }  
 );
 
 module.exports = mongoose.model("User", UserSchema);

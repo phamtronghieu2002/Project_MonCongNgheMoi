@@ -52,7 +52,7 @@ export default function SidebarNav() {
                         className="a-child"
                     />
                 </div>
-                <Link to={configs.paths.home} className=" nav_item position-relative">
+                <Link to={configs.paths.messenger} className=" nav_item position-relative">
                     <i className="fa-solid fa-message nav_icon"></i>
                     {/* circle num */}
                     <div className="nav_num">1</div>

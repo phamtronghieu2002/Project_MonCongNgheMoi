@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { hashPassword, comparePassword } from "..//utils/crypto";
 import { create_access_token, create_fresh_token } from "../utils/jwt";
 dotenv.config();
-import jwt from "jsonwebtoken";
+
 export const searchUser = async (keyword) => {
   try {
     const resultSearch = [];
@@ -32,22 +32,39 @@ export const searchUser = async (keyword) => {
   }
 };
 
-
 export const getUserById = async (id) => {
   try {
-    const user = await UserModel.findOne({_id:id}, "_id avatarPicture username ,friends");  
-      return user;
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
-export const checkFriend = async (senderId, friendId) => {
-  try {
-    const user = await UserModel.findOne({ _id: senderId });
-    console.log(user._doc);
-    return  user._doc.friends.includes(friendId)
+    const user = await UserModel.findOne(
+      { _id: id },
+      "_id avatarPicture username ,friends"
+    );
+    return user;
   } catch (error) {
     console.log(error);
   }
-}
+};
+export const checkFriend = async (senderId, friendId) => {
+
+    const user = await UserModel.findOne({ _id: senderId });
+  console.log(user._doc.friends.includes(friendId));
+    return user._doc.friends.includes(friendId);
+
+};
+
+export const addFriend = async (senderId, friendId) => {
+  try {
+    const sender = await UserModel.findOneAndUpdate(
+      { _id: senderId },
+      { $push: { friends: friendId } },
+      { new: true }
+    );
+    const friend = await UserModel.findOneAndUpdate(
+      { _id: friendId },
+      { $push: { friends: senderId } },
+      { new: true }
+    );
+    return { sender, friend };
+  } catch (error) {
+    console.log(error);
+  }
+};

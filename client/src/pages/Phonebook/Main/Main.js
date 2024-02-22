@@ -8,10 +8,10 @@ function Main({ icon, type }) {
     const Component = type === 'friend' ? UserList : type==='group'  ? GroupList : FriendRequest;
     const Langtitle =
         type === 'friend'
-            ? t('home.social_list.friend')
+            ? t('messenger.social_list.friend')
             : type === 'group'
-            ? t('home.social_list.group')
-            : t('home.social_list.request_invite');
+            ? t('messenger.social_list.group')
+            : t('messenger.social_list.request_invite');
     return (
         <div id="main_container_handbook">
             <div className="header">

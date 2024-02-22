@@ -1,5 +1,5 @@
 const paths={
-    home:"/",
+    messenger:"/messenger",
     phonebook:"/phonebook",
     login:"/login",
 }

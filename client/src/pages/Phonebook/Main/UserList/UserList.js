@@ -38,7 +38,7 @@ useEffect(()=>{
        <Layout
        onSearch={handleSearchUser}
        >
-         <div id="user_list">
+         <div id="user_list" style={{padding:"16px"}}>
                 {Users.map((item,index) => (
                     <AccountItem
                     key={index}

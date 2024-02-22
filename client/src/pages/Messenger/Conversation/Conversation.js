@@ -1,20 +1,21 @@
-import './UserChat.scss';
+import './Conversation.scss';
 import Search from '../../../components/Search/Search';
 import clsx from 'clsx';
-import AccountItem from './AccountItem/AccountItem';
+import ConversationItem from './ConversationItem/ConversationItem';
 import * as conversationService from '../../../services/conversationService';
 import * as messageService from '../../../services/messageService';
 import { useEffect, useState, useContext, useRef } from 'react';
-
 import { socketContext } from '../../../providers/Socket/SocketProvider';
-const UserChat = () => {
-    const [activeFilter, setActivFilter] = useState(1);
+import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
+
+const Conversation = () => {
+    const { socket, currentUserId } = useContext(socketContext);
+    const {conversation}=useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
-    const { socket, currentUserId } = useContext(socketContext);
-   
+    const [activeFilter, setActivFilter] = useState(conversation._id);
     const currentUserIdRef = useRef(currentUserId);
-console.log("re-render",conversations)
+
     const fetchConversations = async () => {
         try {
             
@@ -61,7 +62,7 @@ console.log("re-render",conversations)
             <div className="usersChat">
                 {conversations.length > 0 &&
                     conversations.map((item, index) => (
-                        <AccountItem
+                        <ConversationItem
                             activeFilter={activeFilter}
                             onActiveFilter={setActivFilter}
                             onClick={fetchConversations}
@@ -78,4 +79,4 @@ console.log("re-render",conversations)
     );
 };
 
-export default UserChat;
+export default Conversation;

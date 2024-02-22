@@ -5,14 +5,14 @@ export const handleCreateMessage = async (req, res) => {
     return res.status(400).json({ message: "missing param" });
   }
 
-  const response = await messageService.createMessage(
+  const data = await messageService.createMessage(
     senderId,
 
     content,
     conversationId
   );
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
@@ -23,11 +23,11 @@ export const handleGetMessageByConverationId = async (req, res) => {
   if (!conversationId) {
     return res.status(400).json({ message: "missing param" });
   }
-  const response = await messageService.getMessageByConverationId(
+  const data = await messageService.getMessageByConverationId(
     conversationId
   );
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
@@ -37,12 +37,12 @@ export const handleUpdateStatusSeenMessage = async (req, res) => {
   if (!senderId || !conversationId) {
     return res.status(400).json({ message: "missing param" });
   }
-  const response = await messageService.updatStatusSeenMessage(
+  const data = await messageService.updatStatusSeenMessage(
     senderId,
     conversationId
   );
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 }

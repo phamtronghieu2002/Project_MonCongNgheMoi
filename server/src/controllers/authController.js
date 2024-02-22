@@ -4,14 +4,14 @@ export const handleRegister = async (req, res) => {
   if (!username || !phonenumber || !password) {
     return res.status(400).json({ message: "missing params" });
   }
-  const response = await authServices.register({
+  const data = await authServices.register({
     username,
 
     password,
     phonenumber,
   });
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
@@ -21,13 +21,13 @@ export const handleLogin = async (req, res) => {
   if (!phonenumber || !password) {
     return res.status(400).json({ message: "missing params" });
   }
-  const response = await authServices.login({
+  const data = await authServices.login({
     phonenumber,
     password,
     res,
   });
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
@@ -37,11 +37,11 @@ export const handleCheckEixtsPhone = async (req, res) => {
   if (!phonenumber) {
     return res.status(400).json({ message: "missing params" });
   }
-  const response = await authServices.checkPhoneExist({
+  const data = await authServices.checkPhoneExist({
     phonenumber,
   });
-  if (response) {
-    return res.status(200).json(response);
+  if (data) {
+    return res.status(200).json(data);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };

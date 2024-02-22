@@ -13,9 +13,9 @@ export const createConversation = async (senderid, recieverid, type) => {
       members: [senderid, recieverid],
       isGroup: type,
     });
-    const response = await new_conversation.save();
-    if (response) {
-      return response;
+    const data = await new_conversation.save();
+    if (data) {
+      return data;
     }
   } catch (error) {
     console.log(error);

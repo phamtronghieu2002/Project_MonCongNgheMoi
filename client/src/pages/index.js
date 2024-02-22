@@ -1,6 +1,6 @@
-import Home from "./Home/Home";
+import Messenger from "./Messenger/Messenger";
 
 import Login from "./Login/Login";
 import Phonebook from "./Phonebook/Phonebook";
 
-export {Home,Login,Phonebook}
+export {Messenger,Login,Phonebook}

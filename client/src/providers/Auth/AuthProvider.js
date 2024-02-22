@@ -33,7 +33,7 @@ export default function AuthProvider({ children }) {
 
 
 const login=()=>{
-  window.location.href = configs.paths.home;
+  window.location.href = configs.paths.messenger;
 }
 
   const logout = () => {

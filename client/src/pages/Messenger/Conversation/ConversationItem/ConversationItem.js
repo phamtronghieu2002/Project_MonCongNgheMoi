@@ -1,12 +1,12 @@
 
-import './AccountItem.scss';
-import DetailUserChatPopper from '../../../../components/Popper/DetailUserChatPopper/DetailUserChatPopper';
+import './ConversationItem.scss';
+import DetailConversationPopper from '../../../../components/Popper/DetailConversationPopper/DetailConversationPopper';
 import { useEffect, useState, useContext } from 'react';
 import { useLang } from '../../../../hooks';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
 import * as userService from '../../../../services/userService';
 import clsx from 'clsx';
-function AccountItem({
+function ConversationItem({
     activeFilter,
     conversationId,
     onDetail,
@@ -21,7 +21,7 @@ function AccountItem({
 }) {
     const { t } = useLang();
     const [openDetail, setOpenDetail] = useState(false);
-    const [userChat, setUserChat] = useState(null);
+    const [ConversationCurrent, setConversationCurent] = useState(null);
     const { conversation, setConversation } = useContext(ConversationContext);
     
     useEffect(() => {
@@ -40,13 +40,14 @@ function AccountItem({
         const fetchMember = async () => {
             try {
                 if (isGroup) {
+
                 }
                 const recieverid = members.find((id) => id !== senderId);
                 console.log('recieverid', recieverid);
                 const user = await userService.getUserById(recieverid);
 
                 console.log("user >>>>",user)
-                setUserChat(user);
+                setConversationCurent(user);
             } catch (err) {
                 console.log(err);
             }
@@ -59,9 +60,9 @@ function AccountItem({
             onClick={() => {
                 setConversation({
                     recieveInfor: {
-                        avatar: userChat.avatarPicture || userChat.groupPicture,
-                        name: userChat.username || userChat.groupname,
-                        _id: userChat._id,
+                        avatar: ConversationCurrent.avatarPicture || ConversationCurrent.groupPicture,
+                        name: ConversationCurrent.username || ConversationCurrent.groupname,
+                        _id: ConversationCurrent._id,
                         isGroup
                     },
                     _id:conversationId,
@@ -74,20 +75,20 @@ function AccountItem({
                 (conversationId === activeFilter ? ' backgroundActive' : '')
             }
         >
-            {openDetail && <DetailUserChatPopper />}
+            {openDetail && <DetailConversationPopper />}
             <div className="avatar">
                 <img
                     className="single_chat_avatar"
-                    src={userChat ? userChat.avatarPicture || userChat.groupPicture : ''}
+                    src={ConversationCurrent ? ConversationCurrent.avatarPicture || ConversationCurrent.groupPicture : ''}
                     alt="avt"
                 />
             </div>
             <div className="infor">
-                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{userChat ? userChat.username || userChat.groupname : ''}</span>
+                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{ConversationCurrent ? ConversationCurrent.username || ConversationCurrent.groupname : ''}</span>
                 <br />
                 <span className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>{lastMessage}</span>
             </div>
-            <span className="timer_message">{`5 ${t('home.account_chat_item.timmer.day')}`}</span>
+            <span className="timer_message">{`5 ${t('messenger.account_chat_item.timmer.day')}`}</span>
             <button onClick={onDetail} className="detail_btn">
                 ...
             </button>
@@ -96,4 +97,4 @@ function AccountItem({
     );
 }
 
-export default AccountItem;
+export default ConversationItem;

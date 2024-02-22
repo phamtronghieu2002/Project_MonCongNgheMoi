@@ -22,12 +22,12 @@ function UserPopper() {
     };
 
     const main_menu = [
-        { title: t('home.popper.user.profile'), callback: () => {} },
-        { title: t('home.popper.user.setting'), callback: () => {} },
+        { title: t('messenger.popper.user.profile'), callback: () => {} },
+        { title: t('messenger.popper.user.setting'), callback: () => {} },
     ];
     const foot_menu = [
         {
-            title: t('home.popper.user.logout'),
+            title: t('messenger.popper.user.logout'),
             callback: handleLogout,
         },
     ];

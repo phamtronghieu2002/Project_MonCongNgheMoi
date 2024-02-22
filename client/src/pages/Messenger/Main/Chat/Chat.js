@@ -11,14 +11,20 @@ import { ConversationContext } from '../../../../providers/ConversationProvider/
 import { socketContext } from '../../../../providers/Socket/SocketProvider';
 
 function Chat() {
+    const { conversation } = useContext(ConversationContext);
+    const { currentUserId, socket } = useContext(socketContext);
     const { t } = useLang();
+
+
     const [messages, setMessages] = useState([]);
     const [messagesComponent, setMessagesComponent] = useState([]);
     const [textMessage, setTextMessage] = useState('');
-    const { conversation } = useContext(ConversationContext);
-    const { currentUserId, socket } = useContext(socketContext);
-    const [isFriend, setIsFriend] = useState(true);
+    const [isFriend, setIsFriend] = useState(false);
     const [statusRequest, setStatusRequest] = useState(false);
+    const [request_id, setRequestId] = useState(0);
+
+    console.log("isfriend",isFriend)
+
     const conversationId = useRef(conversation._id);
     const refInput = useRef();
 
@@ -26,8 +32,12 @@ function Chat() {
         try {
             const senderId = currentUserId;
             const recieverId = conversation.recieveInfor._id;
-            friendService.sendRequestFriend(senderId, recieverId);
+            const requestFriend= await friendService.sendRequestFriend(senderId, recieverId);
+            console.log('requestFriend',requestFriend);
+            setRequestId(requestFriend._id);
             setStatusRequest(true);
+            socket.emit('sendRequestFriend', {recieverId });
+
             toast.success('Đã gửi yêu cầu kết bạn');
         } catch (error) {
             console.log(error);
@@ -36,10 +46,10 @@ function Chat() {
 
     const handleCancelRequestFriend = async () => {
         try {
-            const senderId = currentUserId;
             const recieverId = conversation.recieveInfor._id;
-            friendService.cancelRequestFriend(0, senderId, recieverId);
+            friendService.cancelRequestFriend(0,request_id);
             setStatusRequest(false);
+            socket.emit('sendRequestFriend', {recieverId});
             toast.success('Đã huy gửi yêu cầu kết bạn');
         } catch (error) {
             console.log(error);
@@ -99,36 +109,53 @@ function Chat() {
         const isGroup = conversation.recieveInfor.isGroup;
         if (!isGroup) {
             const isFriend = await userService.isFriend(senderId, friendId);
-            setIsFriend(isFriend.data);
+            setIsFriend(typeof isFriend === 'boolean' ? isFriend : isFriend.data === 2)
         }
     };
 
+    const CheckIsSendRequestFriend = async () => {
+        try {
+            const senderId = currentUserId;
+            const recieverId = conversation.recieveInfor._id;
+            const isSendRequest = await friendService.isSendRequestFriend(senderId, recieverId);
+            setStatusRequest(isSendRequest.status);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     useEffect(() => {
         conversationId.current = conversation._id;
         checkFriend();
         fetchMessage();
-        setStatusRequest(false)
+        CheckIsSendRequestFriend();
     }, [conversation._id]);
-
-
 
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
-            console.log('new_message', new_message);
-
-            console.log(messages);
-            setMessages((prev) => {
-                console.log('lot vao day');
-                return [...prev, new_message];
-            });
+            console.log("lot vo")
+            if (conversationId === conversation._id)
+            {
+                setMessages((prev) =>  [...prev, new_message]);
+            } 
         };
+        const onReRenderRequestFriend = () => {
+                checkFriend();
+        }
+            
         socket.on('getMessage', onMessage);
+        socket.on('re-renderFriendRequest', onReRenderRequestFriend);
+        return () => {
+            socket.off('getMessage', onMessage);
+            socket.off('re-renderFriendRequest', onReRenderRequestFriend);
+        };
     }, []);
-
 
     useEffect(() => {
         handleDataMessages(messages);
     }, [messages]);
+   
+   
+
 
     const handleSendMessage = async () => {
         try {
@@ -150,7 +177,7 @@ function Chat() {
     };
     return (
         <div id="chat_container">
-            <div className="header">
+            <div className="header position-relative">
                 <div className="infor">
                     <div className="avatar">
                         <img src={conversation.recieveInfor.avatar} alt="avatar" />
@@ -161,7 +188,7 @@ function Chat() {
                         </div>
 
                         <div className="status">
-                            <span>{t('home.account_chat_item.status.online')}</span>
+                            <span>{t('messenger.account_chat_item.status.online')}</span>
                         </div>
                     </div>
                 </div>
@@ -199,16 +226,17 @@ function Chat() {
                         />
                     </button>
                 </div>
-            </div>
-
-            <div className="chat_content">
-                {!isFriend && (
+                {isFriend && (
                     <Notify
                         statusRequest={statusRequest}
                         onSendRequestFriend={handleSendRequestFriend}
                         onCancelRequestFriend={handleCancelRequestFriend}
                     />
                 )}
+            </div>
+
+            <div className="chat_content">
+              
                 <div className="wrapper_scroll">{messagesComponent}</div>
             </div>
 

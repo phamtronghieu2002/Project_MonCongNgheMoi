@@ -9,27 +9,56 @@ router.post("/", (req, res) => {
   }
   requestFriendService
     .addRequestFriend(senderId, recieverId)
-    .then((response) => {
-      return res.status(200).json(response);
+    .then((data) => {
+      return res.status(200).json(data);
     })
     .catch((error) => {
       console.log(error);
       return res.status(500).json({ message: "Internal Server Error" });
     });
 });
-router.put("/", (req, res) => {
+
+router.get("/", async(req, res) => {
+  const { senderId,recieverId } = req.query;
+  console.log(senderId,recieverId);
+  if(!senderId || !recieverId){
+    return res.status(400).json({ message: "missing param" });
+  }
+    const request = await requestFriendService.checkSendRequestFriend( senderId,recieverId );
+    if(request){
+      return res.status(200).json(request);
+    }
+    return res.status(500).json({ message: "Internal Server Error" });
+
+});
+router.put("/:id", (req, res) => {
   const { status} = req.query;
- const { senderId, recieverId } = req.body;
+ const { id } = req.params;
+
   requestFriendService
-    .updateStatus(status,senderId,recieverId)
-    .then((response) => {
-      return res.status(200).json(response);
+    .updateStatus(status,id)
+    .then((data) => {
+      return res.status(200).json(data);
     })
     .catch((error) => {
       console.log(error);
       return res.status(500).json({ message: "Internal Server Error" });
     });
 });
+
+router.get("/:userId", async(req, res) => {
+  const { userId } = req.params;
+  if(!userId){
+    return res.status(400).json({ message: "missing param" });
+  }
+    const request = await requestFriendService.getRequestFriend(userId);
+    if(request){
+      return res.status(200).json(request);
+    }
+    return res.status(500).json({ message: "Internal Server Error" });
+
+});
+
 
 
 export default router;
