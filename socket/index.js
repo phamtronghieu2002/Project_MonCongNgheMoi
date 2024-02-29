@@ -33,46 +33,63 @@ io.on("connection", (socket) => {
   //send and get message
   socket.on(
     "sendMessage",
-    ({ senderId, recieverId, content, conversationId,new_message }) => {
+    ({
+      senderId,
+      recieverId,
+      content,
+      conversationId,
+      new_message,
+      isGroup,
+      members
+    }) => {
       const reciever = getUser(recieverId);
-      const sender = getUser(senderId);
-      console.log("real time >>>")
-      if (reciever) {
-        io.to(reciever.socketId).emit("getMessage", {
-          senderId,
-          content,
-          conversationId,
-          new_message
-        });
-        io.to(reciever.socketId).emit("reRenderConversations", {
-          senderId,
-          content,
-          conversationId,
-        });
-      }
-      io.to(sender.socketId).emit("reRenderConversations", {
-        senderId,
-        content,
-        conversationId,
-      });
+      if(isGroup)
+          {
+           
+            members.forEach((member) => {
+              const reciever = getUser(member);
+              console.log(member)
+              if (reciever) {
+                io.to(reciever.socketId).emit("getMessage", {
+                  senderId,
+                  content,
+                  conversationId,
+                  new_message,
+                });
+                io.to(reciever.socketId).emit("reRenderConversations");
+              }
+            });
+          }
+          else
+          {
+            if (reciever) {
+              io.to(reciever.socketId).emit("getMessage", {
+                senderId,
+                content,
+                conversationId,
+                new_message,
+              });
+              io.to(reciever.socketId).emit("reRenderConversations");
+            }
+          }
+
+      io.to(socket.id).emit("reRenderConversations");
     }
   );
 
-  socket.on("sendRequestFriend",({recieverId})=>{
+  socket.on("sendRequestFriend", ({ recieverId }) => {
     const reciever = getUser(recieverId);
     if (reciever) {
       io.to(reciever.socketId).emit("getFriendRequest");
     }
-  
-  })
+  });
 
-  socket.on("acceptFriendRequest",(senderId)=>{
+  socket.on("acceptFriendRequest", (senderId) => {
     const sender = getUser(senderId);
     if (senderId) {
       io.to(sender.socketId).emit("re-renderFriendRequest");
     }
-  
-  })
+  });
   //when disconnect
   socket.on("disconnect", () => {
     console.log("a user disconnected!");

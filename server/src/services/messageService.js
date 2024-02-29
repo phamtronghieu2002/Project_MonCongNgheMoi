@@ -8,50 +8,50 @@ export const createMessage = async (
   try {
     const new_message = new MessageModel({
       senderId: senderid,
-
       content: content,
       isSeen: 0,
       conversationId: conversationId,
     });
-    console.log("new_message>>", new_message)
+
     new_message.save();
-    return new_message;
+    return await MessageModel.findOne({ _id: new_message._doc._id })
+      .populate("senderId", "_id username avatarPicture")
+      .exec();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updatStatusSeenMessage = async (
-  senderid,
-
-  conversationId
-) => {
+export const updatStatusSeenMessage = async (senderid, conversationId,recieverid) => {
   try {
-    const resultUpdate = MessageModel.updateMany({
-      senderId: senderid,
-      conversationId: conversationId,
-      isSeen: 0,
-    }, { isSeen: 1 });
-  
-    
+
+    console.log("recieverid >>>>>", recieverid);
+    const resultUpdate = MessageModel.updateMany(
+      {
+        senderId: senderid,
+        conversationId: conversationId,
+     
+      },
+      { $addToSet: { isSeen: recieverid } }
+    );
+
     return resultUpdate;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getMessageByConverationId = async (
-    conversationId
-  ) => {
-    console.log("conversationId>>", conversationId)
-    try {
-      const messages = await MessageModel.find({
-        conversationId: conversationId,
-      });
-      console.log("messages>>", messages)
-      return messages;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
+export const getMessageByConverationId = async (conversationId) => {
+  console.log("conversationId>>", conversationId);
+  try {
+    const messages = await MessageModel.find({
+      conversationId: conversationId,
+    })
+      .populate("senderId", "_id username avatarPicture")
+      .exec();
+    console.log("messages>>", messages);
+    return messages;
+  } catch (error) {
+    console.log(error);
+  }
+};

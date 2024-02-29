@@ -6,8 +6,9 @@ export const sendMessage = (data) => {
     return axios.post('/message', data);
 };
 
-export const updateStatus = (senderId,conversationId) => {
-    return axios.post('/message/updateStatus', {senderId,conversationId});
+export const updateStatus = (senderId,conversationId,receiverId) => {
+    console.log(senderId,conversationId,receiverId);
+    return axios.post('/message/updateStatus', {senderId,conversationId,receiverId});
 };
 
 export const updateLastMessage = (conversationId,content) => {

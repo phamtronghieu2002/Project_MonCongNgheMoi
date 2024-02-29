@@ -49,3 +49,14 @@ export const handleAddFriend = async (req, res) => {
 
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+export const handleGetUserByFirstCharater =async(req,res)=>{
+
+  console.log("xin chao")
+ 
+  const data =await userServices.getUserByFirstCharater();
+  if(data){
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({message: "Internal Server Error"});
+}

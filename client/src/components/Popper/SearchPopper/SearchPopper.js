@@ -1,7 +1,8 @@
 import './SearchPopper.scss';
 import AccountItem from '../../Search/AccountItem/AccountItem';
+import { memo, useEffect } from 'react';
+ function SearchPopper({searchCoversations}) {
 
-export default function SearchPopper({searchCoversations}) {
     return (
         <div id="wp_search_popper">
             <h5 className="text-left fs-6 ps-3 cusor-pointer user-select-none">Recent Search</h5>
@@ -19,3 +20,4 @@ export default function SearchPopper({searchCoversations}) {
         </div>
     );
 }
+export default  memo(SearchPopper);

@@ -23,9 +23,8 @@ function Chat() {
     const [statusRequest, setStatusRequest] = useState(false);
     const [request_id, setRequestId] = useState(0);
 
-    console.log("isfriend",isFriend)
 
-    const conversationId = useRef(conversation._id);
+  
     const refInput = useRef();
 
     const handleSendRequestFriend = async () => {
@@ -57,35 +56,41 @@ function Chat() {
     };
     const handleDataMessages = async (messages) => {
         try {
-            const conversationID = conversationId.current;
+          
 
             console.log('co chay vao handleData', messages);
 
             let texts = [];
             const components = [];
-            let recieverId = '';
+            let senderId = '';
 
             for (let i = 0; i < messages.length; i++) {
                 let text = messages[i].content;
-
-                if (messages[i].senderId === currentUserId) {
+                let avatar = messages[i].senderId.avatarPicture;
+                // if(messages[i].senderId._id!=recieverId && messages[i].senderId._id !== currentUserId && recieverId)
+                // {
+                //     components.push(<MessageItem key={i} content={texts}  avatar={avatar}/>);
+                //     recieverId='';
+                //     texts = [];
+                // }
+                if (messages[i].senderId._id === currentUserId) {
                     if (texts.length > 0) {
-                        components.push(<MessageItem key={i - 1} content={texts} />);
+                        components.push(<MessageItem key={i - 1} content={texts} avatar={avatar} />);
 
                         texts = [];
                     }
                     components.push(<MessageItem key={i} content={text} own />);
                 } else {
-                    if (!recieverId && messages[i].senderId != currentUserId) {
-                        recieverId = messages[i].senderId;
+                    if (!senderId && messages[i].senderId._id != currentUserId) {
+                        senderId = messages[i].senderId._id;
                     }
                     texts.push(text);
-                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts} />);
+                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts}  avatar={avatar}/>);
                 }
             }
             // update status seen message
-            recieverId && (await messageService.updateStatus(recieverId, conversationID));
-
+            senderId && (await messageService.updateStatus(senderId, conversation._id, currentUserId));
+            socket.emit("")
             setMessagesComponent([...components]);
         } catch (error) {
             console.log(error);
@@ -110,7 +115,9 @@ function Chat() {
         if (!isGroup) {
             const isFriend = await userService.isFriend(senderId, friendId);
             setIsFriend(typeof isFriend === 'boolean' ? isFriend : isFriend.data === 2)
+            return;
         }
+        setIsFriend(true)
     };
 
     const CheckIsSendRequestFriend = async () => {
@@ -124,20 +131,23 @@ function Chat() {
         }
     };
     useEffect(() => {
-        conversationId.current = conversation._id;
+      
         checkFriend();
         fetchMessage();
         CheckIsSendRequestFriend();
+        
     }, [conversation._id]);
 
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
-            console.log("lot vo")
-            if (conversationId === conversation._id)
-            {
-                setMessages((prev) =>  [...prev, new_message]);
-            } 
-        };
+               
+                    if(conversationId === conversation._id)
+                    {
+                        setMessages((prev) => [...prev, new_message] );
+                    }
+               
+            }
+        
         const onReRenderRequestFriend = () => {
                 checkFriend();
         }
@@ -148,7 +158,7 @@ function Chat() {
             socket.off('getMessage', onMessage);
             socket.off('re-renderFriendRequest', onReRenderRequestFriend);
         };
-    }, []);
+    }, [conversation._id]);
 
     useEffect(() => {
         handleDataMessages(messages);
@@ -164,6 +174,8 @@ function Chat() {
                 recieverId: conversation.recieveInfor._id,
                 conversationId: conversation._id,
                 content: textMessage,
+                isGroup:conversation.recieveInfor.isGroup,
+                members:conversation.recieveInfor.members
             };
             const new_message = await messageService.sendMessage(data);
             await messageService.updateLastMessage(conversation._id, textMessage);
@@ -226,7 +238,7 @@ function Chat() {
                         />
                     </button>
                 </div>
-                {isFriend && (
+                {!isFriend && (
                     <Notify
                         statusRequest={statusRequest}
                         onSendRequestFriend={handleSendRequestFriend}

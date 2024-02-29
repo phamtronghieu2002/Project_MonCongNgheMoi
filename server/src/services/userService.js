@@ -1,8 +1,6 @@
 import UserModel from "../models/User";
 import GroupModel from "../models/Group";
 import dotenv from "dotenv";
-import { hashPassword, comparePassword } from "..//utils/crypto";
-import { create_access_token, create_fresh_token } from "../utils/jwt";
 dotenv.config();
 
 export const searchUser = async (keyword) => {
@@ -44,11 +42,9 @@ export const getUserById = async (id) => {
   }
 };
 export const checkFriend = async (senderId, friendId) => {
-
-    const user = await UserModel.findOne({ _id: senderId });
+  const user = await UserModel.findOne({ _id: senderId });
   console.log(user._doc.friends.includes(friendId));
-    return user._doc.friends.includes(friendId);
-
+  return user._doc.friends.includes(friendId);
 };
 
 export const addFriend = async (senderId, friendId) => {
@@ -64,6 +60,44 @@ export const addFriend = async (senderId, friendId) => {
       { new: true }
     );
     return { sender, friend };
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getUserByFirstCharater = async () => {
+  try {
+    const users = await UserModel.find(
+      {},
+      "_id username avatarPicture phonenumber"
+    ).sort({ username: 1 });
+    console.log("users>>", users);
+
+    const result = [];
+    let currentLetter = null;
+    let currentGroup = null;
+
+    users.forEach((user) => {
+      const firstLetter = user.username[0].toUpperCase();
+
+      if (firstLetter !== currentLetter) {
+        if (currentGroup) {
+          result.push(currentGroup);
+        }
+        currentLetter = firstLetter;
+        currentGroup = {
+          firstKey: currentLetter,
+          users: [],
+        };
+      }
+
+      currentGroup.users.push(user);
+    });
+
+    if (currentGroup) {
+      result.push(currentGroup);
+    }
+
+    return result;
   } catch (error) {
     console.log(error);
   }

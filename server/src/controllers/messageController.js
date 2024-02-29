@@ -33,13 +33,14 @@ export const handleGetMessageByConverationId = async (req, res) => {
 };
 
 export const handleUpdateStatusSeenMessage = async (req, res) => {
-  const { senderId, conversationId } = req.body;
-  if (!senderId || !conversationId) {
+  const { senderId, conversationId,receiverId } = req.body;
+  if (!senderId || !conversationId || !receiverId) {
     return res.status(400).json({ message: "missing param" });
   }
   const data = await messageService.updatStatusSeenMessage(
     senderId,
-    conversationId
+    conversationId,
+    receiverId
   );
   if (data) {
     return res.status(200).json(data);

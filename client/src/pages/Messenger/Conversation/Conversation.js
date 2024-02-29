@@ -14,19 +14,20 @@ const Conversation = () => {
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
     const [activeFilter, setActivFilter] = useState(conversation._id);
-    const currentUserIdRef = useRef(currentUserId);
+
 
     const fetchConversations = async () => {
         try {
             
-            const conversations = await conversationService.getConversationByUserId(currentUserIdRef.current);
+            const conversations = await conversationService.getConversationByUserId(currentUserId);
+            console.log("conversations",conversations)
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
                 const messages = await messageService.getMessageByConversationId(conversationID);
                 let totalUnseen = 0;
-
+                
                 for (let j = 0; j < messages.length; j++) {
-                    if (messages[j].senderId !== currentUserIdRef.current && !messages[j].isSeen) {
+                    if (messages[j].senderId._id !== currentUserId && !messages[j].isSeen.includes(currentUserId)) {
                         totalUnseen = totalUnseen + 1;
                     }
                 }
@@ -40,10 +41,10 @@ const Conversation = () => {
 
     useEffect(() => {
         fetchConversations();
-    }, []);
+    }, [currentUserId]);
 
     useEffect(() => {
-        socket.on('reRenderConversations', ({ senderId, content, conversationId }) => {
+        socket.on('reRenderConversations', () => {
           
             fetchConversations();
         });
@@ -65,7 +66,6 @@ const Conversation = () => {
                         <ConversationItem
                             activeFilter={activeFilter}
                             onActiveFilter={setActivFilter}
-                            onClick={fetchConversations}
                             conversationId={item._id}
                             senderId={currentUserId}
                             key={index}

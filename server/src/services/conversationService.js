@@ -9,14 +9,25 @@ export const createConversation = async (senderid, recieverid, type) => {
     if (conversation) {
       return conversation;
     }
-    const new_conversation = new ConversationModel({
-      members: [senderid, recieverid],
-      isGroup: type,
-    });
-    const data = await new_conversation.save();
-    if (data) {
-      return data;
+    let new_conversation;
+    if(type){
+      new_conversation= new ConversationModel({
+        members: [senderid,...recieverid],
+        isGroup: type,
+        lastMessage: "Welcome to the group chat",
+      });
+    }else
+    {
+      new_conversation= new ConversationModel({
+        members: [senderid, recieverid],
+        isGroup: type,
+      });
     }
+   
+    return  await new_conversation.save();
+
+    
+  
   } catch (error) {
     console.log(error);
   }

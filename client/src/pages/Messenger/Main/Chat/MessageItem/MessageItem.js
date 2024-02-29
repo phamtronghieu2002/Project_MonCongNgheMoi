@@ -1,14 +1,14 @@
 import './MessageItem.scss';
 import { useContext } from 'react';
-import { ConversationContext } from '../../../../../providers/ConversationProvider/ConversationProvider';
-function MessageItem({ senderId, receiverId, content, own }) {
-    const { conversation } = useContext(ConversationContext);
+
+function MessageItem({ senderId, receiverId, content, own,avatar }) {
+
 
     return (
         <div className={own ? 'message_item_own message-item' : 'message-item'}>
             {own || (
                 <div className="message-avatar">
-                    <img src={conversation.recieveInfor.avatar} alt="avatar" />
+                    <img src={avatar} alt="avatar" />
                 </div>
             )}
             <div className="message-content">

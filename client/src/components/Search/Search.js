@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { searchUser } from '../../services/userService';
 import SearchPopper from '../Popper/SearchPopper/SearchPopper';
+import ModalCreateGroup from '../ModalCreateGroup/ModalCreateGroup';
 export default function Search() {
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
@@ -37,8 +38,10 @@ export default function Search() {
     };
     return (
         <div id="wp_search">
+            <ModalCreateGroup />
             {isSearch && <SearchPopper searchCoversations={searchCoversations} />}
             <input
+                className="search_input_conversation"
                 onFocus={handleFocusSearch}
                 type="text"
                 placeholder="Search"
@@ -60,7 +63,7 @@ export default function Search() {
                             alt="external-user-plus-users-thin-kawalan-studio"
                         />{' '}
                     </button>
-                    <button className="group_plus action_btn">
+                    <button className="group_plus action_btn" type='button' data-bs-toggle="modal" data-bs-target="#modalCreateGroup">
                         <img
                             width="80"
                             height="80"

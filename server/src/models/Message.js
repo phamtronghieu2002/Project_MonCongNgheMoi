@@ -4,15 +4,18 @@ const MessageSchema = new mongoose.Schema(
   {
     conversationId: {
       type: String,
+      ref: "Conversation",
     },
     senderId: {
       type: String,
+      ref: "User",
     },
     content: {
       type: String,
     },
     isSeen: {
-      type: Boolean,
+      type: Array,
+      default: [],
     },
   },
   { timestamps: true }

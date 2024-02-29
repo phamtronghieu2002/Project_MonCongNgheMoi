@@ -5,6 +5,7 @@ import { useEffect, useState, useContext } from 'react';
 import { useLang } from '../../../../hooks';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
 import * as userService from '../../../../services/userService';
+import * as groupService from '../../../../services/groupService';
 import clsx from 'clsx';
 function ConversationItem({
     activeFilter,
@@ -16,7 +17,7 @@ function ConversationItem({
     senderId,
     lastMessage,
     totalUnseen,
-    onClick,
+
     onActiveFilter,
 }) {
     const { t } = useLang();
@@ -36,14 +37,17 @@ function ConversationItem({
     }, [openPopper]);
 
     useEffect(() => {
-        console.log("use Effect")
+
         const fetchMember = async () => {
             try {
                 if (isGroup) {
-
+                    
+                    const groupId=members[0];
+                    const group = await groupService.getGroupById(groupId);
+                    setConversationCurent(group);
+                    return;
                 }
                 const recieverid = members.find((id) => id !== senderId);
-                console.log('recieverid', recieverid);
                 const user = await userService.getUserById(recieverid);
 
                 console.log("user >>>>",user)
@@ -61,13 +65,14 @@ function ConversationItem({
                 setConversation({
                     recieveInfor: {
                         avatar: ConversationCurrent.avatarPicture || ConversationCurrent.groupPicture,
-                        name: ConversationCurrent.username || ConversationCurrent.groupname,
+                        name: ConversationCurrent.username || ConversationCurrent.groupName,
                         _id: ConversationCurrent._id,
-                        isGroup
+                        isGroup,
+                        members:ConversationCurrent.members
                     },
                     _id:conversationId,
                 });
-                onClick();
+     
                 onActiveFilter(conversationId);
             }}
             className={
@@ -84,7 +89,7 @@ function ConversationItem({
                 />
             </div>
             <div className="infor">
-                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{ConversationCurrent ? ConversationCurrent.username || ConversationCurrent.groupname : ''}</span>
+                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{ConversationCurrent ? ConversationCurrent.username || ConversationCurrent.groupName : ''}</span>
                 <br />
                 <span className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>{lastMessage}</span>
             </div>

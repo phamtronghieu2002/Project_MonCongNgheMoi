@@ -2,45 +2,22 @@ import UserModel from "../models/User";
 import dotenv from "dotenv";
 import { hashPassword, comparePassword } from "..//utils/crypto";
 import { create_access_token, create_fresh_token } from "../utils/jwt";
+import {generateKeywordsWithSpaces} from "../utils/user";
 dotenv.config();
 import jwt from "jsonwebtoken";
 
-function generateKeywordsWithSpaces(str) {
-  const keywords = [];
-  const words = str.split(' ');
 
-  for (let i = 0; i < words.length; i++) {
-    let currentKeyword = '';
-    for (let j = 0; j < words[i].length; j++) {
-      currentKeyword += words[i][j];
-      keywords.push(currentKeyword);
-    }
-
-    if (i < words.length - 1) {
-      // Add space and combinations with the next word
-      currentKeyword += ' ';
-      keywords.push(currentKeyword);
-
-      words[i + 1].split('').forEach(char => {
-        currentKeyword += char;
-        keywords.push(currentKeyword);
-      });
-    }
-  }
-
-  return keywords;
-}
 
 export const register = async ({ username, password, phonenumber, res }) => {
   try {
-    // const user = await UserModel.findOne({ phonenumber });
+    const user = await UserModel.findOne({ phonenumber });
 
-    // if (user) {
-    //   return {
-    //     errCode: 1,
-    //     message: "Phonenumber is already used",
-    //   };
-    // }
+    if (user) {
+      return {
+        errCode: 1,
+        message: "Phonenumber is already used",
+      };
+    }
     const new_user = new UserModel({
       username,
       password: await hashPassword(password),

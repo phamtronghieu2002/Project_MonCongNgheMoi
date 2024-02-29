@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     },
     avatarPicture: {
       type: String,
-      default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1dKSyQ"
+      default: "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpgS"
     },
     backgroundPicture: {
       type: String,
