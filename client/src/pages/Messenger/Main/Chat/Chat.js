@@ -58,7 +58,7 @@ function Chat() {
         try {
           
 
-            console.log('co chay vao handleData', messages);
+         
 
             let texts = [];
             const components = [];
@@ -67,24 +67,28 @@ function Chat() {
             for (let i = 0; i < messages.length; i++) {
                 let text = messages[i].content;
                 let avatar = messages[i].senderId.avatarPicture;
-                // if(messages[i].senderId._id!=recieverId && messages[i].senderId._id !== currentUserId && recieverId)
-                // {
-                //     components.push(<MessageItem key={i} content={texts}  avatar={avatar}/>);
-                //     recieverId='';
-                //     texts = [];
-                // }
                 if (messages[i].senderId._id === currentUserId) {
                     if (texts.length > 0) {
-                        components.push(<MessageItem key={i - 1} content={texts} avatar={avatar} />);
+                        components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i-1].senderId.avatarPicture} />);
+                         texts = [];
 
-                        texts = [];
+             
                     }
                     components.push(<MessageItem key={i} content={text} own />);
                 } else {
-                    if (!senderId && messages[i].senderId._id != currentUserId) {
+                    if (senderId != messages[i].senderId._id) {
+                       if(!senderId)
+                       {
                         senderId = messages[i].senderId._id;
+                       }else{
+                        senderId = messages[i].senderId._id;
+
+                        texts.length >0 && components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i-1].senderId.avatarPicture} />);
+                        texts = [];
+                       }
                     }
                     texts.push(text);
+                    
                     i + 1 === messages.length && components.push(<MessageItem key={i} content={texts}  avatar={avatar}/>);
                 }
             }
@@ -179,6 +183,7 @@ function Chat() {
             };
             const new_message = await messageService.sendMessage(data);
             await messageService.updateLastMessage(conversation._id, textMessage);
+            console.log("new_messsage >>>",new_message)
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
             setTextMessage('');

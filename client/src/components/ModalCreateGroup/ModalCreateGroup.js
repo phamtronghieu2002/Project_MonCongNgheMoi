@@ -47,8 +47,9 @@ function ModalCreateGroup() {
 
     const createConversation = async () => {
   try {
-    const group=await groupServices.addGroup(groupName,selectUser,currentUserId,"https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png");
-    const conversation = await conversationServices.createConversation(group._id,[currentUserId,...selectUser], 1);
+    const members =[currentUserId,...selectUser]
+    const group=await groupServices.addGroup(groupName,members,currentUserId,"https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png");
+    const conversation = await conversationServices.createConversation(group._id,members, 1);
     toast.success('Tạo nhóm thành công');
   } catch (error) {
     toast.error(error);

@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
       if(isGroup)
           {
            
-            members.forEach((member) => {
+            members.filter((member=>member != senderId)).forEach((member) => {
               const reciever = getUser(member);
               console.log(member)
               if (reciever) {

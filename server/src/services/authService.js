@@ -62,7 +62,7 @@ export const login = async ({ phonenumber, password, res }) => {
       backgroundPicture: user.backgroundPicture,
     };
     const access_token = create_access_token(payload, "1h");
-    const fresh_token = create_fresh_token(payload, "3h");
+    const fresh_token = create_fresh_token(payload, "24h");
 
     res
       .cookie("accessToken", access_token, {

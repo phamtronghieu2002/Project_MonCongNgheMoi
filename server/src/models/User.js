@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     },
     avatarPicture: {
       type: String,
-      default: "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-character-default-avatar-image_2237203.jpgS"
+      default: "https://didongviet.vn/dchannel/wp-content/uploads/2023/08/galaxy-huyen-bi-hinh-nen-iphone-12-pro-max-didongviet-2-576x1024.jpg"
     },
     backgroundPicture: {
       type: String,
