@@ -1,7 +1,7 @@
 import './MessageItem.scss';
 import { useContext } from 'react';
 
-function MessageItem({ senderId, receiverId, content, own,avatar }) {
+function MessageItem({ senderId, receiverId, content, own, avatar, senderName }) {
 
 
     return (
@@ -13,8 +13,13 @@ function MessageItem({ senderId, receiverId, content, own,avatar }) {
             )}
             <div className="message-content">
                 {Array.isArray(content) ? (
-                    content.map((text) => (
-                        <div className="message-text">
+                    content.map((text, index) => (
+                        <div
+                            key={index}
+                            className="message-text">
+                            {
+                                !own && index == 0 && <p className='senderName'>{senderName}</p>
+                            }
                             <p>{text}</p>
                         </div>
                     ))
@@ -24,7 +29,7 @@ function MessageItem({ senderId, receiverId, content, own,avatar }) {
                     </div>
                 )}
 
-               
+
             </div>
         </div>
     );

@@ -127,6 +127,7 @@ function ModalCreateGroup() {
                             className="btn btn-primary"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            disabled={groupName.length === 0 || selectUser.length === 0}
                         >
                             Save changes
                         </button>

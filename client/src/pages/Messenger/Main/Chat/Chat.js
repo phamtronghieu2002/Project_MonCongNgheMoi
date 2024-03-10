@@ -24,18 +24,18 @@ function Chat() {
     const [request_id, setRequestId] = useState(0);
 
 
-  
+
     const refInput = useRef();
 
     const handleSendRequestFriend = async () => {
         try {
             const senderId = currentUserId;
             const recieverId = conversation.recieveInfor._id;
-            const requestFriend= await friendService.sendRequestFriend(senderId, recieverId);
-            console.log('requestFriend',requestFriend);
+            const requestFriend = await friendService.sendRequestFriend(senderId, recieverId);
+            console.log('requestFriend', requestFriend);
             setRequestId(requestFriend._id);
             setStatusRequest(true);
-            socket.emit('sendRequestFriend', {recieverId });
+            socket.emit('sendRequestFriend', { recieverId });
 
             toast.success('Đã gửi yêu cầu kết bạn');
         } catch (error) {
@@ -46,9 +46,9 @@ function Chat() {
     const handleCancelRequestFriend = async () => {
         try {
             const recieverId = conversation.recieveInfor._id;
-            friendService.cancelRequestFriend(0,request_id);
+            friendService.cancelRequestFriend(0, request_id);
             setStatusRequest(false);
-            socket.emit('sendRequestFriend', {recieverId});
+            socket.emit('sendRequestFriend', { recieverId });
             toast.success('Đã huy gửi yêu cầu kết bạn');
         } catch (error) {
             console.log(error);
@@ -56,9 +56,6 @@ function Chat() {
     };
     const handleDataMessages = async (messages) => {
         try {
-          
-
-         
 
             let texts = [];
             const components = [];
@@ -67,31 +64,34 @@ function Chat() {
             for (let i = 0; i < messages.length; i++) {
                 let text = messages[i].content;
                 let avatar = messages[i].senderId.avatarPicture;
+
                 if (messages[i].senderId._id === currentUserId) {
                     if (texts.length > 0) {
-                        components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i-1].senderId.avatarPicture} />);
-                         texts = [];
+                        components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
+                        texts = [];
 
-             
+
                     }
                     components.push(<MessageItem key={i} content={text} own />);
                 } else {
                     if (senderId != messages[i].senderId._id) {
-                       if(!senderId)
-                       {
-                        senderId = messages[i].senderId._id;
-                       }else{
-                        senderId = messages[i].senderId._id;
+                        if (!senderId) {
+                            senderId = messages[i].senderId._id;
+                        } else {
+                            senderId = messages[i].senderId._id;
 
-                        texts.length >0 && components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i-1].senderId.avatarPicture} />);
-                        texts = [];
-                       }
+                            texts.length > 0 && components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
+                            texts = [];
+                        }
                     }
                     texts.push(text);
-                    
-                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts}  avatar={avatar}/>);
+
+                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts} avatar={avatar} senderName={messages[i].senderId.username} />);
                 }
             }
+
+
+
             // update status seen message
             senderId && (await messageService.updateStatus(senderId, conversation._id, currentUserId));
             socket.emit("")
@@ -135,27 +135,26 @@ function Chat() {
         }
     };
     useEffect(() => {
-      
+
         checkFriend();
         fetchMessage();
         CheckIsSendRequestFriend();
-        
+
     }, [conversation._id]);
 
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
-               
-                    if(conversationId === conversation._id)
-                    {
-                        setMessages((prev) => [...prev, new_message] );
-                    }
-               
+
+            if (conversationId === conversation._id) {
+                setMessages((prev) => [...prev, new_message]);
             }
-        
-        const onReRenderRequestFriend = () => {
-                checkFriend();
+
         }
-            
+
+        const onReRenderRequestFriend = () => {
+            checkFriend();
+        }
+
         socket.on('getMessage', onMessage);
         socket.on('re-renderFriendRequest', onReRenderRequestFriend);
         return () => {
@@ -167,8 +166,8 @@ function Chat() {
     useEffect(() => {
         handleDataMessages(messages);
     }, [messages]);
-   
-   
+
+
 
 
     const handleSendMessage = async () => {
@@ -178,12 +177,12 @@ function Chat() {
                 recieverId: conversation.recieveInfor._id,
                 conversationId: conversation._id,
                 content: textMessage,
-                isGroup:conversation.recieveInfor.isGroup,
-                members:conversation.recieveInfor.members
+                isGroup: conversation.recieveInfor.isGroup,
+                members: conversation.recieveInfor.members
             };
             const new_message = await messageService.sendMessage(data);
             await messageService.updateLastMessage(conversation._id, textMessage);
-            console.log("new_messsage >>>",new_message)
+            console.log("new_messsage >>>", new_message)
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
             setTextMessage('');
@@ -253,7 +252,7 @@ function Chat() {
             </div>
 
             <div className="chat_content">
-              
+
                 <div className="wrapper_scroll">{messagesComponent}</div>
             </div>
 
