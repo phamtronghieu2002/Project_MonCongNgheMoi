@@ -3,6 +3,7 @@ import { useInfor } from '../../../../hooks';
 import { socketContext } from '../../../../providers/Socket/SocketProvider';
 import * as requestService from '../../../../services/requestFriendService';
 import FriendRequestItem from './FriendRequestItem/FriendRequestItem';
+import NotifyNoFriend from '../../Notify/NotifyNoFriend';
 
 export default function FriendRequest() {
     const [friendRequests, setFriendRequests] = useState([]);
@@ -35,17 +36,19 @@ export default function FriendRequest() {
                 <h3>Lời mời kết bạn</h3>
                 <div className="content">
                     <div className="row ">
-                        {friendRequests.length > 0 &&
+                        {friendRequests.length > 0 ?
                             friendRequests.map((req, index) => (
                                 <FriendRequestItem
-                                  socket={socket}
+                                    socket={socket}
                                     reciverId={currentUser._id}
                                     key={index}
                                     _id={req._id}
                                     sender={req.senderId}
                                     fetchFriendRequest={fetchFriendRequest}
                                 />
-                            ))}
+                            )) :
+                            <NotifyNoFriend />
+                        }
                     </div>
                 </div>
             </div>

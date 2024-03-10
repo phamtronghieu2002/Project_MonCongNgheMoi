@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import PhoneInput from 'react-phone-input-2';
 import clsx from 'clsx';
-import ModalOTP from '../../../components/ModalOTP/ModalOTP';
+import ModalOTP from '../../../components/Modal/ModalOTP/ModalOTP';
 import configs from '..//..//..//configs';
 import * as authServices from '../../../services/authService';
 export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
@@ -27,7 +27,7 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
                 callback: (response) => {
                     onSignup();
                 },
-                'expired-callback': () => {},
+                'expired-callback': () => { },
             });
         }
     }

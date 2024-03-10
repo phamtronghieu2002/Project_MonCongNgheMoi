@@ -1,5 +1,5 @@
 import './ModalOTP.scss';
-import { useLang } from '../../hooks';
+import { useLang } from '../../../hooks';
 import { useState } from 'react';
 import OtpInput from 'react-otp-input';
 import clsx from 'clsx';

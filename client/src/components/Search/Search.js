@@ -3,16 +3,15 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { searchUser } from '../../services/userService';
 import SearchPopper from '../Popper/SearchPopper/SearchPopper';
-import ModalCreateGroup from '../ModalCreateGroup/ModalCreateGroup';
+import ModalCreateGroup from '../Modal/ModalCreateGroup/ModalCreateGroup';
 export default function Search() {
     const [search, setSearch] = useState('');
     const [isSearch, setIsSearch] = useState(false);
     const [searhDebouce] = useDebounce(search, 200);
     const [searchCoversations, setSearchCoversations] = useState([]);
-    console.log("searchCoversations",searchCoversations);
+    console.log("searchCoversations", searchCoversations);
     useEffect(() => {
-        if(!searhDebouce)
-        {
+        if (!searhDebouce) {
             setSearchCoversations([]);
             return;
         }

@@ -29,7 +29,7 @@
     .usersChat {
         height: 100vh;
         position: relative;
-        z-index: 0;
+      
         overflow: auto;
         .account_item_chat {
             @for $i from 1 through 4 {

@@ -33,7 +33,7 @@
     "messenger": {
         "popper": {
             "user": {
-                "profile": "thông tin cá nhân",
+                "profile": "Thông tin cá nhân",
                 "logout": "Đăng xuất",
                 "setting": "Cài đặt"
             },

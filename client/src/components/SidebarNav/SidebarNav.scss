@@ -1,4 +1,11 @@
 #wp_SidebarNav{
+
+
+
+.active{
+    background-color: #006edc;
+}
+
     flex-direction: column;
     display: flex;
     z-index: 11;
@@ -38,6 +45,13 @@
 
 .nav_item
 {
+
+    &:hover
+    {
+            -webkit-animation: fade-in .3s linear 1;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
     
     height: 64px;
     display: flex;

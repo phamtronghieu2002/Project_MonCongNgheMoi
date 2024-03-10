@@ -13,16 +13,20 @@ export const createMessage = async (
       conversationId: conversationId,
     });
 
-    new_message.save();
-    return await MessageModel.findOne({ _id: new_message._doc._id })
+    await new_message.save();
+
+    const result = await MessageModel.findOne({ _id: new_message._doc._id })
       .populate("senderId", "_id username avatarPicture")
       .exec();
+
+    return result
+
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updatStatusSeenMessage = async (senderid, conversationId,recieverid) => {
+export const updatStatusSeenMessage = async (senderid, conversationId, recieverid) => {
   try {
 
     console.log("recieverid >>>>>", recieverid);
@@ -30,7 +34,7 @@ export const updatStatusSeenMessage = async (senderid, conversationId,recieverid
       {
         senderId: senderid,
         conversationId: conversationId,
-     
+
       },
       { $addToSet: { isSeen: recieverid } }
     );

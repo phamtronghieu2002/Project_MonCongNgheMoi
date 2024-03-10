@@ -14,7 +14,9 @@
         }
     }
     .carousel-indicators{
-        bottom: -160px;
+        position: fixed;
+        bottom: 24px;
+        right: -457px;
     }
     .carousel-caption 
     {

@@ -1,7 +1,8 @@
 import * as messageService from "../services/messageService.js";
 export const handleCreateMessage = async (req, res) => {
   const { senderId, content, conversationId } = req.body;
-  if (!senderId  || !content  || !conversationId) {
+  console.log("type", typeof (content));
+  if (!senderId || !content || !conversationId) {
     return res.status(400).json({ message: "missing param" });
   }
 
@@ -11,6 +12,7 @@ export const handleCreateMessage = async (req, res) => {
     content,
     conversationId
   );
+  console.log("data>>>", data);
   if (data) {
     return res.status(200).json(data);
   }
@@ -33,7 +35,7 @@ export const handleGetMessageByConverationId = async (req, res) => {
 };
 
 export const handleUpdateStatusSeenMessage = async (req, res) => {
-  const { senderId, conversationId,receiverId } = req.body;
+  const { senderId, conversationId, receiverId } = req.body;
   if (!senderId || !conversationId || !receiverId) {
     return res.status(400).json({ message: "missing param" });
   }
