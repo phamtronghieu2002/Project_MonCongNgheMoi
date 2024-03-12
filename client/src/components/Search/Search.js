@@ -37,7 +37,7 @@ export default function Search() {
     };
     return (
         <div id="wp_search">
-            <ModalCreateGroup />
+            {/* <ModalCreateGroup /> */}
             {isSearch && <SearchPopper searchCoversations={searchCoversations} />}
             <input
                 className="search_input_conversation"

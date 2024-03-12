@@ -9,8 +9,24 @@ function Main() {
 
     return (
         <div id="main_container" className="d-flex">
+
+
             {conversation._id ? (
                 <>
+                    <div
+                        className="background_conversation"
+                        style={{
+                            backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
+                            backgroundSize: 'cover',
+                            filter: 'blur(115px)',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: -1
+                        }}
+                    ></div>
                     <Chat />
                     {/* <Aside/> */}
                 </>

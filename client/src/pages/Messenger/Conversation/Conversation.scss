@@ -1,11 +1,12 @@
 .hoho {
     background: blue;
+   
 }
-#wp_user_chat {
+#wp_conversation {
     width: 344px;
     border-right: 1px solid #e0e0e0;
-
-    .filter_chat {
+    z-index: 1;
+    .filter_conversations {
         border-bottom: 1px solid #e0e0e0;
         z-index: 0;
         position: relative;
@@ -26,7 +27,7 @@
             border-bottom: 2px solid #1600e0;
         }
     }
-    .usersChat {
+    .conversations {
         height: 100vh;
         position: relative;
       

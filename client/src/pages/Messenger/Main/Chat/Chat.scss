@@ -1,4 +1,13 @@
 #chat_container {
+
+    .background_conversation{
+       &::after{
+        
+       }
+    }
+
+
+
     width: 595px;
     display: flex;
     flex-direction: column;
@@ -30,18 +39,32 @@
     }
 
     .chat_content {
+
+
+
+   
+
+ 
+
+
+
+
         z-index: 0;
         flex: 1;
         background: #9aa3af24;
-        padding: 5px 15px;
+        padding: 5px 0px 0px 15px;
         overflow: auto;
         display: flex;
         flex-direction: column-reverse;
         .wrapper_scroll {
+
+            z-index:9999;
+       
             display: flex;
             flex-direction: column;
 
             gap: 15px;
+
         }
     }
 

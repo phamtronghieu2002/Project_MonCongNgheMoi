@@ -10,7 +10,7 @@ import { ConversationContext } from '../../../providers/ConversationProvider/Con
 
 const Conversation = () => {
     const { socket, currentUserId } = useContext(socketContext);
-    const {conversation}=useContext(ConversationContext)
+    const { conversation } = useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
     const [activeFilter, setActivFilter] = useState(conversation._id);
@@ -18,14 +18,14 @@ const Conversation = () => {
 
     const fetchConversations = async () => {
         try {
-            
+
             const conversations = await conversationService.getConversationByUserId(currentUserId);
-            console.log("conversations",conversations)
+            console.log("conversations", conversations)
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
                 const messages = await messageService.getMessageByConversationId(conversationID);
                 let totalUnseen = 0;
-                
+
                 for (let j = 0; j < messages.length; j++) {
                     if (messages[j].senderId._id !== currentUserId && !messages[j].isSeen.includes(currentUserId)) {
                         totalUnseen = totalUnseen + 1;
@@ -45,14 +45,14 @@ const Conversation = () => {
 
     useEffect(() => {
         socket.on('reRenderConversations', () => {
-          
+
             fetchConversations();
         });
     }, []);
     return (
-        <div id="wp_user_chat">
+        <div id="wp_conversation" className='bg-white'>
             <Search />
-            <div className="filter_chat">
+            <div className="filter_conversations">
                 <span onClick={() => setActivFilter(1)} className={clsx('filter_item', activeFilter ? 'active' : '')}>
                     Tất cả
                 </span>
@@ -60,7 +60,7 @@ const Conversation = () => {
                     Chưa đọc
                 </span>
             </div>
-            <div className="usersChat">
+            <div className="conversations">
                 {conversations.length > 0 &&
                     conversations.map((item, index) => (
                         <ConversationItem

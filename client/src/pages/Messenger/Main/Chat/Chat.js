@@ -27,6 +27,9 @@ function Chat() {
 
     const refInput = useRef();
 
+
+
+
     const handleSendRequestFriend = async () => {
         try {
             const senderId = currentUserId;
@@ -186,14 +189,30 @@ function Chat() {
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
             setTextMessage('');
+
             refInput.current.focus();
         } catch (error) {
             console.log(error);
         }
     };
     return (
-        <div id="chat_container">
-            <div className="header position-relative">
+        <div id="chat_container" className=' position-relative'>
+
+            {/* <div
+            className="background_conversation"
+                style={{
+                    backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
+                    backgroundSize: 'cover',
+                    filter: 'blur(5px)',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: -1
+                }}
+            ></div> */}
+            <div className="header position-relative bg-white">
                 <div className="infor">
                     <div className="avatar">
                         <img src={conversation.recieveInfor.avatar} alt="avatar" />
@@ -251,12 +270,16 @@ function Chat() {
                 )}
             </div>
 
-            <div className="chat_content">
+            <div className="chat_content position-relative  ">
 
-                <div className="wrapper_scroll">{messagesComponent}</div>
+                <div className="wrapper_scroll">
+                    {messagesComponent}
+
+
+                </div>
             </div>
 
-            <div className="chat_input_container">
+            <div className="chat_input_container bg-white">
                 <div className="actions">
                     <button className="action_btn">
                         <img

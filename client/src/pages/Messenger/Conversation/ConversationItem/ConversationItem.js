@@ -24,7 +24,7 @@ function ConversationItem({
     const [openDetail, setOpenDetail] = useState(false);
     const [ConversationCurrent, setConversationCurent] = useState(null);
     const { conversation, setConversation } = useContext(ConversationContext);
-    
+
     useEffect(() => {
         window.addEventListener('click', () => setOpenDetail(false));
         if (openPopper === conversationId) {
@@ -41,8 +41,8 @@ function ConversationItem({
         const fetchMember = async () => {
             try {
                 if (isGroup) {
-                    
-                    const groupId=members[0];
+
+                    const groupId = members[0];
                     const group = await groupService.getGroupById(groupId);
                     setConversationCurent(group);
                     return;
@@ -50,14 +50,13 @@ function ConversationItem({
                 const recieverid = members.find((id) => id !== senderId);
                 const user = await userService.getUserById(recieverid);
 
-                console.log("user >>>>",user)
                 setConversationCurent(user);
             } catch (err) {
                 console.log(err);
             }
         };
         fetchMember();
-    }, [members,conversationId]);
+    }, [members, conversationId]);
 
     return (
         <div
@@ -68,11 +67,11 @@ function ConversationItem({
                         name: ConversationCurrent.username || ConversationCurrent.groupName,
                         _id: ConversationCurrent._id,
                         isGroup,
-                        members:ConversationCurrent.members
+                        members: ConversationCurrent.members
                     },
-                    _id:conversationId,
+                    _id: conversationId,
                 });
-     
+
                 onActiveFilter(conversationId);
             }}
             className={
