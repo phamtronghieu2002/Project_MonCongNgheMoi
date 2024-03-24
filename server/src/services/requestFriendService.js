@@ -7,7 +7,7 @@ export const addRequestFriend = async (senderId, recieverId) => {
   });
 
   if (request) {
-   const new_request=await RequestFriendModal.findOneAndUpdate(
+    const new_request = await RequestFriendModal.findOneAndUpdate(
       { senderId, recieverId },
       {
         status: 1,
@@ -17,7 +17,6 @@ export const addRequestFriend = async (senderId, recieverId) => {
       }
     );
 
-    console.log(new_request);
     return new_request;
   }
   const new_request = new RequestFriendModal({
@@ -65,12 +64,12 @@ export const checkSendRequestFriend = async (senderId, recieverId) => {
     });
     return request?._id
       ? {
-          status: true,
-          requestId: request._id,
-        }
+        status: true,
+        requestId: request._id,
+      }
       : {
-          status: false,
-        };
+        status: false,
+      };
   } catch (error) {
     console.log(error);
   }

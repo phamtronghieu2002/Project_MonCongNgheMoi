@@ -9,7 +9,7 @@ export default function Search() {
     const [isSearch, setIsSearch] = useState(false);
     const [searhDebouce] = useDebounce(search, 200);
     const [searchCoversations, setSearchCoversations] = useState([]);
-    console.log("searchCoversations", searchCoversations);
+
     useEffect(() => {
         if (!searhDebouce) {
             setSearchCoversations([]);

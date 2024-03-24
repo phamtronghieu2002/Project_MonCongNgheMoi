@@ -13,14 +13,12 @@ const Conversation = () => {
     const { conversation } = useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
-    const [activeFilter, setActivFilter] = useState(conversation._id);
-
-
+    const [activeFilter, setActiveFilter] = useState(1);
+    const [activeConversation, setActiveConversation] = useState(conversation._id);
     const fetchConversations = async () => {
         try {
 
             const conversations = await conversationService.getConversationByUserId(currentUserId);
-            console.log("conversations", conversations)
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
                 const messages = await messageService.getMessageByConversationId(conversationID);
@@ -39,24 +37,36 @@ const Conversation = () => {
         }
     };
 
-    useEffect(() => {
-        fetchConversations();
-    }, [currentUserId]);
+
 
     useEffect(() => {
-        socket.on('reRenderConversations', () => {
-
+        const onRerenderConversations = () => {
             fetchConversations();
-        });
+            setActiveConversation(conversation._id)
+        }
+        socket.on('reRenderConversations', onRerenderConversations);
+
+        return () => {
+            socket.off('reRenderConversations', onRerenderConversations);
+        }
     }, []);
+
+    useEffect(() => {
+        if (activeFilter) {
+            fetchConversations();
+        } else {
+            const filterConversations = conversations.filter((item) => item.totalUnseen > 0);
+            setConversations([...filterConversations]);
+        }
+    }, [activeFilter]);
     return (
         <div id="wp_conversation" className='bg-white'>
             <Search />
             <div className="filter_conversations">
-                <span onClick={() => setActivFilter(1)} className={clsx('filter_item', activeFilter ? 'active' : '')}>
+                <span onClick={() => setActiveFilter(1)} className={clsx('filter_item', activeFilter ? 'active' : '')}>
                     Tất cả
                 </span>
-                <span onClick={() => setActivFilter(0)} className={clsx('filter_item', !activeFilter ? 'active' : '')}>
+                <span onClick={() => setActiveFilter(0)} className={clsx('filter_item', !activeFilter ? 'active' : '')}>
                     Chưa đọc
                 </span>
             </div>
@@ -64,10 +74,10 @@ const Conversation = () => {
                 {conversations.length > 0 &&
                     conversations.map((item, index) => (
                         <ConversationItem
-                            activeFilter={activeFilter}
-                            onActiveFilter={setActivFilter}
+                            activeConversation={activeConversation}
+                            onActiveConversation={setActiveConversation}
                             conversationId={item._id}
-                            senderId={currentUserId}
+                            currentUserId={currentUserId}
                             key={index}
                             {...item}
                             openPopper={openPopper}

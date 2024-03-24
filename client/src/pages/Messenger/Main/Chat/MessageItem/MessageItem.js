@@ -1,36 +1,45 @@
 import './MessageItem.scss';
-import { useContext } from 'react';
 
-function MessageItem({ senderId, receiverId, content, own, avatar, senderName }) {
+function MessageItem({ senderId, receiverId, content, own, avatar, senderName, timeStamp }) {
 
 
     return (
-        <div className={own ? 'message_item_own message-item' : 'message-item'}>
-            {own || (
-                <div className="message-avatar">
-                    <img src={avatar} alt="avatar" />
-                </div>
-            )}
-            <div className="message-content">
-                {Array.isArray(content) ? (
-                    content.map((text, index) => (
-                        <div
-                            key={index}
-                            className="message-text">
-                            {
-                                !own && index == 0 && <p className='senderName'>{senderName}</p>
-                            }
-                            <p>{text}</p>
-                        </div>
-                    ))
-                ) : (
-                    <div className="message-text">
-                        <p>{content}</p>
+        <div>
+            <p className='timeStamp'>
+                {timeStamp}
+            </p>
+            <div className={own ? 'message_item_own message-item' : 'message-item'}>
+
+
+
+                {own || (
+                    <div className="message-avatar">
+                        <img src={avatar} alt="avatar" />
                     </div>
                 )}
+                <div className="message-content">
+                    {
+                        content.map((itemText, index) => (
+                            <div className='cart-text'>
+                                <div
+                                    key={index}
+                                    className="message-text">
+                                    {
+                                        !own && index == 0 && <p className='senderName'>{senderName}</p>
+                                    }
+                                    <p>{itemText.content}</p>
+                                    <p className='time_stamp'>{index == content.length - 1 && itemText.messageTime}</p>
+                                </div>
+                            </div>
+
+                        )
+
+                        )}
 
 
+                </div>
             </div>
+
         </div>
     );
 }

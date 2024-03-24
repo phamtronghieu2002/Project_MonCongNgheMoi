@@ -18,10 +18,8 @@ export default function FriendRequest() {
         }
     };
     useEffect(() => {
-        console.log('fetch friend request');
         fetchFriendRequest();
         const onGetFriendRequest = () => {
-            console.log('get friend request');
             fetchFriendRequest();
         };
         socket.on('getFriendRequest', onGetFriendRequest);

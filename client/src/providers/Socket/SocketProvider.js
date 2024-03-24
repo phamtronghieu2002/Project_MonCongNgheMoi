@@ -7,7 +7,7 @@ function SocketProvider({children}) {
     const {getUser}=useContext(AuthContext);
     const user=getUser().data;
   const  socket = io('ws://localhost:9000');
-  console.log("socket hhihi")
+
     useEffect(() => {
         if(!user._id) return
         socket.emit('addUser', user._id);

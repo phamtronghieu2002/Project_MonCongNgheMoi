@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast'
 import { useEffect, useState, useContext } from 'react';
 import { useDebounce } from 'use-debounce';
 import { socketContext } from '../../../providers/Socket/SocketProvider';
+import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 import * as userServices from '..//..//../services/userService';
 import * as conversationServices from '..//..//../services/conversationService';
 import * as groupServices from '..//..//../services/groupService';
@@ -15,6 +16,7 @@ function ModalCreateGroup() {
     const [search, setSearch] = useState('');
     const [searhDebouce] = useDebounce(search, 200);
     const { socket, currentUserId } = useContext(socketContext);
+    const { conversation, setConversation } = useContext(ConversationContext);
     const fetchUsers = async () => {
         try {
             const users = await userServices.getUserByFirstCharacter();
@@ -50,7 +52,21 @@ function ModalCreateGroup() {
             const members = [currentUserId, ...selectUser]
             const group = await groupServices.addGroup(groupName, members, currentUserId, "https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png");
             const conversation = await conversationServices.createConversation(group._id, members, 1);
+            setConversation(
+                {
+                    recieveInfor: {
+                        avatar: group.groupPicture,
+                        name: group.groupName,
+                        _id: group._id,
+                        isGroup: true,
+                        members: group.members,
+                    },
+                    _id: conversation._id,
+                }
+            )
+            socket.emit("reRenderConversations", members);
             toast.success('Tạo nhóm thành công');
+
         } catch (error) {
             toast.error(error);
         }
@@ -60,7 +76,7 @@ function ModalCreateGroup() {
             style={{ zIndex: 9999 }}
             className="modal fade"
             id="modalCreateGroup"
-            tabindex="-1"
+            tabIndex="-1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
         >

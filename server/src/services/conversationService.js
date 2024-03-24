@@ -9,6 +9,7 @@ export const createConversation = async (senderid, recieverid, type) => {
     if (conversation) {
       return conversation;
     }
+
     let new_conversation;
     if (type) {
       new_conversation = new ConversationModel({
@@ -43,32 +44,30 @@ export const getConversationByUserId = async (senderid) => {
       return conversations;
     }
 
-    console.log("conversations>>>", conversations);
     //check if conversation has message
     for (let i = 0; i < conversations.length; i++) {
 
 
       if (conversations[i].lastMessage !== "") {
         consRes.push(conversations[i]);
-        console.log("consRes trong>>>", consRes);
       }
     }
 
-    console.log("consRes>>>", consRes);
     return consRes;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateLastMessage = async (conversationId, lastMessage) => {
+export const updateLastMessage = async (conversationId, lastMessage, senderid) => {
   try {
     //update and sort by updateAt
-    const updatedConversation = await ConversationModel.findByIdAndUpdate(
+    await ConversationModel.findByIdAndUpdate(
       conversationId,
       {
         $set: {
           lastMessage: lastMessage,
+          lastSenderid: senderid,
         },
         $currentDate: {
           updatedAt: true,

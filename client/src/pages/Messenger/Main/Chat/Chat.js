@@ -9,6 +9,7 @@ import { useLang } from '../../../../hooks';
 import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
 import { socketContext } from '../../../../providers/Socket/SocketProvider';
+import { v4 as uuidv4 } from 'uuid';
 
 function Chat() {
     const { conversation } = useContext(ConversationContext);
@@ -27,8 +28,34 @@ function Chat() {
 
     const refInput = useRef();
 
+    function formatDateString(dateString) {
+        var inputDate = new Date(dateString);
+        var today = new Date();
 
+        if (
+            inputDate.getDate() === today.getDate() &&
+            inputDate.getMonth() === today.getMonth() &&
+            inputDate.getFullYear() === today.getFullYear()
+        ) {
+            return "hôm nay";
+        } else {
+            var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return inputDate.toLocaleDateString('en-US', options);
+        }
+    }
+    function chuyenDoiThoiGian(timeString) {
+        // Tạo một đối tượng Date từ chuỗi thời gian đầu vào
+        const date = new Date(timeString);
 
+        // Lấy giờ và phút từ đối tượng Date
+        const gio = date.getHours();
+        const phut = date.getMinutes();
+
+        // Tạo chuỗi định dạng "9h:11"
+        const chuoiThoiGian = gio.toString().padStart(2, '0') + 'h:' + phut.toString().padStart(2, '0');
+
+        return chuoiThoiGian;
+    }
 
     const handleSendRequestFriend = async () => {
         try {
@@ -60,45 +87,62 @@ function Chat() {
     const handleDataMessages = async (messages) => {
         try {
 
-            let texts = [];
+            let ReceivedMessage = [];
+            let sendMessage = [];
             const components = [];
             let senderId = '';
-
+            let preTime = ''
+            let curentTime = ''
             for (let i = 0; i < messages.length; i++) {
                 let text = messages[i].content;
                 let avatar = messages[i].senderId.avatarPicture;
+                let timeStamp = formatDateString(messages[i].createdAt);
+                let messageTime = chuyenDoiThoiGian(messages[i].createdAt);
+                if (!preTime && !curentTime || preTime !== timeStamp) {
+                    preTime = timeStamp
+                    curentTime = timeStamp
+                }
+
 
                 if (messages[i].senderId._id === currentUserId) {
-                    if (texts.length > 0) {
-                        components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
-                        texts = [];
-
-
+                    if (ReceivedMessage.length > 0) {
+                        components.push(<MessageItem timeStamp={curentTime} key={uuidv4()} content={ReceivedMessage} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
+                        ReceivedMessage = [];
+                        curentTime = ""
                     }
-                    components.push(<MessageItem key={i} content={text} own />);
+                    sendMessage.push({ content: text, messageTime });
+
+
                 } else {
+                    if (sendMessage.length > 0) {
+                        components.push(<MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />)
+                        sendMessage = [];
+                        curentTime = ""
+                    }
                     if (senderId != messages[i].senderId._id) {
                         if (!senderId) {
                             senderId = messages[i].senderId._id;
                         } else {
                             senderId = messages[i].senderId._id;
 
-                            texts.length > 0 && components.push(<MessageItem key={i - 1} content={texts} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
-                            texts = [];
+                            ReceivedMessage.length > 0 && components.push(<MessageItem timeStamp={curentTime} key={uuidv4()} content={ReceivedMessage} avatar={messages[i - 1].senderId.avatarPicture} senderName={messages[i - 1].senderId.username} />);
+                            ReceivedMessage = [];
+                            curentTime = ""
                         }
                     }
-                    texts.push(text);
+                    ReceivedMessage.push({ content: text, messageTime });
 
-                    i + 1 === messages.length && components.push(<MessageItem key={i} content={texts} avatar={avatar} senderName={messages[i].senderId.username} />);
                 }
+
+                i + 1 === messages.length && (sendMessage.length > 0 ? components.push(<MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />) : components.push(<MessageItem timeStamp={curentTime} key={uuidv4()} content={ReceivedMessage} avatar={avatar} senderName={messages[i].senderId.username} />))
             }
 
 
 
             // update status seen message
             senderId && (await messageService.updateStatus(senderId, conversation._id, currentUserId));
-            socket.emit("")
             setMessagesComponent([...components]);
+            socket.emit("reRenderConversations", [currentUserId]);
         } catch (error) {
             console.log(error);
         }
@@ -138,6 +182,9 @@ function Chat() {
         }
     };
     useEffect(() => {
+
+
+
 
         checkFriend();
         fetchMessage();
@@ -184,10 +231,10 @@ function Chat() {
                 members: conversation.recieveInfor.members
             };
             const new_message = await messageService.sendMessage(data);
-            await messageService.updateLastMessage(conversation._id, textMessage);
-            console.log("new_messsage >>>", new_message)
+            await messageService.updateLastMessage(conversation._id, textMessage, currentUserId);
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
+            socket.emit('reRenderConversations', conversation.recieveInfor.members);
             setTextMessage('');
 
             refInput.current.focus();
@@ -198,20 +245,6 @@ function Chat() {
     return (
         <div id="chat_container" className=' position-relative'>
 
-            {/* <div
-            className="background_conversation"
-                style={{
-                    backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
-                    backgroundSize: 'cover',
-                    filter: 'blur(5px)',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: -1
-                }}
-            ></div> */}
             <div className="header position-relative bg-white">
                 <div className="infor">
                     <div className="avatar">

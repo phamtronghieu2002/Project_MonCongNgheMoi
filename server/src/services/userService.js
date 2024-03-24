@@ -43,7 +43,6 @@ export const getUserById = async (id) => {
 };
 export const checkFriend = async (senderId, friendId) => {
   const user = await UserModel.findOne({ _id: senderId });
-  console.log(user._doc.friends.includes(friendId));
   return user._doc.friends.includes(friendId);
 };
 
@@ -70,7 +69,6 @@ export const getUserByFirstCharater = async () => {
       {},
       "_id username avatarPicture phonenumber"
     ).sort({ username: 1 });
-    console.log("users>>", users);
 
     const result = [];
     let currentLetter = null;

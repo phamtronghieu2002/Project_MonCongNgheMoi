@@ -7,7 +7,7 @@ import configs from "..//..//configs";
 export const AuthContext = React.createContext();
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState({ auth: false, data:{} });
+  const [user, setUser] = useState({ auth: false, data: {} });
 
   useEffect(() => {
     axios
@@ -15,29 +15,28 @@ export default function AuthProvider({ children }) {
       .then((response) => {
         const user = response;
         if (user) {
-          console.log(user)
           const path = window.location.pathname;
           if (path === configs.paths.login) {
             login();
             return;
           }
-          setUser({ auth: true, data:user});
+          setUser({ auth: true, data: user });
           return;
         }
       })
       .catch((error) => {
-      
+
         console.log(error);
       });
   }, []);
 
 
-const login=()=>{
-  window.location.href = configs.paths.messenger;
-}
+  const login = () => {
+    window.location.href = configs.paths.messenger;
+  }
 
   const logout = () => {
-   window.location.href = configs.paths.login;
+    window.location.href = configs.paths.login;
   };
   const getUser = () => {
     return user;

@@ -18,7 +18,7 @@ function Main() {
                         style={{
                             backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
                             backgroundSize: 'cover',
-                            filter: 'blur(115px)',
+                            filter: 'blur(200px)',
                             position: 'absolute',
                             top: 0,
                             left: 0,

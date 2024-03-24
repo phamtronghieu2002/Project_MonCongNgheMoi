@@ -4,4 +4,4 @@ import ThemeProvider from "./ThemeProvider/ThemeProvider";
 import AuthProvider from "./Auth/AuthProvider";
 import ConversationProvider from "./ConversationProvider/ConversationProvider";
 import SocketProvider from "./Socket/SocketProvider";
-export {GlobalStyle,I18nProvider,ThemeProvider,AuthProvider,ConversationProvider,SocketProvider}
+export { GlobalStyle, I18nProvider, ThemeProvider, AuthProvider, ConversationProvider, SocketProvider }

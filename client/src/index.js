@@ -14,16 +14,15 @@ import i18n from './i18n/I18n';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <I18nProvider>
-        <GlobalStyle>
-            <AuthProvider>
-                <SocketProvider>
-                    <ThemeProvider>
-                        <ConversationProvider>
-                            <App />
-                        </ConversationProvider>
-                    </ThemeProvider>
-                </SocketProvider>
-            </AuthProvider>
-        </GlobalStyle>
+        <AuthProvider>
+            <SocketProvider>
+                <ThemeProvider>
+                    <ConversationProvider>
+                        <App />
+                    </ConversationProvider>
+                </ThemeProvider>
+            </SocketProvider>
+        </AuthProvider>
+
     </I18nProvider>,
 );

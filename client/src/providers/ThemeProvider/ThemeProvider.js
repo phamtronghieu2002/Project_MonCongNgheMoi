@@ -15,7 +15,6 @@ const getTheme = () => {
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(getTheme);
-  console.log("ThemeContext",ThemeContext)
   function toggleTheme() {
     if (theme === "dark-theme") {
       setTheme("light-theme");
@@ -44,6 +43,7 @@ const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
 
 export { ThemeContext };
 

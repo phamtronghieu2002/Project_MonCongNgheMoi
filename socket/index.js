@@ -20,7 +20,7 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  //when ceonnect
+  //when user connect
   console.log("a user connected.");
 
   //take userId and socketId from user
@@ -43,40 +43,46 @@ io.on("connection", (socket) => {
       members
     }) => {
       const reciever = getUser(recieverId);
-      if(isGroup)
-          {
-           
-            members.filter((member=>member != senderId)).forEach((member) => {
-              const reciever = getUser(member);
-              console.log(member)
-              if (reciever) {
-                io.to(reciever.socketId).emit("getMessage", {
-                  senderId,
-                  content,
-                  conversationId,
-                  new_message,
-                });
-                io.to(reciever.socketId).emit("reRenderConversations");
-              }
-            });
-          }
-          else
-          {
-            if (reciever) {
-              io.to(reciever.socketId).emit("getMessage", {
-                senderId,
-                content,
-                conversationId,
-                new_message,
-              });
-              io.to(reciever.socketId).emit("reRenderConversations");
-            }
-          }
 
-      io.to(socket.id).emit("reRenderConversations");
+      if (isGroup) {
+
+        members.filter((member => member != senderId)).forEach((member) => {
+          const reciever = getUser(member);
+          console.log(member)
+          if (reciever) {
+            io.to(reciever.socketId).emit("getMessage", {
+              senderId,
+              content,
+              conversationId,
+              new_message,
+            });
+
+          }
+        });
+      }
+      else {
+        if (reciever) {
+          io.to(reciever.socketId).emit("getMessage", {
+            senderId,
+            content,
+            conversationId,
+            new_message,
+          });
+
+        }
+      }
     }
   );
 
+  socket.on("reRenderConversations", (members) => {
+
+
+    users.filter(user => members.includes(user.userId)).forEach((user) => {
+      io.to(user.socketId).emit("reRenderConversations");
+    });
+
+
+  });
   socket.on("sendRequestFriend", ({ recieverId }) => {
     const reciever = getUser(recieverId);
     if (reciever) {

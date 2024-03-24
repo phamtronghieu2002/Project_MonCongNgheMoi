@@ -10,7 +10,12 @@ const ConversationSchema = new mongoose.Schema(
     },
     lastMessage: {
       type: String,
-      default: "",  
+      default: "",
+    },
+    lastSenderid: {
+      type: String,
+      ref: "User",
+      default: "",
     },
   },
   {

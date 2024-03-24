@@ -22,10 +22,10 @@ instance.interceptors.response.use(
       };
       const status = res.status;
       if (status === 401) {
-          axios
+        axios
           .post("http://localhost:8080/api/v1/auth/refresh_token")
           .then((response) => {
-            console.log(response);
+
           })
           .catch((error) => {
             console.log(error);
@@ -43,11 +43,10 @@ instance.interceptors.response.use(
 axiosRetry(instance, {
   retries: 2, // number of retries
   retryDelay: (retryCount) => {
-    console.log(`retry attempt: ${retryCount}`);
     return retryCount * 100; // time interval between retries
   },
   retryCondition(error) {
-    return error.status === 401 
+    return error.status === 401
   },
 });
 export default instance;

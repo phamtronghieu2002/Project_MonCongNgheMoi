@@ -17,8 +17,7 @@ const corsOptions = {
   optionSuccessStatus: 200
 }
 app.use(cors(corsOptions));
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
@@ -27,7 +26,8 @@ app.use(morgan("common"));
 mongoose
   .connect("mongodb://127.0.0.1:27017/zaloClone", {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true
+
   })
   .then(() => {
     console.log("Connected to MongoDB");
@@ -38,8 +38,6 @@ mongoose
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 InitApiRoute(app);
-
-
 
 
 app.listen(port, () => {

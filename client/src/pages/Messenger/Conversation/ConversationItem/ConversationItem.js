@@ -8,21 +8,21 @@ import * as userService from '../../../../services/userService';
 import * as groupService from '../../../../services/groupService';
 import clsx from 'clsx';
 function ConversationItem({
-    activeFilter,
+    activeConversation,
     conversationId,
     onDetail,
     openPopper,
     members,
     isGroup,
-    senderId,
+    currentUserId,
     lastMessage,
     totalUnseen,
-
-    onActiveFilter,
+    onActiveConversation,
+    lastSenderid,
 }) {
     const { t } = useLang();
     const [openDetail, setOpenDetail] = useState(false);
-    const [ConversationCurrent, setConversationCurent] = useState(null);
+    const [conversationCurrent, setConversationCurent] = useState(null);
     const { conversation, setConversation } = useContext(ConversationContext);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ function ConversationItem({
                     setConversationCurent(group);
                     return;
                 }
-                const recieverid = members.find((id) => id !== senderId);
+                const recieverid = members.find((id) => id !== currentUserId);
                 const user = await userService.getUserById(recieverid);
 
                 setConversationCurent(user);
@@ -56,41 +56,44 @@ function ConversationItem({
             }
         };
         fetchMember();
-    }, [members, conversationId]);
+    }, [members, conversationId, activeConversation]);
 
     return (
         <div
             onClick={() => {
                 setConversation({
                     recieveInfor: {
-                        avatar: ConversationCurrent.avatarPicture || ConversationCurrent.groupPicture,
-                        name: ConversationCurrent.username || ConversationCurrent.groupName,
-                        _id: ConversationCurrent._id,
+                        avatar: conversationCurrent.avatarPicture || conversationCurrent.groupPicture,
+                        name: conversationCurrent.username || conversationCurrent.groupName,
+                        _id: conversationCurrent._id,
                         isGroup,
-                        members: ConversationCurrent.members
+                        members: conversationCurrent.members ? conversationCurrent.members : [currentUserId, conversationCurrent._id],
                     },
                     _id: conversationId,
                 });
 
-                onActiveFilter(conversationId);
+                onActiveConversation(conversationId);
             }}
             className={
                 'd-flex position-relative account_item_chat' +
-                (conversationId === activeFilter ? ' backgroundActive' : '')
+                (conversationId === activeConversation ? ' backgroundActive' : '')
             }
         >
             {openDetail && <DetailConversationPopper />}
             <div className="avatar">
                 <img
                     className="single_chat_avatar"
-                    src={ConversationCurrent ? ConversationCurrent.avatarPicture || ConversationCurrent.groupPicture : ''}
+                    src={conversationCurrent ? conversationCurrent.avatarPicture || conversationCurrent.groupPicture : ''}
                     alt="avt"
                 />
             </div>
             <div className="infor">
-                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{ConversationCurrent ? ConversationCurrent.username || ConversationCurrent.groupName : ''}</span>
+                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{conversationCurrent ? conversationCurrent.username || conversationCurrent.groupName : ''}</span>
                 <br />
-                <span className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>{lastMessage}</span>
+                <p className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>
+                    {lastSenderid === currentUserId ? `Bạn: ${lastMessage}` : lastMessage}
+                    { }
+                </p>
             </div>
             <span className="timer_message">{`5 ${t('messenger.account_chat_item.timmer.day')}`}</span>
             <button onClick={onDetail} className="detail_btn">

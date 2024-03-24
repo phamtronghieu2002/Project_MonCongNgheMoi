@@ -11,8 +11,10 @@ export const createMessage = async (
       content: content,
       isSeen: 0,
       conversationId: conversationId,
-    });
 
+    });
+    const currentDateTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }); // Adjust time zone as needed
+    new_message.createdAt = currentDateTime;
     await new_message.save();
 
     const result = await MessageModel.findOne({ _id: new_message._doc._id })
@@ -29,7 +31,6 @@ export const createMessage = async (
 export const updatStatusSeenMessage = async (senderid, conversationId, recieverid) => {
   try {
 
-    console.log("recieverid >>>>>", recieverid);
     const resultUpdate = MessageModel.updateMany(
       {
         senderId: senderid,
@@ -46,14 +47,12 @@ export const updatStatusSeenMessage = async (senderid, conversationId, recieveri
 };
 
 export const getMessageByConverationId = async (conversationId) => {
-  console.log("conversationId>>", conversationId);
   try {
     const messages = await MessageModel.find({
       conversationId: conversationId,
     })
       .populate("senderId", "_id username avatarPicture")
       .exec();
-    console.log("messages>>", messages);
     return messages;
   } catch (error) {
     console.log(error);

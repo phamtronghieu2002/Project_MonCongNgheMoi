@@ -7,17 +7,18 @@ function UserItem({ label, users, onSetUser, selectUser }) {
             {users.map((user, index) => {
                 return (
                     <div
-                         key={index}
+                        key={index}
                         onClick={() => {
                             selectUser.includes(user._id) ? onSetUser(selectUser.filter((item) => item !== user._id)) :
-                            onSetUser([...selectUser, user._id]);
+                                onSetUser([...selectUser, user._id]);
                         }}
                         className="user_item d-flex gap-1 align-items-center mt-1"
                     >
                         <input
                             checked={selectUser.includes(user._id) ? true : false}
+                            onChange={() => { }}
                             type="checkbox"
-                            class="form-check-input me-2"
+                            className="form-check-input me-2"
                         />
                         <img
                             className="avatar"

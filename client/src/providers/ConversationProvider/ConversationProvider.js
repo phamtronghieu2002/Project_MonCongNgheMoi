@@ -3,9 +3,9 @@ import { useState } from 'react';
 export const ConversationContext = React.createContext();
 function ConversationProvider({ children }) {
     const [conversation, setConversation] = useState({
-active:false,userInfor:{},conversationId:""
+        active: false, userInfor: {}, conversationId: ""
     });
-    return <ConversationContext.Provider value={{conversation, setConversation}}>{children}</ConversationContext.Provider>;
+    return <ConversationContext.Provider value={{ conversation, setConversation }}>{children}</ConversationContext.Provider>;
 }
 
 export default ConversationProvider;
