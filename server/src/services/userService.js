@@ -33,9 +33,11 @@ export const searchUser = async (keyword) => {
 export const getUserById = async (id) => {
   try {
     const user = await UserModel.findOne(
-      { _id: id },
-      "_id avatarPicture username ,friends"
-    );
+      { _id: id }, {
+      password: 0,
+    }
+
+    )
     return user;
   } catch (error) {
     console.log(error);
@@ -69,12 +71,13 @@ export const getUserByFirstCharater = async () => {
       {},
       "_id username avatarPicture phonenumber"
     ).sort({ username: 1 });
-
+    console.log("users>>", users);
     const result = [];
     let currentLetter = null;
     let currentGroup = null;
 
     users.forEach((user) => {
+      console.log("user>>", user)
       const firstLetter = user.username[0].toUpperCase();
 
       if (firstLetter !== currentLetter) {
@@ -95,8 +98,48 @@ export const getUserByFirstCharater = async () => {
       result.push(currentGroup);
     }
 
+    console.log("result>>", result);
     return result;
   } catch (error) {
     console.log(error);
   }
 };
+
+export const updateUser = async (_id, username, gender, birth) => {
+  try {
+
+    //exclude password
+    const user = await UserModel
+      .findOneAndUpdate({ _id },
+        {
+          $set: {
+            username,
+            gender,
+            birth
+          }
+        },
+        { new: true, fields: { password: 0 } }
+      );
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export const updateImageUser = async (_id, imgURL) => {
+  try {
+
+    //exclude password
+    const user = await UserModel
+      .findOneAndUpdate({ _id },
+        {
+          $set: {
+            avatarPicture: imgURL
+          }
+        },
+        { new: true, fields: { password: 0 } }
+      );
+    return user;
+  } catch (error) {
+    console.log(error);
+  }
+}

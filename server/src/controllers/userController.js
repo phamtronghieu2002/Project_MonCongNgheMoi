@@ -50,13 +50,43 @@ export const handleAddFriend = async (req, res) => {
   return res.status(500).json({ message: "Internal Server Error" });
 };
 
-export const handleGetUserByFirstCharater =async(req,res)=>{
+export const handleGetUserByFirstCharater = async (req, res) => {
 
-  console.log("xin chao")
- 
-  const data =await userServices.getUserByFirstCharater();
-  if(data){
+
+
+  const data = await userServices.getUserByFirstCharater();
+  if (data) {
     return res.status(200).json(data);
   }
-  return res.status(500).json({message: "Internal Server Error"});
+  return res.status(500).json({ message: "Internal Server Error" });
 }
+
+export const handleUpdateInformationUser = async (req, res) => {
+
+  console.log("req.body", req.body)
+  const _id = req.params.id;
+  const { username, gender, birth } = req.body;
+  if (!username || !gender || !birth) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const data = await userServices.updateUser(_id, username, gender, birth);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}
+export const handleUpdateImageUser = async (req, res) => {
+
+
+  const _id = req.params.id;
+  const imgURL = req.file.path;
+  if (!imgURL) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const data = await userServices.updateImageUser(_id, imgURL);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}
+

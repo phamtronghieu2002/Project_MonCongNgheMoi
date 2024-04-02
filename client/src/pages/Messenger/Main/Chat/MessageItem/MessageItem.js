@@ -20,9 +20,9 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
                 <div className="message-content">
                     {
                         content.map((itemText, index) => (
-                            <div className='cart-text'>
+                            <div key={index} className='cart-text'>
                                 <div
-                                    key={index}
+
                                     className="message-text">
                                     {
                                         !own && index == 0 && <p className='senderName'>{senderName}</p>

@@ -1,0 +1,26 @@
+#personalInfoModal {
+    .modal-dialog {
+        overflow: hidden;
+    }
+    .infor {
+        transform: translateX(500px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .infor.in.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .btn_changeAvatar {
+        &:hover {
+            background-color: #d1d1d1 !important;
+        }
+    }
+    .p_infor {
+        display: flex;
+        gap: 10px;
+        strong {
+            width: 110px;
+        }
+    }
+}

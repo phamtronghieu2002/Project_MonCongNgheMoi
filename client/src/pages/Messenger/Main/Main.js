@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 function Main() {
     const { conversation } = useContext(ConversationContext);
-
+    console.log("conversation", conversation)
     return (
         <div id="main_container" className="d-flex">
 
@@ -18,12 +18,12 @@ function Main() {
                         style={{
                             backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
                             backgroundSize: 'cover',
-                            filter: 'blur(200px)',
+                            filter: 'blur(400px)',
                             position: 'absolute',
                             top: 0,
-                            left: 0,
-                            right: 0,
+                            width: '1136px',
                             bottom: 0,
+                            right: 0,
                             zIndex: -1
                         }}
                     ></div>

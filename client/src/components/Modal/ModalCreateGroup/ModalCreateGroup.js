@@ -8,7 +8,11 @@ import { ConversationContext } from '../../../providers/ConversationProvider/Con
 import * as userServices from '..//..//../services/userService';
 import * as conversationServices from '..//..//../services/conversationService';
 import * as groupServices from '..//..//../services/groupService';
-function ModalCreateGroup() {
+import OverLay from '../../Overlay/Overlay';
+import ModalSetAvatarGroup from '../ModalSetAvatarGroup/ModalSetAvatarGroup';
+function ModalCreateGroup({ onHide }) {
+
+
     const [groupName, setGroupName] = useState('');
     const [selectUser, setSelectUser] = useState([]);
     const [users, setUsers] = useState([]);
@@ -17,6 +21,8 @@ function ModalCreateGroup() {
     const [searhDebouce] = useDebounce(search, 200);
     const { socket, currentUserId } = useContext(socketContext);
     const { conversation, setConversation } = useContext(ConversationContext);
+    const [showModalSetImageGroup, setShowModalSetImageGroup] = useState(true);
+
     const fetchUsers = async () => {
         try {
             const users = await userServices.getUserByFirstCharacter();
@@ -72,85 +78,94 @@ function ModalCreateGroup() {
         }
     }
     return (
-        <div
-            style={{ zIndex: 9999 }}
-            className="modal fade"
-            id="modalCreateGroup"
-            tabIndex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-        >
-            <div className="modal-dialog ">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title fw-bold" id="exampleModalLabel">
-                            Tạo nhóm
-                        </h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
 
-                    <div className="modal-body ">
-                        <div className="name-group-wp d-flex align-items-center gap-3">
-                            <button className="choose-image-group">
-                                <i className="fas fa-image"></i>
-                            </button>
-                            <input
-                                value={groupName}
-                                onChange={(e) => setGroupName(e.target.value)}
-                                type="text" className="form-control search_group" placeholder="Nhập tên nhóm..." />
-                        </div>
-                        <div className="searchUser_container mt-3">
-                            <input
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                type="text"
-                                className=""
-                                placeholder="Tìm kiếm người dùng..."
-                            />
-                            <i className="fa-solid fa-magnifying-glass search_icon"></i>
-                        </div>
-                        <div className="result-search mt-3">
-                            {userSearch.length > 0 ? (
-                                <UserItem
+        <OverLay>
 
-                                    selectUser={selectUser}
-                                    onSetUser={setSelectUser}
-                                    users={userSearch}
+            {showModalSetImageGroup && <ModalSetAvatarGroup onHide={() => setShowModalSetImageGroup(false)} />}
+            <div id="modalCreateGroup">
+                <div className="modal-dialog" >
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title fw-bold">
+                                Tạo nhóm
+                            </h5>
+                            <button type="button" className="btn-close" onClick={() => {
+                                onHide()
+                            }} aria-label="Close"></button>
+                        </div>
+
+                        <div className="modal-body">
+                            <div className="name-group-wp d-flex align-items-center gap-3">
+                                <button
+
+                                    onClick={() => setShowModalSetImageGroup(true)}
+                                    className="choose-image-group">
+                                    <i className="fas fa-image"></i>
+                                </button>
+                                <input
+                                    value={groupName}
+                                    onChange={(e) => setGroupName(e.target.value)}
+                                    type="text"
+                                    className="form-control search_group"
+                                    placeholder="Nhập tên nhóm..." />
+                            </div>
+                            <div className="searchUser_container mt-3">
+                                <input
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    type="text"
+                                    className="control search_user"
+                                    placeholder="Tìm kiếm người dùng..."
                                 />
-                            ) : (
-                                users.map((user, index) => (
+                                <i className="fa-solid fa-magnifying-glass search_icon"></i>
+                            </div>
+                            <div className="result-search mt-3">
+                                {userSearch.length > 0 ? (
                                     <UserItem
-                                        key={index}
+
                                         selectUser={selectUser}
                                         onSetUser={setSelectUser}
-                                        label={user.firstKey}
-                                        users={user.users}
+                                        users={userSearch}
                                     />
-                                ))
-                            )}
+                                ) : (
+                                    users.map((user, index) => (
+                                        <UserItem
+                                            key={index}
+                                            selectUser={selectUser}
+                                            onSetUser={setSelectUser}
+                                            label={user.firstKey}
+                                            users={user.users}
+                                        />
+                                    ))
+                                )}
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button
-                            onClick={() => {
-                                createConversation()
-                            }}
-                            type="button"
-                            className="btn btn-primary"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                            disabled={groupName.length === 0 || selectUser.length === 0}
-                        >
-                            Save changes
-                        </button>
+                        <div className="modal-footer">
+                            <button
+                                onClick={onHide}
+                                type="button"
+                                className="btn btn-secondary">
+                                Close
+                            </button>
+                            <button
+                                onClick={() => {
+
+                                    createConversation()
+                                    onHide()
+                                }}
+                                type="button"
+                                className="btn btn-primary"
+                                disabled={groupName.length === 0 || selectUser.length < 2}
+                            >
+                                Save changes
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+        </OverLay>
     );
 }
 

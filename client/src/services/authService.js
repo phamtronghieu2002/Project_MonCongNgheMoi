@@ -1,17 +1,21 @@
 import axios from './axios';
 
-export const register =  (data) => {
+export const register = (data) => {
     return axios.post('/auth/register', data);
 };
 
-export const login =  (data) => {
+export const login = (data) => {
     return axios.post('/auth/login', data);
 };
-export const logout =  () => {
+export const logout = () => {
     return axios.post('/auth/logout');
 };
 
-export const checkExitPhone =  (phonenumber) => {
-    return axios.post('/auth/checkPhoneExit', {phonenumber});
+export const checkExitPhone = (phonenumber) => {
+    return axios.post('/auth/checkPhoneExit', { phonenumber });
 };
 
+//update avatar
+export const updateAvatar = (imgURL) => {
+    return axios.put('/user/updateAvatar', { imgURL });
+};

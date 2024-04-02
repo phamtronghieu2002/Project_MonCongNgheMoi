@@ -4,7 +4,7 @@ import { useLang } from '..//..//..//hooks';
 import { AuthContext } from '..//..//..//providers/Auth/AuthProvider';
 import { useContext } from 'react';
 import { toast } from 'react-hot-toast';
-import {useInfor} from '..//..//..//hooks';
+import { useInfor } from '..//..//..//hooks';
 import * as authServices from '..//..//..//services/authService';
 
 function UserPopper() {
@@ -13,8 +13,8 @@ function UserPopper() {
     const user = useInfor();
     const handleLogout = async () => {
         try {
-            await authServices.logout();
-            toast.success('đăng xuất thành công !!!');
+
+
             logout();
         } catch (error) {
             toast.success('đăng xuất thất bại!!!');
@@ -22,8 +22,8 @@ function UserPopper() {
     };
 
     const main_menu = [
-        { title: t('messenger.popper.user.profile'), callback: () => {} },
-        { title: t('messenger.popper.user.setting'), callback: () => {} },
+        { title: t('messenger.popper.user.profile'), callback: () => { }, props: { "data-bs-toggle": "modal", "data-bs-target": "#personalInfoModal" } },
+        { title: t('messenger.popper.user.setting'), callback: () => { } },
     ];
     const foot_menu = [
         {
@@ -33,7 +33,7 @@ function UserPopper() {
     ];
     return (
         <div id="wp_popper_user">
-            <h4 className="fw-bold ps-1">{user.username}</h4>
+            <h5 className="fw-bold ps-1">{user.username}</h5>
             <div className="zmenu-separator"></div>
             {main_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />

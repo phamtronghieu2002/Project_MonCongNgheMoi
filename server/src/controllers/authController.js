@@ -1,4 +1,5 @@
 import * as authServices from "../services/authService";
+import { getUserById } from "../services/userService";
 export const handleRegister = async (req, res) => {
   const { username, password, phonenumber } = req.body;
   if (!username || !phonenumber || !password) {
@@ -6,7 +7,6 @@ export const handleRegister = async (req, res) => {
   }
   const data = await authServices.register({
     username,
-
     password,
     phonenumber,
   });
@@ -47,15 +47,15 @@ export const handleCheckEixtsPhone = async (req, res) => {
 };
 
 export const handeleGetProfile = async (req, res) => {
-  const user = req.user;
-  console.log("requser>>", user);
+  const userid = req.user._id;
+  const user = await getUserById(userid);
   if (user) {
     return res.status(200).json(user);
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
 
-export const handleFreshToken = async (req, res) => {
+export const handle_re_fresh_token = async (req, res) => {
   const freshToken = req.cookies.freshToken;
 
   return await authServices.createFreshToken(freshToken, res, req);

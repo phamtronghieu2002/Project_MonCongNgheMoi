@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 import { AuthContext } from '../../../providers/Auth/AuthProvider';
 function AccountItem({ avatarPicture, username, groupPicture, groupName, _id, isGroup, members }) {
-    const { setConversation, conversation } = useContext(ConversationContext);
+    const { setCurrentConversation } = useContext(ConversationContext);
     const { getUser } = useContext(AuthContext);
     const user = getUser();
 
@@ -12,17 +12,21 @@ function AccountItem({ avatarPicture, username, groupPicture, groupName, _id, is
     const name = username || groupName;
     const handleCreateConversation = async () => {
         try {
-            const res = await conversationService.createConversation(user.data._id, _id, isGroup);
-            setConversation({
-                recieveInfor: {
-                    avatar: avatarPicture || groupPicture,
-                    name: username || groupName,
-                    _id,
-                    isGroup,
-                    members: members ? members : [user.data._id, _id],
-                },
-                _id: res._id
-            });
+            const conversation = await conversationService.createConversation(user.data._id, _id, isGroup);
+
+            const avatar = avatarPicture || groupPicture;
+            const name = username || groupName;
+
+            const conversationId = conversation._id;
+
+            setCurrentConversation(
+                avatar,
+                name,
+                _id,
+                isGroup,
+                members ? members : [user.data._id, _id],
+                conversationId
+            );
         } catch (error) {
             console.log(error);
         }

@@ -2,7 +2,7 @@ import UserModel from "../models/User";
 import dotenv from "dotenv";
 import { hashPassword, comparePassword } from "..//utils/crypto";
 import { create_access_token, create_fresh_token } from "../utils/jwt";
-import {generateKeywordsWithSpaces} from "../utils/user";
+import { generateKeywordsWithSpaces } from "../utils/user";
 dotenv.config();
 import jwt from "jsonwebtoken";
 
@@ -57,9 +57,14 @@ export const login = async ({ phonenumber, password, res }) => {
 
     const payload = {
       _id: user._id,
-      avatarPicture: user.avatarPicture,
       username: user.username,
+      phonenumber: user.phonenumber,
       backgroundPicture: user.backgroundPicture,
+      avatarPicture: user.avatarPicture,
+      gender: user.gender,
+      birth: user.birth,
+      keywords: user.keywords,
+
     };
     const access_token = create_access_token(payload, "1h");
     const fresh_token = create_fresh_token(payload, "24h");
@@ -78,29 +83,13 @@ export const login = async ({ phonenumber, password, res }) => {
     user.freshToken = fresh_token;
     await user.save();
 
-    const response_user = user._doc;
 
-    const {
-      password: hashedPassword,
-      phonenumber: phone,
-      gender,
-      birth,
-      friends,
-      groups,
-      freshToken,
-      createdAt,
-      updatedAt,
-      _v,
-      keywords,
-      ...rest
-    } = response_user;
 
     return {
       errCode: 0,
       message: "Login successfully",
-      data: rest,
-      access_token,
-      fresh_token,
+      data: payload,
+      access_token
     };
   } catch (err) {
     console.error(err);
@@ -128,6 +117,7 @@ export const checkPhoneExist = async ({ phonenumber }) => {
 
 export const createFreshToken = async (freshToken, res, req) => {
   try {
+
     const user = await UserModel.findOne({ freshToken });
     if (user) {
       const decoded_freshToken = jwt.verify(
@@ -157,7 +147,7 @@ export const createFreshToken = async (freshToken, res, req) => {
       user.freshToken = new_fresh_token;
       await user.save();
 
-      return res.status(200).json("ok!!");
+      return res.status(200).json("refresh token successfull!!");
     }
     return res.status(401).json({ message: "unauthorized" });
   } catch (error) {

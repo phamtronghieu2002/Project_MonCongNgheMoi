@@ -55,11 +55,11 @@ export default function Login() {
             <div className="inner">
                 <div className="header">
                     <a className="logo"></a>
-                    <h2 className="text-center">
+                    <h5 className="text-center">
                         {t('Login.first_title')}
                         <br />
                         {t('Login.second_title')}
-                    </h2>
+                    </h5>
                 </div>
                 <div className="body mt-3">
                     <div className="tab_select">

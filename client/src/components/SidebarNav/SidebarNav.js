@@ -6,8 +6,10 @@ import SettingPopper from '../Popper/SettingPopper/SettingPopper';
 import configs from '../../configs';
 import useInfor from '../../hooks/useInfor';
 import clsx from 'clsx';
+import { isBase64Image } from '../../utils/imageUtil';
 export default function SidebarNav() {
     const user = useInfor();
+
     const [select, setSelect] = useState("");
 
     const [isOpenPopper, setIsOpenPopper] = useState({
@@ -47,6 +49,7 @@ export default function SidebarNav() {
 
             <div style={{ flex: 1 }}>
                 <div onClick={handleUserClickOpenPopperUser} className="wp_avt">
+
                     <img
                         alt="avt"
                         src={user?.avatarPicture}

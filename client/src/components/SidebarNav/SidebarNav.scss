@@ -1,89 +1,71 @@
-#wp_SidebarNav{
-
-
-
-.active{
-    background-color: #006edc;
-}
-
+#wp_SidebarNav {
     flex-direction: column;
     display: flex;
-    z-index: 11;
     width: 58px;
     height: 100%;
     background-color: #0091ff;
-.wp_avt{
 
-    height: 100px;
-    justify-content: center;
-    display: flex;
-    padding-top: 32px;
-    box-sizing: border-box;
-    
+    .active {
+        background-color: #006edc;
+    }
 
-    .a-child
-    {
-
-        width: 48px;
-        height: 48px;
-        min-width: 48px;
-        min-height: 48px;
+    .wp_avt {
+        height: 100px;
+        justify-content: center;
         display: flex;
-    justify-content: center;
-    align-items: center;
+        padding-top: 32px;
+        box-sizing: border-box;
 
-    overflow: hidden;
-    object-fit: cover;
-    font-size: .75rem;
-    font-weight: 500;
-    line-height: 1.5;
-    border: 1px solid #fff;
-    box-sizing: border-box;
-    border-radius: 50%;
-    }
-}
+        .a-child {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
-.nav_item
-{
-
-    &:hover
-    {
-            -webkit-animation: fade-in .3s linear 1;
-        background-color: rgba(0, 0, 0, 0.1);
-    }
-
-    
-    height: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    .nav_icon
-    {
-        color: white;
-    font-size: 20px;
-    }
-    .nav_num
-    {
-        position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 17px;
-    height: 17px;
-    background-color: #ff0000;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 10px;
-    color: white;
-
+            overflow: hidden;
+            object-fit: cover;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1.5;
+            border: 1px solid #fff;
+            box-sizing: border-box;
+            border-radius: 50%;
+        }
     }
 
-}
-.nav_message
-{
-}
+    .nav_item {
+        &:hover {
+            -webkit-animation: fade-in 0.3s linear 1;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
 
-
+        height: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        .nav_icon {
+            color: white;
+            font-size: 20px;
+        }
+        .nav_num {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 17px;
+            height: 17px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: white;
+        }
+    }
+    .nav_message {
+    }
 }

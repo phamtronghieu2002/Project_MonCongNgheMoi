@@ -7,12 +7,12 @@ import { useState, useContext } from 'react';
 import { useLang } from '../../../hooks';
 import { toast, Toaster } from 'react-hot-toast';
 import { AuthContext } from '../../../providers/Auth/AuthProvider';
-export default function FormLogin({}) {
+export default function FormLogin({ }) {
     const { i18n, t } = useLang();
     const [phonenumber, setPhone] = useState('');
     const [password, setPassword] = useState('');
-    const { login,getUser } = useContext(AuthContext);
-   
+    const { login, getUser } = useContext(AuthContext);
+
     const handleLogin = async () => {
         try {
             const res = await authServices.login({ phonenumber, password });
@@ -21,9 +21,6 @@ export default function FormLogin({}) {
                 const user = res.data;
                 login();
                 toast.success(res.message);
-
-
-
                 return;
             }
             toast.error(res.message);
@@ -43,7 +40,7 @@ export default function FormLogin({}) {
                     }}
                 />
             </div>
-            <div className="input-group flex-nowrap mt-3" style={{ paddingRight: '10px',zIndex:0 }}>
+            <div className="input-group flex-nowrap mt-3" style={{ paddingRight: '10px', zIndex: 0 }}>
                 <span
                     style={{
                         padding: '0 0 0 10px',
@@ -60,7 +57,7 @@ export default function FormLogin({}) {
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}
-                    style={{ height: '35px',zIndex: 0}}
+                    style={{ height: '35px', zIndex: 0 }}
                     type="password"
                     className="form-control"
                     placeholder={t('Login.placeholder.password')}

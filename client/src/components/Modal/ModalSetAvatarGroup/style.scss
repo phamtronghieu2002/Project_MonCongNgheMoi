@@ -1,0 +1,16 @@
+#modalSetAvatarGroup {
+    .chose_image_from_computer {
+        h4 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        gap: 10px;
+        height: 40px;
+        background: #e5efff;
+        color: #005ae0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 24px !important;
+    }
+}

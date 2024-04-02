@@ -1,5 +1,14 @@
 #modalCreateGroup {
- 
+    .search_icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 10px;
+        color: #7589a3;
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+    }
     .modal-body {
         .search_group {
             box-sizing: border-box;
@@ -22,26 +31,25 @@
             box-sizing: content-box;
         }
     }
-    .modal-dialog
-    {
+    .modal-dialog {
         max-height: calc(100% - 20px);
     }
     .searchUser_container {
         position: relative;
-    width: 100%;
-    border: 1px solid #d6dbe1;
-    background: #fff;
-    padding-left: 20px;
-    display: flex;
-    overflow: hidden;
-    box-sizing: border-box;
-    height: 38px;
-    line-height: 38px;
-    border-radius: 20px;
-        input{
+        width: 100%;
+        border: 1px solid #d6dbe1;
+        background: #fff;
+        padding-left: 20px;
+        display: flex;
+        overflow: hidden;
+        box-sizing: border-box;
+        height: 38px;
+        line-height: 38px;
+        border-radius: 20px;
+        input {
             border-radius: 20px;
             padding-left: 32px;
-    
+
             list-style: none;
             position: relative;
             width: 100%;
@@ -57,24 +65,13 @@
             font-weight: 400;
             line-height: 1.5;
         }
-      .search_icon {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 10px;
-        color: #7589a3;
-        font-size: 0.875rem;
-        width: 0.875rem;
-        height: 0.875rem;
-      }
-      
     }
-    .modal-body{
+    .modal-body {
         overflow: auto;
     }
-    .result-search{
-overflow: auto;
-height: 300px;
+    .result-search {
+        overflow: auto;
+        height: 300px;
     }
 }
 .choose-image-group {

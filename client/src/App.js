@@ -6,14 +6,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PrivateRoutes, PublicRoutes } from './routes';
 
 import { Toaster } from 'react-hot-toast';
-import ModalCreateGroup from './components/Modal/ModalCreateGroup/ModalCreateGroup';
+import ModalInformationUser from './components/Modal/ModalInforationUser/ModalInformationUser';
 function App() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     return (
         <div className={`${theme}`}>
-            <ModalCreateGroup />
+            <ModalInformationUser />
             <BrowserRouter>
-
                 <Routes>
                     {PublicRoutes.map((r, index) => (
                         <Route {...r} key={index} />

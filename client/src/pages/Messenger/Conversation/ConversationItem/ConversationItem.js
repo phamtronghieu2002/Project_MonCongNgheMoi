@@ -22,8 +22,8 @@ function ConversationItem({
 }) {
     const { t } = useLang();
     const [openDetail, setOpenDetail] = useState(false);
-    const [conversationCurrent, setConversationCurent] = useState(null);
-    const { conversation, setConversation } = useContext(ConversationContext);
+    const [userOrGroup, setUserOrGroup] = useState(null);
+    const { setCurrentConversation } = useContext(ConversationContext);
 
     useEffect(() => {
         window.addEventListener('click', () => setOpenDetail(false));
@@ -41,16 +41,15 @@ function ConversationItem({
         const fetchMember = async () => {
             try {
                 if (isGroup) {
-
                     const groupId = members[0];
                     const group = await groupService.getGroupById(groupId);
-                    setConversationCurent(group);
+                    setUserOrGroup(group);
                     return;
                 }
                 const recieverid = members.find((id) => id !== currentUserId);
                 const user = await userService.getUserById(recieverid);
 
-                setConversationCurent(user);
+                setUserOrGroup(user);
             } catch (err) {
                 console.log(err);
             }
@@ -61,16 +60,20 @@ function ConversationItem({
     return (
         <div
             onClick={() => {
-                setConversation({
-                    recieveInfor: {
-                        avatar: conversationCurrent.avatarPicture || conversationCurrent.groupPicture,
-                        name: conversationCurrent.username || conversationCurrent.groupName,
-                        _id: conversationCurrent._id,
-                        isGroup,
-                        members: conversationCurrent.members ? conversationCurrent.members : [currentUserId, conversationCurrent._id],
-                    },
-                    _id: conversationId,
-                });
+
+                const avatar = userOrGroup.avatarPicture || userOrGroup.groupPicture;
+                const name = userOrGroup.username || userOrGroup.groupName;
+                const _id = userOrGroup._id;
+                const members = userOrGroup.members ? userOrGroup.members : [currentUserId, userOrGroup._id];
+
+                setCurrentConversation(
+                    avatar,
+                    name,
+                    _id,
+                    isGroup,
+                    members,
+                    conversationId,
+                );
 
                 onActiveConversation(conversationId);
             }}
@@ -83,12 +86,12 @@ function ConversationItem({
             <div className="avatar">
                 <img
                     className="single_chat_avatar"
-                    src={conversationCurrent ? conversationCurrent.avatarPicture || conversationCurrent.groupPicture : ''}
+                    src={userOrGroup ? userOrGroup.avatarPicture || userOrGroup.groupPicture : ''}
                     alt="avt"
                 />
             </div>
             <div className="infor">
-                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{conversationCurrent ? conversationCurrent.username || conversationCurrent.groupName : ''}</span>
+                <span className={clsx('display_name', totalUnseen > 0 ? 'fw-bold' : '')}>{userOrGroup ? userOrGroup.username || userOrGroup.groupName : ''}</span>
                 <br />
                 <p className={clsx('last_message', totalUnseen > 0 ? 'fw-bold' : '')}>
                     {lastSenderid === currentUserId ? `Bạn: ${lastMessage}` : lastMessage}
