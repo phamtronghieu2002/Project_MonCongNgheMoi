@@ -6,17 +6,26 @@ import { AuthContext } from "../../../providers/Auth/AuthProvider";
 import "react-datepicker/dist/react-datepicker.css";
 import * as userService from "../../../services/userService";
 export default function EditUser({ hasTransitionedIn, editing }) {
-    const [username, SetUsername] = useState('');
-    const [gender, setGender] = useState(0);
-    const [birth, setBirth] = useState(new Date());
+ 
+
     const user = useInfor();
+    const [gender, setGender] = useState(user.gender);
+    const [birth, setBirth] = useState(()=>{
+        if(user.birth){
+            return new Date(user.birth)
+        }
+        return new Date()
+    });
+    const [username, SetUsername] = useState(user.username);
     const { updateUser } = useContext(AuthContext);
 
 
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
+    
+    e.preventDefault();
         try {
+            console.log("submit")
             const currentUserId = user._id;
             const data = {
                 username,
@@ -24,6 +33,7 @@ export default function EditUser({ hasTransitionedIn, editing }) {
                 gender,
             }
             const user = await userService.updateUser(currentUserId, data)
+            console.log(user)
             updateUser(user);
             toast.success("Cập nhật thông tin thành công");
         } catch (error) {
@@ -35,7 +45,7 @@ export default function EditUser({ hasTransitionedIn, editing }) {
     }
     return (
         <form
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             className={`infor ${hasTransitionedIn && "in"} ${editing && "visible"
                 }`}
         >
@@ -88,7 +98,8 @@ export default function EditUser({ hasTransitionedIn, editing }) {
 
             <div className="text-end">
                 <button
-                    type="submit" className="btn btn-primary position-relative end-0">
+                     type="submit"
+                     className="btn btn-primary position-relative end-0">
                     <i className="fas fa-save me-1"></i> Lưu
                 </button>
             </div>

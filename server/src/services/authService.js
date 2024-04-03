@@ -6,9 +6,7 @@ import { generateKeywordsWithSpaces } from "../utils/user";
 dotenv.config();
 import jwt from "jsonwebtoken";
 
-
-
-export const register = async ({ username, password, phonenumber, res }) => {
+export const register = async ({ username, password, phonenumber }) => {
   try {
     const user = await UserModel.findOne({ phonenumber });
 
@@ -24,12 +22,12 @@ export const register = async ({ username, password, phonenumber, res }) => {
       phonenumber,
       keywords: generateKeywordsWithSpaces(username),
     });
-    await new_user.save();
-    if (new_user) {
+    const result = await new_user.save();
+    if (result) {
       return {
         errCode: 0,
         message: "Register successfully",
-        data: new_user,
+        data: result,
       };
     }
   } catch (err) {
@@ -64,7 +62,6 @@ export const login = async ({ phonenumber, password, res }) => {
       gender: user.gender,
       birth: user.birth,
       keywords: user.keywords,
-
     };
     const access_token = create_access_token(payload, "1h");
     const fresh_token = create_fresh_token(payload, "24h");
@@ -83,13 +80,11 @@ export const login = async ({ phonenumber, password, res }) => {
     user.freshToken = fresh_token;
     await user.save();
 
-
-
     return {
       errCode: 0,
       message: "Login successfully",
       data: payload,
-      access_token
+      access_token,
     };
   } catch (err) {
     console.error(err);
@@ -117,7 +112,6 @@ export const checkPhoneExist = async ({ phonenumber }) => {
 
 export const createFreshToken = async (freshToken, res, req) => {
   try {
-
     const user = await UserModel.findOne({ freshToken });
     if (user) {
       const decoded_freshToken = jwt.verify(
@@ -155,4 +149,3 @@ export const createFreshToken = async (freshToken, res, req) => {
     return res.status(401).json({ message: "unauthorized" });
   }
 };
-

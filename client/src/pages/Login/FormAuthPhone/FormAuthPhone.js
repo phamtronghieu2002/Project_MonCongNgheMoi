@@ -15,7 +15,7 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
     const [loading, setLoading] = useState(false);
     const { t } = useLang();
     const auth = configs.firebase.auth;
-
+console.log(phone)
     const handleOpenModal = (isOpen) => {
         setIsOpenModalOTP(isOpen);
     };

@@ -1,4 +1,12 @@
 #modalSetAvatarGroup {
+    overflow: hidden;
+    .modal-dialog {
+        overflow: hidden;
+
+        .modal-content {
+            min-height: 500px;
+        }
+    }
     .chose_image_from_computer {
         h4 {
             font-size: 1rem;
@@ -13,4 +21,70 @@
         align-items: center;
         margin-bottom: 24px !important;
     }
+    .image_title {
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.5;
+        color: #081c36;
+    }
+
+    .avatar_item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 68px;
+            height:68px;
+            border-radius: 50%;
+        }
+    }
+
+    .animation_body_modal{
+        position: relative;
+    bottom: 0;
+    transform: translateX(-100%);
+    
+    }
+}
+.detail_avatar_group {
+    background-color: rgb(255, 255, 255);
+
+    position: absolute;
+    transition: all 0.3s;
+    height: 466px;
+    z-index: 10;
+    top: 67px;
+    right: 1px;
+    left: 1px;
+    .main_avatar {
+
+    margin: 30px  auto;
+    width: 250px;
+    height: 250px;
+    border: none;
+    max-width: 300px;
+    max-height: 300px;
+    overflow: hidden;
+    background: red;
+    }
+}
+.btn_back{
+    border: 0px;
+    outline: 0px;
+    background: none;
+    margin-right: 10px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    transition:  all 0.3s;
+    &:hover{
+        background: #dfe2e7;
+    }
+
+  
+}
+
+.modal-body{
+    transition: all 0.3s;
 }

@@ -8,7 +8,7 @@ import * as authServices from '../../../services/authService';
 export default function FormRegister({ onSuccess }) {
     const { t } = useLang();
     const [phoneRegister, setPhoneRegister] = useState('');
-    const [isAuthPhone, setIsAuthPhone] = useState(true);
+    const [isAuthPhone, setIsAuthPhone] = useState(false);
 
     const [dataForm, setDataForm] = useState({
         username: '',
@@ -27,7 +27,7 @@ export default function FormRegister({ onSuccess }) {
             const res = await authServices.register({
                 username: dataForm.username,
                 password: dataForm.password,
-                phonenumber: '+84971754388',
+                phonenumber: phoneRegister,
             });
             toast.success(res.message);
      
