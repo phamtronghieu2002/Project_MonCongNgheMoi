@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:5500'], //access-control-allow-origin
+  origin: 'http://localhost:3000', //access-control-allow-origin
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200
 }

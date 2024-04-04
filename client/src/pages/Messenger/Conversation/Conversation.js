@@ -22,6 +22,7 @@ const Conversation = () => {
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
                 const messages = await messageService.getMessageByConversationId(conversationID);
+                console.log(messages)
                 let totalUnseen = 0;
 
                 for (let j = 0; j < messages.length; j++) {

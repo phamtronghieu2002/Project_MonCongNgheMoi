@@ -9,13 +9,15 @@ import clsx from 'clsx';
 import ModalOTP from '../../../components/Modal/ModalOTP/ModalOTP';
 import configs from '..//..//..//configs';
 import * as authServices from '../../../services/authService';
+import Loading from '../../../components/Loading/Loading';
 export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
     const [phone, setPhone] = useState('');
     const [isOpenModalOTP, setIsOpenModalOTP] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [pendingAnimation,setPendingAnimation] = useState(false); 
     const { t } = useLang();
     const auth = configs.firebase.auth;
-console.log(phone)
+
     const handleOpenModal = (isOpen) => {
         setIsOpenModalOTP(isOpen);
     };
@@ -27,11 +29,11 @@ console.log(phone)
                 callback: (response) => {
                     onSignup();
                 },
-                'expired-callback': () => { },
+                'expired-callback': () => {},
             });
         }
     }
-
+    //hàm gửi otp
     async function onSignup() {
         try {
             const res = await authServices.checkExitPhone(`+${phone}`); // `+${phone}
@@ -39,8 +41,10 @@ console.log(phone)
                 toast.error(res.message);
                 return;
             }
-            setLoading(true);
             onCaptchVerify();
+            setPendingAnimation(true);
+            setLoading(true);
+        
             const appVerifier = window.recaptchaVerifier;
             signInWithPhoneNumber(auth, `+${phone}`, appVerifier)
                 .then((confirmationResult) => {
@@ -48,40 +52,48 @@ console.log(phone)
                     setLoading(false);
                     toast.success('OTP sended successfully!');
                     handleOpenModal(true);
+                    setPendingAnimation(false);
                 })
                 .catch((error) => {
                     console.log(error);
+                    setPendingAnimation(false);
+                    toast.error("OTP can't send, please try again!");
                     setLoading(false);
                 });
         } catch (error) {
             console.log(error);
         }
     }
-
+    //hàm xác thực otp
     function onOTPVerify(otp) {
         setLoading(true);
+        setPendingAnimation(true)
         window.confirmationResult
             .confirm(otp)
             .then(async (res) => {
+                setPendingAnimation(false)
                 console.log(res);
                 toast.success('xác minh thành công !!!');
-                setPhoneRegister(phone);
+                setPhoneRegister(`+${phone}`                                                                                                                                                                                                                                                                                       );
                 setLoading(false);
                 setIsAuthPhone(true);
             })
             .catch((err) => {
                 console.log(err);
+                toast.error('OTP không chính xác,hoặc hết hạn !!!');
                 setLoading(false);
+                setPendingAnimation(false)
             });
     }
 
     return (
         <div>
+         {pendingAnimation && <Loading  pendingAction/>}
             <PhoneInput country="vn" placeholder={t('Login.placeholder.phone')} value={phone} onChange={setPhone} />
             <div
                 type="button"
                 onClick={() => {
-                    onSignup();
+                onSignup();
                 }}
                 className={clsx(
                     'btn btn-primary w-100 mt-3 d-flex justify-content-center align-items-center',
@@ -92,7 +104,17 @@ console.log(phone)
                 {loading && <span className="loader"></span>}
             </div>
             <div id="recaptcha-container"></div>
-            {isOpenModalOTP && <ModalOTP onClose={handleOpenModal} onConfirm={onOTPVerify} />}
+            {isOpenModalOTP && (
+                <ModalOTP
+                    phoneNumber={phone}
+                    onChangePhone={() => {
+                        setLoading(false);
+                    }}
+                    onResendOTP={onSignup}
+                    onClose={handleOpenModal}
+                    onConfirm={onOTPVerify}
+                />
+            )}
         </div>
     );
 }

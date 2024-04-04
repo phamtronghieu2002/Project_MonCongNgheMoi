@@ -18,6 +18,7 @@
         },
         "modal": {
             "title": "Enter the OTP code",
+            "changePhone":"Change your phone number",
             "content": "Please enter the OTP code sent to your phone number",
             "button": {
                 "cancel": "Cancel",

@@ -19,6 +19,7 @@
         "modal": {
             "title": "Nhập mã OPT",
             "content": "Hãy nhập mã OPT được gởi đến số điện thoại của bạn",
+            "changePhone": "Đổi số điện thoại",
             "button": {
                 "cancel": "Hủy",
                 "confirm": "xác nhận"
