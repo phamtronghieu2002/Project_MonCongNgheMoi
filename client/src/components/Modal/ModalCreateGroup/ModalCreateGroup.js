@@ -20,7 +20,7 @@ function ModalCreateGroup({ onHide }) {
     const [search, setSearch] = useState('');
     const [searhDebouce] = useDebounce(search, 200);
     const { socket, currentUserId } = useContext(socketContext);
-    const { conversation, setConversation } = useContext(ConversationContext);
+    const { conversation, setCurrentConversation } = useContext(ConversationContext);
     const [showModalSetImageGroup, setShowModalSetImageGroup] = useState(true);
 
     const fetchUsers = async () => {
@@ -58,22 +58,13 @@ function ModalCreateGroup({ onHide }) {
             const members = [currentUserId, ...selectUser]
             const group = await groupServices.addGroup(groupName, members, currentUserId, "https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png");
             const conversation = await conversationServices.createConversation(group._id, members, 1);
-            setConversation(
-                {
-                    recieveInfor: {
-                        avatar: group.groupPicture,
-                        name: group.groupName,
-                        _id: group._id,
-                        isGroup: true,
-                        members: group.members,
-                    },
-                    _id: conversation._id,
-                }
-            )
+            setCurrentConversation(group.groupPicture, group.groupName, group._id, true, group.members, conversation._id)
+           
             socket.emit("reRenderConversations", members);
             toast.success('Tạo nhóm thành công');
 
         } catch (error) {
+            console.log(error)
             toast.error(error);
         }
     }

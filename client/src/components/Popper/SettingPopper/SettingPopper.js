@@ -11,6 +11,7 @@ function SettingPopper() {
 
     const { t, i18n } = useLang();
     const { toggleTheme } = useContext(ThemeContext);
+ 
     const handleChangeLanguage = (lang) => {
         i18n.changeLanguage(lang);
     }
@@ -45,8 +46,8 @@ function SettingPopper() {
             Icon: <i className="fa-solid fa-earth-americas"></i>,
             callback: () => { },
             subMenu: [
-                { title: 'tiếng việt', Icon: <VI className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.default) } },
-                { title: 'tiếng anh', Icon: <US className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.supportedLangs.en) } },
+                { title: 'tiếng việt', Icon: <VI className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.default) },active:i18n.language === configs.i18n.default},
+                { title: 'tiếng anh', Icon: <US className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.supportedLangs.en) },type:"changeLangue",active:i18n.language === configs.i18n.supportedLangs.en},
             ],
         },
     ];

@@ -18,6 +18,23 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
     const { t } = useLang();
     const auth = configs.firebase.auth;
 
+
+    // const validatePhoneNumber = (phoneNumber, countryCode) => {
+    //     try {
+    //         const parsedNumber = PhoneNumber(phoneNumber, countryCode);
+    //       const   isValid =parsedNumber.isValid();
+    //       if(!isValid){
+    //           toast.error('Số điện thoại không hợp lệ')
+    //           return false;
+    //       }
+    //       return true;
+    //     } catch (error) {
+    //         console.error('Error parsing phone number:', error);
+    //         return false;
+    //     }
+    // };
+
+    console.log('phone', phone)
     const handleOpenModal = (isOpen) => {
         setIsOpenModalOTP(isOpen);
     };
@@ -36,6 +53,7 @@ export default function FormAuthPhone({ setPhoneRegister, setIsAuthPhone }) {
     //hàm gửi otp
     async function onSignup() {
         try {
+         
             const res = await authServices.checkExitPhone(`+${phone}`); // `+${phone}
             if (res.errCode) {
                 toast.error(res.message);
