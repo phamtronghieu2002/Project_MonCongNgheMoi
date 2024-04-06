@@ -5,11 +5,12 @@ import FormLogin from './FormLogin/FormLogin';
 import FormRegister from './FormRegister/FormRegister';
 import configs from '../../configs';
 import clsx from 'clsx';
+
 export default function Login() {
     const { i18n, t } = useLang();
-
     //0 is open tab register, 1 is open tab login
     const [tab, setTab] = useState(1);
+    const [isAuthPhone, setIsAuthPhone] = useState(false);
 
     const handleChangeLanguage = (lang) => {
         i18n.changeLanguage(lang);
@@ -70,7 +71,7 @@ export default function Login() {
                             {t('Login.tab.login')}
                         </div>
                     </div>
-                    <form>{tab ? <FormLogin /> : <FormRegister onSuccess={handleSelectTab} />}</form>
+                    <form>{tab ||isAuthPhone ? <FormLogin /> : <FormRegister onSuccess={handleSelectTab} setIsAuthPhone={setIsAuthPhone} />}</form>
                 </div>
             </div>
 

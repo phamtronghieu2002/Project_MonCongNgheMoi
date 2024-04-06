@@ -4,7 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
-
+import path from "path";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -16,14 +16,16 @@ const corsOptions = {
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200
 }
+// middleware
 app.use(cors(corsOptions));
-
-
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+const filesDirectory = path.join(__dirname, 'files');
+app.use("/files", express.static(filesDirectory));
 
 //connect to db
 mongoose
@@ -36,10 +38,7 @@ mongoose
     console.log("Connected to MongoDB");
   });
 
-//route
-
-app.use(cookieParser(process.env.COOKIE_SECRET));
-
+//routes
 InitApiRoute(app);
 
 

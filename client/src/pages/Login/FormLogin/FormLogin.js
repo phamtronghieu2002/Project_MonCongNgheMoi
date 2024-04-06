@@ -7,6 +7,7 @@ import { useState, useContext } from 'react';
 import { useLang } from '../../../hooks';
 import { toast, Toaster } from 'react-hot-toast';
 import { AuthContext } from '../../../providers/Auth/AuthProvider';
+import { checkValidPhoneNumber } from '../../../utils/phoneUltil';
 export default function FormLogin({ }) {
     const { i18n, t } = useLang();
     const [phonenumber, setPhone] = useState('');
@@ -15,10 +16,13 @@ export default function FormLogin({ }) {
 
     const handleLogin = async () => {
         try {
+            if (!checkValidPhoneNumber(`${phonenumber}`, 'VN')) {
+                toast.error('Số điện thoại không đúng định dạng hoặc không hợp lệ!!!');
+                return;
+            }
             const res = await authServices.login({ phonenumber, password });
 
             if (res.errCode === 0) {
-                const user = res.data;
                 login();
                 toast.success(res.message);
                 return;

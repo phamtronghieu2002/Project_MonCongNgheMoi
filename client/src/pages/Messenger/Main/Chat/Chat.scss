@@ -84,6 +84,7 @@
                 height: 40px;
                 padding: 7px;
                 border-radius: 6px;
+                font-size: 20px;
             }
         }
 
@@ -107,5 +108,12 @@
                 box-sizing: border-box;
             }
         }
+    }
+    .EmojiPickerReact{
+    position: absolute;
+    z-index: 999999;
+    top: 0;
+    right: 0px;
+    top: -445px;
     }
 }

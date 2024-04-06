@@ -2,8 +2,8 @@ import axios from './axios';
 export const getMessageByConversationId = (conversationId) => {
     return axios.get('/message/' + conversationId);
 };
-export const sendMessage = (data) => {
-    return axios.post('/message', data);
+export const sendMessage = (type,data) => {
+    return axios.post(`/message?type=${type}`, data);
 };
 
 export const updateStatus = (senderId, conversationId, receiverId) => {

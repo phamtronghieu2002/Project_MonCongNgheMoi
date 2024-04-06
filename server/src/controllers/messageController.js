@@ -1,18 +1,20 @@
 import * as messageService from "../services/messageService.js";
 export const handleCreateMessage = async (req, res) => {
   const { senderId, content, conversationId } = req.body;
-  console.log("type", typeof (content));
-  if (!senderId || !content || !conversationId) {
-    return res.status(400).json({ message: "missing param" });
+  const {typeMessages}=req.query;
+  const imgURL = req.file?.path;
+  if (!senderId || !content || !conversationId ||typeMessages) {
+    return res.status(400).json({ message: "missing param or query" });
   }
-
-  const data = await messageService.createMessage(
+  let data;
+  data= await messageService.createMessage(
     senderId,
-
     content,
-    conversationId
+    conversationId,
+    imgURL,
+    typeMessages
   );
-  console.log("data>>>", data);
+
   if (data) {
     return res.status(200).json(data);
   }

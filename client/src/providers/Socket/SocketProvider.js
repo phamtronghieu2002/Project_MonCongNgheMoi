@@ -6,6 +6,7 @@ export const socketContext=React.createContext();
 function SocketProvider({children}) {
     const {getUser}=useContext(AuthContext);
     const user=getUser().data;
+    console.log("re-render");
   const  socket = io('ws://localhost:9000');
 
     useEffect(() => {

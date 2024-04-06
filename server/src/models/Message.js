@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 mongoose.set('debug', true);
 const moment = require('moment-timezone');
 
+// Import enum from mongoose
+const { Schema } = mongoose;
+
+
 // Define a custom plugin to format createdAt and updatedAt fields
 const customTimestampsPlugin = (schema, options) => {
   schema.add({
@@ -17,7 +21,7 @@ const customTimestampsPlugin = (schema, options) => {
 
   schema.pre('save', function (next) {
     this.updatedAt = moment.tz(Date.now(), "Asia/Ho_Chi_Minh").format("DD-MM-YYYY HH:mm:ss");
-    next();
+    next(); // Ensure to call next() to proceed with the save operation
   });
 };
 
@@ -33,6 +37,11 @@ const MessageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
+    },
+    type: {
+      type: String, 
+      enum:["text", "image", "file","icon","sticker"],
+      default: "text",
     },
     isSeen: {
       type: Array,

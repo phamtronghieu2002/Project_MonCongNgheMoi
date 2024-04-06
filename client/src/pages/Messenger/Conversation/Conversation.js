@@ -9,12 +9,13 @@ import { socketContext } from '../../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 
 const Conversation = () => {
-    const { socket, currentUserId } = useContext(socketContext);
+    const {  socket,currentUserId } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
     const [activeFilter, setActiveFilter] = useState(1);
     const [activeConversation, setActiveConversation] = useState(conversation._id);
+
     const fetchConversations = async () => {
         try {
 
