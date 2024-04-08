@@ -18,13 +18,12 @@ function Main() {
                         style={{
                             backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
                             backgroundSize: 'cover',
-                            filter: 'blur(400px)',
+                            filter: 'blur(150px)',
                             position: 'absolute',
-                            top: 0,
-                            width: '1136px',
-                            bottom: 0,
-                            right: 0,
-                            zIndex: -1
+                            opacity: 0.01,
+                            inset: 0,
+
+                            zIndex: -99
                         }}
                     ></div>
                     <Chat />

@@ -1,6 +1,5 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
-
 axios.defaults.withCredentials = true;
 
 const instance = axios.create({
@@ -23,7 +22,7 @@ instance.interceptors.response.use(
       const status = res.status;
       if (status === 401) {
         axios
-          .post("http://localhost:8080/api/v1/auth/refresh_token")
+          .post(`http://localhost:8080/api/v1/auth/refresh_token`)
           .then((response) => {
 
           })

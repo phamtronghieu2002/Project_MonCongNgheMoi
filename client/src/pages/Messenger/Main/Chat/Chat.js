@@ -12,6 +12,7 @@ import { socketContext } from '../../../../providers/Socket/SocketProvider';
 import { v4 as uuidv4 } from 'uuid';
 import { formatDateString, chuyenDoiThoiGian } from '../../../../utils/chatUtil';
 import EmojiPicker from 'emoji-picker-react';
+import axios from 'axios';
 function Chat() {
     const { conversation } = useContext(ConversationContext);
     const { currentUserId, socket } = useContext(socketContext);
@@ -23,9 +24,53 @@ function Chat() {
     const [isFriend, setIsFriend] = useState(false);
     const [statusRequest, setStatusRequest] = useState(false);
     const [request_id, setRequestId] = useState(0);
-
+    const [isOpenSticker, setIsOpenSticker] = useState(false);
     const refInput = useRef();
+    const fileImageRef = useRef();
+    const fileRef = useRef();
 
+    const onUploadImageFile = () => {
+        fileImageRef.current.click();
+    };
+    const onUploadFile = () => {
+        fileRef.current.click();
+    };
+
+    const handleFileImageChange = async (e) => {
+
+        try {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            const data = await messageService.uploadImageMessage(formData);
+            const imgMessage = data.imgURL
+            await handleSendMessage("image", imgMessage);
+
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    };
+    const handleFileChange = async (e) => {
+
+        try {
+            const formData = new FormData();
+
+            formData.append("file", e.target.files[0]);
+
+            const data = await messageService.uploadFileMessage(formData);
+            const fileMessage = data.fileName;
+            console.log('fileMessage', fileMessage);
+            await handleSendMessage("file", fileMessage);
+        } catch (error) {
+            console.log(error);
+        }
+
+    };
+    const handleIconMessage = async (data) => {
+        const iconMessage = data.imageUrl
+        await handleSendMessage("icon", iconMessage);
+        setIsOpenSticker(false);
+    }
 
     const handleSendRequestFriend = async () => {
         try {
@@ -64,6 +109,7 @@ function Chat() {
             let curentTime = '';
             for (let i = 0; i < messages.length; i++) {
                 let text = messages[i].content;
+                let type = messages[i].type;
                 let avatar = messages[i].senderId.avatarPicture;
                 let timeStamp = formatDateString(messages[i].createdAt);
                 let messageTime = chuyenDoiThoiGian(messages[i].createdAt);
@@ -86,7 +132,7 @@ function Chat() {
                         ReceivedMessage = [];
                         curentTime = '';
                     }
-                    sendMessage.push({ content: text, messageTime });
+                    sendMessage.push({ content: text, messageTime, type });
                 } else {
                     if (sendMessage.length > 0) {
                         components.push(
@@ -115,23 +161,23 @@ function Chat() {
                             curentTime = '';
                         }
                     }
-                    ReceivedMessage.push({ content: text, messageTime });
+                    ReceivedMessage.push({ content: text, messageTime, type });
                 }
 
                 i + 1 === messages.length &&
                     (sendMessage.length > 0
                         ? components.push(
-                              <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
-                          )
+                            <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
+                        )
                         : components.push(
-                              <MessageItem
-                                  timeStamp={curentTime}
-                                  key={uuidv4()}
-                                  content={ReceivedMessage}
-                                  avatar={avatar}
-                                  senderName={messages[i].senderId.username}
-                              />,
-                          ));
+                            <MessageItem
+                                timeStamp={curentTime}
+                                key={uuidv4()}
+                                content={ReceivedMessage}
+                                avatar={avatar}
+                                senderName={messages[i].senderId.username}
+                            />,
+                        ));
             }
 
             // update status seen message
@@ -205,18 +251,34 @@ function Chat() {
         handleDataMessages(messages);
     }, [messages]);
 
-    const handleSendMessage = async () => {
+    const handleLastMessage = (type, content) => {
+
+        switch (type) {
+            case 'text':
+                return content;
+            case 'image':
+                return 'Đã gửi một ảnh';
+            case 'icon':
+                return 'Đã gửi một icon';
+            case 'file':
+                return 'Đã gửi một file';
+        }
+    }
+    const handleSendMessage = async (type = "text", content = textMessage) => {
         try {
             const data = {
                 senderId: currentUserId,
                 recieverId: conversation.recieveInfor._id,
                 conversationId: conversation._id,
-                content: textMessage,
+                content,
                 isGroup: conversation.recieveInfor.isGroup,
                 members: conversation.recieveInfor.members,
             };
-            const new_message = await messageService.sendMessage("text",data);
-            await messageService.updateLastMessage(conversation._id, textMessage, currentUserId);
+
+            const new_message = await messageService.sendMessage(type, data);
+            const lastMessage = handleLastMessage(type, content);
+
+            await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
             socket.emit('sendMessage', { ...data, new_message });
             socket.emit('reRenderConversations', conversation.recieveInfor.members);
@@ -293,18 +355,40 @@ function Chat() {
 
             <div className="chat_input_container bg-white">
                 <div className="actions">
+                    <input
+                        ref={fileImageRef}
+                        type="file"
+                        className="visually-hidden"
+                        accept="image/*"
+                        onChange={handleFileImageChange}
+                    />
+
                     <button className="action_btn">
                         <i class="fa-regular fa-note-sticky"></i>
                     </button>{' '}
-                    <button className="action_btn">
-                    <i class="fa-solid fa-paperclip"></i>
+                    <button
+                        onClick={onUploadFile}
+                        className="action_btn">
+                        <input
+                            ref={fileRef}
+                            type="file"
+                            className="visually-hidden"
+                            accept="*/*"
+                            onChange={handleFileChange}
+                        />
+
+                        <i class="fa-solid fa-paperclip"></i>
                     </button>
-                    <button className="action_btn">
-                    <i class="fa-regular fa-image"></i>
+                    <button
+                        onClick={onUploadImageFile}
+                        className="action_btn">
+                        <i class="fa-regular fa-image"></i>
                     </button>
-                  
+
                 </div>
-                <div className="chat_input">
+                <div className="chat_input position-relative">
+                    {isOpenSticker &&
+                        <EmojiPicker onEmojiClick={handleIconMessage} />}
                     <input
                         ref={refInput}
                         type="text"
@@ -313,10 +397,13 @@ function Chat() {
                         onChange={(e) => setTextMessage(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     />
-                    <button className="action_btn position-relative">
-                    {/* <EmojiPicker /> */}
 
-                    <i class="fa-regular fa-face-smile"></i>
+                    <button
+                        onClick={() => setIsOpenSticker(!isOpenSticker)}
+                        className="action_btn position-relative">
+
+
+                        <i class="fa-regular fa-face-smile"></i>
 
                     </button>
                     <button onClick={handleSendMessage} className="action_btn">

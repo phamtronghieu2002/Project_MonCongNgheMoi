@@ -1,0 +1,46 @@
+.file_container {
+    .file_main {
+        gap: 20px;
+    }
+    width: 376px;
+    position: relative;
+    display: block;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: var(--layer-background);
+    margin-bottom: 4px;
+    width: 376px;
+    cursor: pointer;
+    color: #081c36;
+
+    .file_name {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        word-wrap: break-word;
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+    .file_size {
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #7589a3;
+    }
+    a {
+        margin: 0 !important;
+    }
+
+    #react-doc-viewer {
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+    }
+    button-close {
+        position: fixed;
+        top: 0px;
+        right: 10px;
+        cursor: pointer;
+    }
+}

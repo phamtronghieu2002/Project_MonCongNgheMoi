@@ -1,70 +1,74 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@cyntler/react-doc-viewer": "^1.14.1",
-    "@reduxjs/toolkit": "^2.0.1",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.6.2",
-    "axios-retry": "^4.0.0",
-    "clsx": "^2.1.0",
-    "country-flag-icons": "^1.5.9",
-    "emoji-picker-react": "^4.9.2",
-    "firebase": "^10.7.1",
-    "google-libphonenumber": "^3.2.34",
-    "i18next": "^23.7.11",
-    "jquery": "^3.7.1",
-    "libphonenumber-js": "^1.10.60",
-    "otp-input-react": "^0.3.0",
-    "react": "^18.2.0",
-    "react-datepicker": "^6.6.0",
-    "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
-    "react-firebase-hooks": "^5.1.1",
-    "react-hot-toast": "^2.4.1",
-    "react-i18next": "^14.0.0",
-    "react-icons": "^4.7.1",
-    "react-modal": "^3.16.1",
-    "react-otp-input": "^3.1.1",
-    "react-paginate": "^8.2.0",
-    "react-phone-input-2": "^2.15.1",
-    "react-phone-number-input": "^3.3.9",
-    "react-redux": "^9.0.4",
-    "react-router-dom": "^6.21.1",
-    "react-scripts": "5.0.1",
-    "react-toastify": "^10.0.4",
-    "sass": "^1.69.5",
-    "socket.io-client": "^4.7.4",
-    "tailwindcss": "^3.4.1",
-    "use-debounce": "^10.0.0",
-    "uuid": "^9.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "client",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@cyntler/react-doc-viewer": "^1.14.1",
+        "@reduxjs/toolkit": "^2.0.1",
+        "@testing-library/jest-dom": "^5.17.0",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "axios": "^1.6.2",
+        "axios-retry": "^4.0.0",
+        "clsx": "^2.1.0",
+        "country-flag-icons": "^1.5.9",
+        "dotenv-cli": "^7.4.1",
+        "emoji-picker-react": "^4.9.2",
+        "firebase": "^10.7.1",
+        "google-libphonenumber": "^3.2.34",
+        "i18next": "^23.7.11",
+        "jquery": "^3.7.1",
+        "libphonenumber-js": "^1.10.60",
+        "otp-input-react": "^0.3.0",
+        "react": "^18.2.0",
+        "react-datepicker": "^6.6.0",
+        "react-dom": "^18.2.0",
+        "react-download-link": "^2.3.0",
+        "react-dropzone": "^14.2.3",
+        "react-firebase-hooks": "^5.1.1",
+        "react-hot-toast": "^2.4.1",
+        "react-i18next": "^14.0.0",
+        "react-icons": "^4.7.1",
+        "react-media-previewer": "^1.3.10",
+        "react-modal": "^3.16.1",
+        "react-otp-input": "^3.1.1",
+        "react-paginate": "^8.2.0",
+        "react-phone-input-2": "^2.15.1",
+        "react-phone-number-input": "^3.3.9",
+        "react-redux": "^9.0.4",
+        "react-router-dom": "^6.21.1",
+        "react-scripts": "4.0.3",
+        "react-simple-image-viewer": "^1.2.2",
+        "react-toastify": "^10.0.4",
+        "sass": "^1.69.5",
+        "socket.io-client": "^4.7.4",
+        "tailwindcss": "^3.4.1",
+        "use-debounce": "^10.0.0",
+        "uuid": "^9.0.1",
+        "web-vitals": "^2.1.4"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }

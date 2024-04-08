@@ -1,11 +1,10 @@
 .hoho {
     background: blue;
-   
 }
 #wp_conversation {
     width: 344px;
     border-right: 1px solid #e0e0e0;
-    z-index: 1;
+    // z-index: 1;
     .filter_conversations {
         border-bottom: 1px solid #e0e0e0;
         z-index: 0;
@@ -30,7 +29,7 @@
     .conversations {
         height: 100vh;
         position: relative;
-      
+
         overflow: auto;
         .account_item_chat {
             @for $i from 1 through 4 {
