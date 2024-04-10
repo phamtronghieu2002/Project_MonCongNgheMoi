@@ -91,7 +91,7 @@ function Chat() {
     const handleCancelRequestFriend = async () => {
         try {
             const recieverId = conversation.recieveInfor._id;
-            friendService.cancelRequestFriend(0, request_id);
+            friendService.cancelRequestFriend(request_id);
             setStatusRequest(false);
             socket.emit('sendRequestFriend', { recieverId });
             toast.success('Đã huy gửi yêu cầu kết bạn');

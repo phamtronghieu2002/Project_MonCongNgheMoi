@@ -7,6 +7,7 @@ import File from '../../../../../components/File/File';
 import clsx from 'clsx';
 import * as messageService from "../..//..//..//..//services/messageService"
 import { ConversationContext } from '../../../../../providers/ConversationProvider/ConversationProvider';
+import ActionMessagePopper from '../../../../../components/Popper/ActionMessagePopper/ActionMessagePopper';
 function MessageItem({ senderId, receiverId, content, own, avatar, senderName, timeStamp }) {
 
 
@@ -91,7 +92,6 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
                                     }
                                     <p className='time_stamp'>{index == content.length - 1 && item.messageTime}</p>
                                     <span
-
                                         className='feeling'>
                                         {
                                             emojis.index === index && emojis.emojis || item.reaction || <i class="fa-regular fa-thumbs-up"></i>
@@ -114,6 +114,14 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
                                                     console.log(error);
                                                 }
                                             }} />
+                                    </span>
+                                    <span className='actions'>
+                                        <i className="fa-solid fa-quote-left"></i>
+                                        <i className="fa-solid fa-share"></i>
+                                        <i className="fa-regular fa-calendar-check"></i>
+                                        <i className="detail fa-solid fa-ellipsis d-block position-relative">
+                                            <ActionMessagePopper content={item.content} />
+                                        </i>
                                     </span>
                                 </div>
                             )

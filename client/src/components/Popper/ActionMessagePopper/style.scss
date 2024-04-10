@@ -1,0 +1,15 @@
+.action_message_popper_container {
+    z-index: 20;
+    margin-left: 56px;
+    min-width: 220px;
+    opacity: 1;
+    left: -58px;
+    bottom: 16px;
+    position: absolute;
+    background: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    z-index: 9999;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid #d6dbe1;
+}

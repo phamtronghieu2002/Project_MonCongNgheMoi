@@ -1,16 +1,15 @@
 import './MenuItemPopper.scss';
 import clsx from 'clsx';
-function ManuItemPopper({ Icon, title, subMenu, callback, titleStyle, props,active }) {
+function ManuItemPopper({ Icon, title, subMenu, callback, titleStyle, props, active }) {
     return (
         <div
-
             onClick={callback}
-            className={clsx("menu_item_poper position-relative",active && "active")}
+            className={clsx("menu_item_poper position-relative", active && "active")}
             {...props}
         >
             <span
                 style={{
-                    margin:"0.5rem"
+                    margin: "0.5rem"
                 }}
             > {Icon && Icon} </span>
             <span className={titleStyle}>{title}</span>
