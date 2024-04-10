@@ -39,9 +39,18 @@ const MessageSchema = new mongoose.Schema(
       type: String,
     },
     type: {
-      type: String, 
-      enum:["text", "image", "file","icon","sticker"],
+      type: String,
+      enum: ["text", "image", "file", "icon", "sticker"],
       default: "text",
+    },
+    reaction: {
+      type: String,
+      default: ""
+    },
+    status: {
+      type: Number,
+      enum: [0, 1],
+      default: 1,
     },
     isSeen: {
       type: Array,

@@ -21,7 +21,7 @@ const fileIcons = [
         icon: "https://chat.zalo.me/assets/icon-photo.a5e578fd357185b3e24c5b7637f48f97.svg"
     }
 ]
-const filePreviewLink = (filename) => {
+const fileLink = (filename) => {
     return `${"http://localhost:8080"}/files/${filename}`
 }
 
@@ -67,4 +67,4 @@ function extraTimeStamp(chuoi) {
 
 
 
-export { fileIcons, filePreviewLink, extraTimeStamp, extractFileName, extractFileSize, extractFileExtension }
+export { fileIcons, fileLink, extraTimeStamp, extractFileName, extractFileSize, extractFileExtension }

@@ -1,13 +1,12 @@
 import { upload } from '../utils/uploadImageUtil.js';
- function checkTypeMessage(req, res, next) {
-    // Kiểm tra query parameters từ URL
-    const isTextMesage = req.query.type === 'text';
-    console.log("isTextMesage>>>", isTextMesage);
-    if(isTextMesage){
-  return   next();
-    }
-    upload.single('file')(); 
-   
-  };
+function checkTypeMessage(req, res, next) {
+  // Kiểm tra query parameters từ URL
+  const isTextMesage = req.query.type === 'text';
+  if (isTextMesage) {
+    return next();
+  }
+  upload.single('file')(req, res, next);
 
-  export { checkTypeMessage };
+};
+
+export { checkTypeMessage };

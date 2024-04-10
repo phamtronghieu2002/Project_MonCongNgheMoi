@@ -22,7 +22,7 @@ export const searchUser = async (keyword) => {
       keywords: { $in: keyword },
     });
     if (groups.length > 0) {
-      resultSearch.push(...groups.map((group) => ({ ...group._doc, type: 1 })));
+      resultSearch.push(...groups.map((group) => ({ ...group._doc, isGroup: 1 })));
     }
     return resultSearch;
   } catch (err) {

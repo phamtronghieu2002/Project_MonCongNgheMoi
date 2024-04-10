@@ -1,10 +1,13 @@
 import express from 'express';
-const router=express.Router();
+const router = express.Router();
 import * as messageController from '../controllers/messageController.js';
-import {checkTypeMessage} from '../middlewares/messages.js';
+import { uploadImage } from '../middlewares/uploadImage.js';
+import uploadFile from '../middlewares/uploadFile.js';
 
-router.post("/",checkTypeMessage, messageController.handleCreateMessage);
+router.post("/", messageController.handleCreateMessage);
+router.post("/uploadImage", uploadImage.single("file"), messageController.uploadImageMessage);
+router.post("/uploadFile", uploadFile.single("file"), messageController.uploadFileMessage);
 router.get("/:conversationId", messageController.handleGetMessageByConverationId);
 router.post("/updateStatus", messageController.handleUpdateStatusSeenMessage);
-
+router.put("/updateReaction", messageController.handleUpdateReactionMessage);
 export default router;

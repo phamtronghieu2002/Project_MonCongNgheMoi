@@ -13,19 +13,20 @@ function Main() {
 
             {conversation._id ? (
                 <>
-                    <div
+                    {/* <div
                         className="background_conversation"
                         style={{
                             backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
                             backgroundSize: 'cover',
-                            filter: 'blur(150px)',
+                            filter: 'blur(10px)',
                             position: 'absolute',
-                            opacity: 0.01,
-                            inset: 0,
+                            opacity: 0.07,
+                            width: "100vw",
+                            height: "100vh",
 
                             zIndex: -99
                         }}
-                    ></div>
+                    ></div> */}
                     <Chat />
                     {/* <Aside/> */}
                 </>

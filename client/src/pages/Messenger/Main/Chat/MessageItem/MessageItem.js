@@ -1,10 +1,18 @@
-import './MessageItem.scss';
+import { useState, useCallback, useContext } from 'react';
+import { socketContext } from '../../../../../providers/Socket/SocketProvider';
 import ImageViewer from 'react-simple-image-viewer';
-import { useState, useCallback } from 'react';
+import Picker from 'emoji-picker-react';
+import './MessageItem.scss';
 import File from '../../../../../components/File/File';
 import clsx from 'clsx';
+import * as messageService from "../..//..//..//..//services/messageService"
+import { ConversationContext } from '../../../../../providers/ConversationProvider/ConversationProvider';
 function MessageItem({ senderId, receiverId, content, own, avatar, senderName, timeStamp }) {
 
+
+    const { socket, currentUserId } = useContext(socketContext);
+    const { conversation } = useContext(ConversationContext)
+    const [emojis, setEmojis] = useState({ emojis: '', index: 0 });
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [];
@@ -25,13 +33,25 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
             case 'image':
                 return 'message-img';
             case 'file':
-                return 'message-file';
+                return 'message_file';
             case 'icon':
                 return 'message-icon';
         }
     };
+    // const handleReaction = async (reaction) => {
+    //     try {
+    //         let emoji = reaction.emoji;
+    //         await messageService.updateReactionMessage(id, emoji);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+
+
+    // }
     return (
         <div className='mb-3 message_container'>
+
+
             <p className='timeStamp'>
                 {timeStamp}
             </p>
@@ -54,7 +74,7 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
                             }
                             return (
                                 <div
-                                    className={clsx(handleStyleTypeMessage(item.type), "mb-1")}>
+                                    className={clsx(handleStyleTypeMessage(item.type), "mb-1", "position-relative")}>
                                     {
                                         !own && index == 0 && <p className='senderName'>{senderName}</p>
                                     }
@@ -70,7 +90,31 @@ function MessageItem({ senderId, receiverId, content, own, avatar, senderName, t
 
                                     }
                                     <p className='time_stamp'>{index == content.length - 1 && item.messageTime}</p>
+                                    <span
 
+                                        className='feeling'>
+                                        {
+                                            emojis.index === index && emojis.emojis || item.reaction || <i class="fa-regular fa-thumbs-up"></i>
+                                        }
+                                        <Picker
+
+                                            reactionsDefaultOpen={true} onReactionClick={async (reaction) => {
+                                                try {
+                                                    let emoji = reaction.emoji;
+                                                    setEmojis({ emojis: emoji, index });
+                                                    const message = await messageService.updateReactionMessage(item.id, emoji);
+                                                    socket.emit('sendEmojiMessage', {
+                                                        senderId: currentUserId,
+                                                        conversationId: conversation._id,
+                                                        new_message: message,
+                                                        members: conversation.recieveInfor.members
+
+                                                    })
+                                                } catch (error) {
+                                                    console.log(error);
+                                                }
+                                            }} />
+                                    </span>
                                 </div>
                             )
                         })

@@ -1,4 +1,41 @@
 .message-item {
+    .feeling {
+        position: absolute;
+        bottom: -8px;
+        right: -5px;
+        font-size: 15px;
+
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        border-radius: 50%;
+        background: #ffffffab;
+        box-shadow: 1px solid black;
+
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+        .EmojiPickerReact {
+            position: absolute;
+            z-index: 999999;
+            top: 0;
+            right: -230px;
+            top: -39px;
+            height: 40px !important;
+            display: none !important;
+            transition: all 0.5s;
+        }
+        &:hover {
+            .EmojiPickerReact {
+                display: block !important;
+            }
+        }
+    }
+    .message_file {
+        background: #fff;
+    }
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -61,12 +98,19 @@
     }
 }
 .message_item_own {
+    .feeling {
+        &:hover {
+            .EmojiPickerReact {
+                display: none !important;
+            }
+        }
+    }
     justify-content: end;
     .message-text {
         background: #e5efff;
     }
 
-    .file_container {
+    .message_file {
         background: #e5efff;
     }
     .message-icon {

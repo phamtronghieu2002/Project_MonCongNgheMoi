@@ -54,6 +54,13 @@
     }
 
     .chat_input_container {
+        .EmojiPickerReact {
+            position: absolute;
+            z-index: 999999;
+            top: 0;
+            right: 55px;
+            top: -500px;
+        }
         height: 90px;
         display: flex;
 
@@ -93,12 +100,5 @@
                 box-sizing: border-box;
             }
         }
-    }
-    .EmojiPickerReact {
-        position: absolute;
-        z-index: 999999;
-        top: 0;
-        right: 55px;
-        top: -500px;
     }
 }

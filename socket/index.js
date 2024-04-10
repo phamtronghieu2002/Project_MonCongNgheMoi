@@ -35,45 +35,48 @@ io.on("connection", (socket) => {
     "sendMessage",
     ({
       senderId,
-      recieverId,
-      content,
       conversationId,
       new_message,
-      isGroup,
       members
     }) => {
-      const reciever = getUser(recieverId);
 
-      if (isGroup) {
-
-        members.filter((member => member != senderId)).forEach((member) => {
-          const reciever = getUser(member);
-          console.log(member)
-          if (reciever) {
-            io.to(reciever.socketId).emit("getMessage", {
-              senderId,
-              content,
-              conversationId,
-              new_message,
-            });
-
-          }
-        });
-      }
-      else {
+      members.filter((member => member != senderId)).forEach((member) => {
+        const reciever = getUser(member);
         if (reciever) {
           io.to(reciever.socketId).emit("getMessage", {
-            senderId,
-            content,
             conversationId,
             new_message,
           });
 
         }
-      }
+      });
     }
   );
 
+  socket.on(
+    "sendEmojiMessage",
+    ({
+      senderId,
+      conversationId,
+      new_message,
+      members
+    }) => {
+
+
+
+      members.forEach((member) => {
+        const reciever = getUser(member);
+        console.log(member)
+        if (reciever) {
+          io.to(reciever.socketId).emit("getMessageEmoji", {
+            conversationId,
+            new_message,
+          });
+
+        }
+      });
+    }
+  );
   socket.on("reRenderConversations", (members) => {
 
 

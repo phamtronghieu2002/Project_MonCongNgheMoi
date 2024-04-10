@@ -1,3 +1,4 @@
+import EmojiPicker from 'emoji-picker-react';
 import './Chat.scss';
 import MessageItem from './MessageItem/MessageItem';
 import Notify from './Notify/Notify';
@@ -11,7 +12,6 @@ import { ConversationContext } from '../../../../providers/ConversationProvider/
 import { socketContext } from '../../../../providers/Socket/SocketProvider';
 import { v4 as uuidv4 } from 'uuid';
 import { formatDateString, chuyenDoiThoiGian } from '../../../../utils/chatUtil';
-import EmojiPicker from 'emoji-picker-react';
 import axios from 'axios';
 function Chat() {
     const { conversation } = useContext(ConversationContext);
@@ -111,6 +111,9 @@ function Chat() {
                 let text = messages[i].content;
                 let type = messages[i].type;
                 let avatar = messages[i].senderId.avatarPicture;
+                let reaction = messages[i].reaction;
+
+                let id = messages[i]._id;
                 let timeStamp = formatDateString(messages[i].createdAt);
                 let messageTime = chuyenDoiThoiGian(messages[i].createdAt);
                 if ((!preTime && !curentTime) || preTime !== timeStamp) {
@@ -132,7 +135,7 @@ function Chat() {
                         ReceivedMessage = [];
                         curentTime = '';
                     }
-                    sendMessage.push({ content: text, messageTime, type });
+                    sendMessage.push({ content: text, messageTime, type, reaction });
                 } else {
                     if (sendMessage.length > 0) {
                         components.push(
@@ -161,7 +164,7 @@ function Chat() {
                             curentTime = '';
                         }
                     }
-                    ReceivedMessage.push({ content: text, messageTime, type });
+                    ReceivedMessage.push({ content: text, messageTime, type, reaction, id });
                 }
 
                 i + 1 === messages.length &&
@@ -193,7 +196,7 @@ function Chat() {
         if (conversation._id) {
             try {
                 const messages = await messageService.getMessageByConversationId(conversation._id);
-                setMessages([...messages]);
+                setMessages(messages);
             } catch (error) {
                 console.log(error);
             }
@@ -227,7 +230,7 @@ function Chat() {
         fetchMessage();
         CheckIsSendRequestFriend();
     }, [conversation._id]);
-
+    //đăng kí socket nhận tin nhắn
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
             if (conversationId === conversation._id) {
@@ -246,7 +249,31 @@ function Chat() {
             socket.off('re-renderFriendRequest', onReRenderRequestFriend);
         };
     }, [conversation._id]);
+    // đăng kí socket nhận emoji tin nhắn
+    useEffect(() => {
+        const onMessageEmoji = ({ conversationId, new_message }) => {
+            if (conversationId === conversation._id) {
+                //
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.reaction = new_message.reaction;
 
+                        }
+                    }
+                    )
+                    console.log('prev', [...prev]);
+                    return [...prev]
+                });
+            }
+        };
+
+
+        socket.on('getMessageEmoji', onMessageEmoji);
+        return () => {
+            socket.off('getMessageEmoji', onMessageEmoji);
+        };
+    }, [conversation._id]);
     useEffect(() => {
         handleDataMessages(messages);
     }, [messages]);
@@ -268,10 +295,8 @@ function Chat() {
         try {
             const data = {
                 senderId: currentUserId,
-                recieverId: conversation.recieveInfor._id,
                 conversationId: conversation._id,
                 content,
-                isGroup: conversation.recieveInfor.isGroup,
                 members: conversation.recieveInfor.members,
             };
 
@@ -291,6 +316,19 @@ function Chat() {
     };
     return (
         <div id="chat_container" className=" position-relative">
+            <div
+                className="background_conversation"
+                style={{
+                    backgroundImage: `url(${conversation.recieveInfor?.avatar})`,
+                    backgroundSize: 'cover',
+                    filter: 'blur(10px)',
+                    position: 'absolute',
+                    opacity: 0.07,
+                    inset: 0,
+
+                    zIndex: -99
+                }}
+            ></div>
             <div className="header position-relative bg-white">
                 <div className="infor">
                     <div className="avatar">

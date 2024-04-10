@@ -1,17 +1,17 @@
 import MessageModel from "../models/Message.js";
 export const createMessage = async (
-  senderid,
-
+  senderId,
   content,
-  conversationId
+  conversationId,
+  type
 ) => {
   try {
     const new_message = new MessageModel({
-      senderId: senderid,
-      content: content,
+      senderId,
+      content,
       isSeen: 0,
-      conversationId: conversationId,
-
+      conversationId,
+      type
     });
     const currentDateTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }); // Adjust time zone as needed
     new_message.createdAt = currentDateTime;
@@ -58,3 +58,19 @@ export const getMessageByConverationId = async (conversationId) => {
     console.log(error);
   }
 };
+
+export const updateReactionMessage = async (messageId, reaction) => {
+  try {
+    const messages = await MessageModel.findByIdAndUpdate({
+      _id: messageId
+    }, {
+      reaction
+    }, { new: true })
+
+    return messages;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+

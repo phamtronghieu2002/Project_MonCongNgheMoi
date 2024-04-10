@@ -26,3 +26,6 @@ export const uploadFileMessage = (formData) => {
             headers: { "Content-Type": "multipart/form-data" },
         });
 }
+export const updateReactionMessage = (messageId, emoji) => {
+    return axios.put('/message/updateReaction', { messageId, emoji });
+}
