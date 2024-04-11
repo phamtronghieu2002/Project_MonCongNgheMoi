@@ -4,8 +4,8 @@ import { useContext, useEffect } from 'react';
 export const i18nContext = React.createContext();
 
 function I18nProvider({ children }) {
-    const { i18n } = useTranslation();
-    const { t } = useTranslation();
+    const { i18n, t } = useTranslation();
+
 
 
     useEffect(() => {

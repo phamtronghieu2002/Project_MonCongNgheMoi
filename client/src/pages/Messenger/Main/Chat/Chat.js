@@ -35,28 +35,32 @@ function Chat() {
     const onUploadFile = () => {
         fileRef.current.click();
     };
-
+    // xử lí gửi ảnh
     const handleFileImageChange = async (e) => {
 
         try {
             const file = e.target.files[0];
             const formData = new FormData();
             formData.append('file', file);
+            //upload image
             const data = await messageService.uploadImageMessage(formData);
             const imgMessage = data.imgURL
+            //gửi image
             await handleSendMessage("image", imgMessage);
 
         } catch (error) {
             console.error('Error uploading image:', error);
         }
     };
+
+    //xử lí gửi file
     const handleFileChange = async (e) => {
 
         try {
             const formData = new FormData();
 
             formData.append("file", e.target.files[0]);
-
+            //upload file
             const data = await messageService.uploadFileMessage(formData);
             const fileMessage = data.fileName;
             console.log('fileMessage', fileMessage);
@@ -66,18 +70,22 @@ function Chat() {
         }
 
     };
+
+    //xử lí gửi icon
     const handleIconMessage = async (data) => {
         const iconMessage = data.imageUrl
+        //gửi icon
         await handleSendMessage("icon", iconMessage);
         setIsOpenSticker(false);
     }
-
+    //xử lí gửi yêu cầu kết bạn
     const handleSendRequestFriend = async () => {
         try {
             const senderId = currentUserId;
             const recieverId = conversation.recieveInfor._id;
             const requestFriend = await friendService.sendRequestFriend(senderId, recieverId);
-            console.log('requestFriend', requestFriend);
+
+
             setRequestId(requestFriend._id);
             setStatusRequest(true);
             socket.emit('sendRequestFriend', { recieverId });
@@ -87,11 +95,11 @@ function Chat() {
             console.log(error);
         }
     };
-
+    // xử lí hủy gửi yêu cầu kết bạn
     const handleCancelRequestFriend = async () => {
         try {
             const recieverId = conversation.recieveInfor._id;
-            friendService.cancelRequestFriend(request_id);
+            await friendService.cancelRequestFriend(request_id);
             setStatusRequest(false);
             socket.emit('sendRequestFriend', { recieverId });
             toast.success('Đã huy gửi yêu cầu kết bạn');
@@ -108,12 +116,8 @@ function Chat() {
             let preTime = '';
             let curentTime = '';
             for (let i = 0; i < messages.length; i++) {
-                let text = messages[i].content;
-                let type = messages[i].type;
-                let avatar = messages[i].senderId.avatarPicture;
-                let reaction = messages[i].reaction;
 
-                let id = messages[i]._id;
+                let avatar = messages[i].senderId.avatarPicture;
                 let timeStamp = formatDateString(messages[i].createdAt);
                 let messageTime = chuyenDoiThoiGian(messages[i].createdAt);
                 if ((!preTime && !curentTime) || preTime !== timeStamp) {
@@ -135,7 +139,7 @@ function Chat() {
                         ReceivedMessage = [];
                         curentTime = '';
                     }
-                    sendMessage.push({ content: text, messageTime, type, reaction });
+                    sendMessage.push({ ...messages[i], messageTime });
                 } else {
                     if (sendMessage.length > 0) {
                         components.push(
@@ -164,7 +168,7 @@ function Chat() {
                             curentTime = '';
                         }
                     }
-                    ReceivedMessage.push({ content: text, messageTime, type, reaction, id });
+                    ReceivedMessage.push({ ...messages[i], messageTime });
                 }
 
                 i + 1 === messages.length &&
@@ -274,6 +278,36 @@ function Chat() {
             socket.off('getMessageEmoji', onMessageEmoji);
         };
     }, [conversation._id]);
+
+    //đăng kí socket nhận tin nhắn đã xóa
+    useEffect(() => {
+        const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
+            console.log('new_message', new_message);
+
+
+
+            if (conversationId === conversation._id) {
+                //
+                await messageService.updateLastMessage(conversationId, "đã xóa 1 tin nhắn", senderId);
+                socket.emit('reRenderConversations', conversation.recieveInfor.members);
+                setMessages((prev) => {
+                    prev.forEach((message) => {
+                        if (message._id === new_message._id) {
+                            message.isDeleted = new_message.isDeleted;
+
+                        }
+                    }
+                    )
+                    console.log('prev', [...prev]);
+                    return [...prev]
+                });
+            }
+        };
+        socket.on('getMessageDelete', onMessageDelete);
+        return () => {
+            socket.off('getMessageDelete', onMessageDelete);
+        };
+    }, [conversation._id]);
     useEffect(() => {
         handleDataMessages(messages);
     }, [messages]);
@@ -300,12 +334,12 @@ function Chat() {
                 members: conversation.recieveInfor.members,
             };
 
-            const new_message = await messageService.sendMessage(type, data);
+            const new_message = await messageService.sendMessage(type, data); //gửi dô đb
             const lastMessage = handleLastMessage(type, content);
 
             await messageService.updateLastMessage(conversation._id, lastMessage, currentUserId);
             setMessages([...messages, new_message]);
-            socket.emit('sendMessage', { ...data, new_message });
+            socket.emit('sendMessage', { ...data, new_message });// gửi socket
             socket.emit('reRenderConversations', conversation.recieveInfor.members);
             setTextMessage('');
 

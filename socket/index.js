@@ -64,13 +64,35 @@ io.on("connection", (socket) => {
 
 
 
-      members.forEach((member) => {
+      members.filter((member => member != senderId)).forEach((member) => {
         const reciever = getUser(member);
-        console.log(member)
         if (reciever) {
           io.to(reciever.socketId).emit("getMessageEmoji", {
             conversationId,
             new_message,
+          });
+
+        }
+      });
+    }
+  );
+
+
+  socket.on(
+    "delete-message",
+    ({
+      senderId,
+      conversationId,
+      new_message,
+      members
+    }) => {
+      members.forEach((member) => {
+        const reciever = getUser(member);
+        if (reciever) {
+          io.to(reciever.socketId).emit("getMessageDelete", {
+            conversationId,
+            new_message,
+            senderId
           });
 
         }

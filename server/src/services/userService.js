@@ -1,11 +1,19 @@
 import UserModel from "../models/User";
 import GroupModel from "../models/Group";
 import dotenv from "dotenv";
+import { checkPhoneNumberIsValid } from "../utils/user";
 dotenv.config();
 
-export const searchUser = async (keyword) => {
+export const searchUser = async (userId, keyword) => {
   try {
     const resultSearch = [];
+    const user = await UserModel.findOne({ _id: userId });
+
+    console.log("user id", user._doc._id);
+    const userFriends = user._doc.friends;
+    const userGroups = user._doc.groups;
+
+    const isPhoneNumber = checkPhoneNumberIsValid(keyword);
     const users = await UserModel.find(
       {
         $or: [
@@ -16,13 +24,34 @@ export const searchUser = async (keyword) => {
       "_id avatarPicture username backgroundPicture friends"
     );
     if (users.length > 0) {
-      resultSearch.push(...users.map((user) => ({ ...user._doc, isGroup: 0 })));
+      if (isPhoneNumber) {
+
+        resultSearch.push(...users.map((user) => ({ ...user._doc, isGroup: 0 })));
+      } else {
+        userFriends.forEach((friendid) => {
+          users.forEach((user) => {
+            console.log("user._id", user._id.toString(), friendid);
+            console.log(user.backgroundPicture);
+            if (user._id.toString() === friendid) {
+              console.log("ok");
+              resultSearch.push({ ...user._doc, isGroup: 0 });
+            }
+          });
+        });
+      }
+
     }
     const groups = await GroupModel.find({
       keywords: { $in: keyword },
     });
     if (groups.length > 0) {
-      resultSearch.push(...groups.map((group) => ({ ...group._doc, isGroup: 1 })));
+      userGroups.forEach((groupid) => {
+        groups.forEach((group) => {
+          if (group._id.toString() === groupid) {
+            resultSearch.push({ ...group._doc, isGroup: 1 });
+          }
+        });
+      });
     }
     return resultSearch;
   } catch (err) {

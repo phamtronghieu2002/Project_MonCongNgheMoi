@@ -42,7 +42,7 @@ function ModalCreateGroup({ onHide }) {
         }
         const handleSearchResult = async () => {
             try {
-                const response = await userServices.searchUser(searhDebouce);
+                const response = await userServices.searchUser(currentUserId, searhDebouce);
                 setUsersSeach(response);
             } catch (error) {
                 console.log(error);
@@ -59,7 +59,7 @@ function ModalCreateGroup({ onHide }) {
             const group = await groupServices.addGroup(groupName, members, currentUserId, "https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png");
             const conversation = await conversationServices.createConversation(group._id, members, 1);
             setCurrentConversation(group.groupPicture, group.groupName, group._id, true, group.members, conversation._id)
-           
+
             socket.emit("reRenderConversations", members);
             toast.success('Tạo nhóm thành công');
 

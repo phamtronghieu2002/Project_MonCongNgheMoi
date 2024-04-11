@@ -32,6 +32,7 @@ const ModalInformationUser = () => {
         try {
             const formData = new FormData();
             formData.append('file', e.target.files[0]);
+            console.log(e.target.files[0]);
             setLoading(true);
             const user = await updateImageUser(_id, formData);
             setLoading(false);

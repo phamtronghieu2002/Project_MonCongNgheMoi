@@ -53,16 +53,17 @@
         i:hover {
             color: #005ae0;
         }
-        //   .detail {
-        //       .action_message_popper_container {
-        //            display: none !important;
-        //       }
-        //       &:hover {
-        //           .action_message_popper_container {
-        //               display: block !important;
-        //           }
-        //       }
-        //   }
+        .detail {
+            .action_message_popper_container {
+                display: none !important;
+            }
+            &:hover {
+                .action_message_popper_container {
+                    font-family: sans-serif;
+                    display: block !important;
+                }
+            }
+        }
     }
     &:hover {
         .actions {
@@ -110,7 +111,6 @@
         }
     }
     .message-text {
-        display: inline-block;
         font-size: 15px;
         position: relative;
 

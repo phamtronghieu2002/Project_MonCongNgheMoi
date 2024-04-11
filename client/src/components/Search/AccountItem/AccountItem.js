@@ -12,6 +12,7 @@ function AccountItem({ avatarPicture, username, groupPicture, groupName, _id, is
     const name = username || groupName;
     const handleCreateConversation = async () => {
         try {
+
             const conversation = await conversationService.createConversation(user.data._id, _id, isGroup);
 
             const avatar = avatarPicture || groupPicture;

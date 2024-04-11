@@ -50,3 +50,8 @@ export const uploadFileMessage = (formData) => {
 export const updateReactionMessage = (messageId, emoji) => {
     return axios.put('/message/updateReaction', { messageId, emoji });
 }
+
+
+export const deleteMessage = (id) => {
+    return axios.delete(`/message/${id}`);
+}

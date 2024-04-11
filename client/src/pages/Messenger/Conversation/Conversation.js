@@ -9,7 +9,7 @@ import { socketContext } from '../../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 
 const Conversation = () => {
-    const {  socket,currentUserId } = useContext(socketContext);
+    const { socket, currentUserId } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
     const [conversations, setConversations] = useState([]);
@@ -18,19 +18,24 @@ const Conversation = () => {
 
     const fetchConversations = async () => {
         try {
-
+            //get toàn bộ conversation
             const conversations = await conversationService.getConversationByUserId(currentUserId);
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
+                //get toàn bộ message của conversation tương ứng
                 const messages = await messageService.getMessageByConversationId(conversationID);
-                console.log(messages)
+                console.log("message >>", messages);
                 let totalUnseen = 0;
 
                 for (let j = 0; j < messages.length; j++) {
+                    //duyệt từng messages của conversation đó->nếu người gửi không phải mình
+                    // và  mảng isSeen  chưa có mình  thì tăng biến totalUnseen lên 1
                     if (messages[j].senderId._id !== currentUserId && !messages[j].isSeen.includes(currentUserId)) {
+                        console.log("hello");
                         totalUnseen = totalUnseen + 1;
                     }
                 }
+                //thêm trường totalUnseen vào mảng object conversation
                 conversations[i].totalUnseen = totalUnseen;
             }
             setConversations([...conversations]);

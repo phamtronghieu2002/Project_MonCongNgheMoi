@@ -1,8 +1,9 @@
 import axios from './axios';
 
-//api tìm kiếm user theo keyword, tham số truyền vô dạng:searchUser("abc")
-export const searchUser = (keyword) => {
-    return axios.get(`/user/search/?k=${keyword}`);
+//api tìm kiếm user theo keyword, tham số truyền vô dạng:searchUser("123","abc")
+//trong đó id là id của current user,keyword là từ  khóa tìm kiếm
+export const searchUser = (id, keyword) => {
+    return axios.get(`/user/search/${id}?k=${keyword}`);
 }
 //get user theo id, tham số truyền vô dạng:"abc",getUserId("abc")
 export const getUserById = (id) => {

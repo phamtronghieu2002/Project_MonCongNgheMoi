@@ -1,10 +1,12 @@
 import * as userServices from "../services/userService";
 export const handleSearchUser = async (req, res) => {
   const { k } = req.query;
+  const { id } = req.params;
+
   if (!k) {
     return res.status(400).json({ message: "missing query" });
   }
-  const data = await userServices.searchUser(k);
+  const data = await userServices.searchUser(id, k);
   if (data) {
     return res.status(200).json(data);
   }

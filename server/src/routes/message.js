@@ -10,4 +10,5 @@ router.post("/uploadFile", uploadFile.single("file"), messageController.uploadFi
 router.get("/:conversationId", messageController.handleGetMessageByConverationId);
 router.post("/updateStatus", messageController.handleUpdateStatusSeenMessage);
 router.put("/updateReaction", messageController.handleUpdateReactionMessage);
+router.delete("/:id", messageController.handleDeleteMessage);
 export default router;

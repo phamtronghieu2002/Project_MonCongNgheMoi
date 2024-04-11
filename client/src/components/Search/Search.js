@@ -4,6 +4,7 @@ import { useDebounce } from 'use-debounce';
 import { searchUser } from '../../services/userService';
 import SearchPopper from '../Popper/SearchPopper/SearchPopper';
 import ModalCreateGroup from '../Modal/ModalCreateGroup/ModalCreateGroup';
+import { useInfor } from '../../hooks';
 export default function Search() {
 
     const [showModal, setShowModal] = useState(false);
@@ -11,7 +12,7 @@ export default function Search() {
     const [isSearch, setIsSearch] = useState(false);
     const [searhDebouce] = useDebounce(search, 200);
     const [searchCoversations, setSearchCoversations] = useState([]);
-
+    const currenUser = useInfor();
     useEffect(() => {
         if (!searhDebouce) {
             setSearchCoversations([]);
@@ -20,7 +21,8 @@ export default function Search() {
         const handleSearchResult = async () => {
             try {
 
-                const response = await searchUser(searhDebouce);
+                let currentUserId = currenUser._id;
+                const response = await searchUser(currentUserId, searhDebouce);
                 setSearchCoversations(response);
             } catch (error) {
                 console.log(error);

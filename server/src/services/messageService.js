@@ -73,4 +73,19 @@ export const updateReactionMessage = async (messageId, reaction) => {
   }
 };
 
+export const deleteMessage = async (id) => {
+  try {
+    const message = await MessageModel.findByIdAndUpdate({
+      _id: id
+    }, {
+      isDeleted: true
+    }, {
+      new: true
+    });
+    return message;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
 
