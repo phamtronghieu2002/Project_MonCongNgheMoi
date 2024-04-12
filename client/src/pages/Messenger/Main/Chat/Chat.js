@@ -18,6 +18,8 @@ function Chat() {
     const { currentUserId, socket } = useContext(socketContext);
     const { t } = useLang();
 
+    const [isLoading,setIsloading]=useState(false);
+
     const [messages, setMessages] = useState([]);
     const [messagesComponent, setMessagesComponent] = useState([]);
     const [textMessage, setTextMessage] = useState('');
@@ -42,12 +44,13 @@ function Chat() {
             const file = e.target.files[0];
             const formData = new FormData();
             formData.append('file', file);
+            setIsloading(true)
             //upload image
             const data = await messageService.uploadImageMessage(formData);
             const imgMessage = data.imgURL
             //gửi image
             await handleSendMessage("image", imgMessage);
-
+            setIsloading(false)
         } catch (error) {
             console.error('Error uploading image:', error);
         }
@@ -61,10 +64,11 @@ function Chat() {
 
             formData.append("file", e.target.files[0]);
             //upload file
+            setIsloading(true)
             const data = await messageService.uploadFileMessage(formData);
             const fileMessage = data.fileName;
-            console.log('fileMessage', fileMessage);
             await handleSendMessage("file", fileMessage);
+            setIsloading(false)
         } catch (error) {
             console.log(error);
         }
@@ -236,7 +240,10 @@ function Chat() {
     }, [conversation._id]);
     //đăng kí socket nhận tin nhắn
     useEffect(() => {
+
+        
         const onMessage = ({ conversationId, new_message }) => {
+     
             if (conversationId === conversation._id) {
                 setMessages((prev) => [...prev, new_message]);
             }
@@ -258,6 +265,7 @@ function Chat() {
         const onMessageEmoji = ({ conversationId, new_message }) => {
             if (conversationId === conversation._id) {
                 //
+          
                 setMessages((prev) => {
                     prev.forEach((message) => {
                         if (message._id === new_message._id) {
@@ -350,6 +358,9 @@ function Chat() {
     };
     return (
         <div id="chat_container" className=" position-relative">
+            {isLoading && <div className='loading_pending_messageSend'>  </div>}
+
+           
             <div
                 className="background_conversation"
                 style={{

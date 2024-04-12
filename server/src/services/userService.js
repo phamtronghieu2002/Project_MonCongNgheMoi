@@ -100,13 +100,15 @@ export const getUserByFirstCharater = async () => {
       {},
       "_id username avatarPicture phonenumber"
     ).sort({ username: 1 });
-    console.log("users>>", users);
+ 
+
+
     const result = [];
     let currentLetter = null;
     let currentGroup = null;
 
     users.forEach((user) => {
-      console.log("user>>", user)
+    
       const firstLetter = user.username[0].toUpperCase();
 
       if (firstLetter !== currentLetter) {

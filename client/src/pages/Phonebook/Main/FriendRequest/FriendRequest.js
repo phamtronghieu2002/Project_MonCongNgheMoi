@@ -31,7 +31,7 @@ export default function FriendRequest() {
     return (
         <div className="wp_request_invite">
             <div className="mb-4">
-                <h3>Lời mời kết bạn</h3>
+                <h5>Lời mời kết bạn</h5>
                 <div className="content">
                     <div className="row ">
                         {friendRequests.length > 0 ?
@@ -51,7 +51,7 @@ export default function FriendRequest() {
                 </div>
             </div>
             <div className="mb-4">
-                <h3>Đã gửi lời mời</h3>
+                <h5>Đã gửi lời mời</h5>
                 <div className="content">
                     <div className="row "></div>
                 </div>

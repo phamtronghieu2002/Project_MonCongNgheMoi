@@ -63,8 +63,8 @@ io.on("connection", (socket) => {
     }) => {
 
 
-
-      members.filter((member => member != senderId)).forEach((member) => {
+      //.filter((member => member != senderId))
+      members.forEach((member) => {
         const reciever = getUser(member);
         if (reciever) {
           io.to(reciever.socketId).emit("getMessageEmoji", {
