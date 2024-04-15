@@ -21,9 +21,10 @@ export const addFriend = (senderId, friendId) => {
     return axios.post(`/user/addFriend`, { senderId, friendId });
 }
 
-//get all user theo chữ cái đầu tiên, tham số truyền vô dạng:getUserByFirstCharacter()
-export const getUserByFirstCharacter = () => {
-    return axios.get(`/user/firstCharacter/`);
+//get all user theo chữ cái đầu tiên, tham số truyền vô dạng:getUserByFirstCharacter("123")
+//trong đó 123 là id của current user
+export const getUserByFirstCharacter = (userid) => {
+    return axios.get(`/user/firstCharacter/${userid}`);
 }
 
 //api cập nhật thông tin user(không có ảnh,ảnh là api riêng),

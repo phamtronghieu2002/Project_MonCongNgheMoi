@@ -94,11 +94,15 @@ export const addFriend = async (senderId, friendId) => {
     console.log(error);
   }
 };
-export const getUserByFirstCharater = async () => {
+
+
+export const getUserByFirstCharater = async (userId) => {
   try {
     const users = await UserModel.find(
-      {},
-      "_id username avatarPicture phonenumber"
+      {
+      //  friends: { $in: [userId] }
+      },
+      "_id username avatarPicture phonenumber groups"
     ).sort({ username: 1 });
  
 

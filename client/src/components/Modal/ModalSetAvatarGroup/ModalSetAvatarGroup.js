@@ -1,38 +1,45 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import OverLay from '../../Overlay/Overlay';
-import DetailAvatarGroup from './DetailAvatarGroup';
+
 import './style.scss';
 import { avtarGroupAvailble } from '../../../assets/GroupAvatars';
-export default function ModalSetAvatarGroup({ onHide }) {
-    const [isShowDetailAvatar, setIsShowDetailAvatar] = useState(false);
+export default function ModalSetAvatarGroup({ onHide,onSelectImageGroup,onChangeFileImage }) {
+
     const [avatarActive, setAvatarActive] = useState('');
+    const inputRef=useRef();
+
+    const onuploadImage = () => {
+        inputRef.current.click();
+    };
     const avatarGroupRender = avtarGroupAvailble.map((avatar, index) => ({
         imgURL: avatar,
         callback: () => {
-            openDetailAvatar()
-            setAvatarActive(avatar);
+            onHide();
+            onSelectImageGroup(avatar)
+            setAvatarActive(index);
         },
     }));
-const openDetailAvatar = () => {
-    setIsShowDetailAvatar(true);
-}
-const closeDetailAvatar = () => {
-    setIsShowDetailAvatar(false);
+const handlUploadAvatarImage =(e)=>{
+    const file = inputRef.current.files[0];
+    if(!file){
+        return;
+    }
+    const reader = new FileReader();
+    reader.onloadend=()=>{
+        onHide();
+        onChangeFileImage(e.target.files[0])
+        onSelectImageGroup(reader.result)
+    }
+    reader.readAsDataURL(file);
 }
     return (
         <OverLay zIndex={99999999}>
             <div id="modalSetAvatarGroup">
                 <div className="modal-dialog modal-dialog-centered position-relative">
-                    <DetailAvatarGroup isShow={isShowDetailAvatar} />
+              
                     <div className="modal-content">
                         <div className="modal-header">
-                            {isShowDetailAvatar && (
-                                <button
-                                onClick={closeDetailAvatar}
-                                className="btn_back">
-                                    <i class="fa-solid fa-chevron-left"></i>
-                                </button>
-                            )}
+            
                             <h6 className="modal-title fw-bold">Chọn ảnh đại diện</h6>
                             <button
                                 onClick={() => {
@@ -44,8 +51,17 @@ const closeDetailAvatar = () => {
                             ></button>
                         </div>
 
-                        <div className={isShowDetailAvatar ? "animation_body_modal modal-body":"modal-body"}>
-                            <div className="chose_image_from_computer">
+                        <div className={"modal-body"}>
+                        <input
+                            ref={inputRef}
+                            type="file"
+                            className="visually-hidden"
+                            accept="image/*"
+                            onChange={handlUploadAvatarImage}
+                        />
+                            <div 
+                         onClick={onuploadImage}
+                            className="chose_image_from_computer">
                                 <span>
                                     <i class="fa-regular fa-image"></i>
                                 </span>
@@ -71,22 +87,7 @@ const closeDetailAvatar = () => {
                             </div>
                         </div>
 
-                        {isShowDetailAvatar && (
-                            <div className="modal-footer" style={{marginTop:"55px"}}>
-                                <button
-                                    onClick={() => {
-                                        onHide();
-                                    }}
-                                    type="button"
-                                    className="btn btn-secondary"
-                                >
-                                    Hủy
-                                </button>
-                                <button type="button" className="btn btn-primary">
-                                    Lưu
-                                </button>
-                            </div>
-                        )}
+
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
 import GroupModel from "../models/Group";
+import UserModel from "../models/User";
+
 import {generateKeywordsWithSpaces} from "../utils/user";
 export const createGroup = async (
   groupName,
@@ -7,13 +9,23 @@ export const createGroup = async (
   createdBy
 ) => {
   try {
-    const group = await GroupModel.create({
+    const group = await  GroupModel.create({
       groupName,
       groupPicture,
       members,
       createdBy,
       keywords: generateKeywordsWithSpaces(groupName),
     });
+
+    const id_group=group._doc._id;
+    for(let i=0;i<members.length;i++){
+       await UserModel.findOneAndUpdate(
+        { _id: members[i] },
+        { $push: { groups: id_group } },
+        { new: true }
+      );
+    }
+   
     return group;
   } catch (error) {
     console.log(error);

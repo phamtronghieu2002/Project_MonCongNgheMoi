@@ -1,3 +1,4 @@
+
 #modalCreateGroup {
     .search_icon {
         position: absolute;
@@ -70,11 +71,89 @@
         overflow: auto;
     }
     .result-search {
-        overflow: auto;
         height: 300px;
+        display: flex;
+        .left_result_search {
+            flex: 1;
+            overflow: auto;
+        }
+        .right_result_search {
+            border: 1px solid #d6dbe1;
+            border-radius: 4px;
+            padding: 12px 5px;
+            width: 170px;
+            min-width: 170px;
+            margin-top: 12px;
+            overflow: auto;
+
+            display: none;
+            transform: translateX(110%);
+            transition: all 0.5s;
+
+            
+            &.show{
+                display: block;
+                transform: translateX(0%);
+            }
+            .filter_user_selected {
+                width: auto;
+                height: 38px;
+                max-width: 170px;
+                max-height: 38px;
+                overflow: hidden;
+                position: relative;
+                color: #005ae0;
+                background: #e5efff;
+                margin-bottom: 5px;
+                display: flex;
+                align-items: center;
+                border-radius: 16px;
+                padding: 0 12px;
+
+                i {
+                    cursor: pointer;
+                }
+                .infor {
+                    display: flex;
+                    align-items: center;
+                    flex: 1;
+                    gap: 2px;
+                }
+                img {
+                    width: 23px;
+                    height: 23px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: #e6e8ea;
+                    color: #7589a3;
+                    overflow: hidden;
+                    object-fit: cover;
+                    font-size: 0.375rem;
+                    font-weight: 500;
+                    line-height: 1.5;
+                    border: 1px solid #7589a3;
+                    box-sizing: border-box;
+                    border-radius: 50%;
+                }
+            }
+
+            .total_members_select {
+                height: 20px;
+                padding: 0 8px;
+                background: #f0f7ff;
+                color: #005ae0;
+                border-radius: 4px;
+                margin-left: 4px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                line-height: 1.5;
+            }
+        }
     }
 }
 .choose-image-group {
+    overflow: hidden;
     width: 46px;
     height: 46px;
     border-radius: 50%;
@@ -87,4 +166,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    img {
+        width: 46px;
+        height: 46px;
+    }
 }

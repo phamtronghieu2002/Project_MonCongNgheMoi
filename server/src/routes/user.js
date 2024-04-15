@@ -10,7 +10,7 @@ import { uploadImage } from '../middlewares/uploadImage';
 
 
 router.get("/search/:id", userController.handleSearchUser);
-router.get("/firstCharacter", userController.handleGetUserByFirstCharater);
+router.get("/firstCharacter/:id", userController.handleGetUserByFirstCharater);
 router.get("/:id", userController.handleGetUserById);
 router.post("/checkFriend", userController.handleCheckFriend);
 router.post("/addFriend", userController.handleAddFriend);

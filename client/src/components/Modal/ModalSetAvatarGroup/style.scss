@@ -32,11 +32,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
+     
         img {
             width: 68px;
             height:68px;
             border-radius: 50%;
+            &:hover{
+                border: 2px solid #005ae0;
+            }
         }
     }
 

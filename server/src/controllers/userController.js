@@ -54,9 +54,9 @@ export const handleAddFriend = async (req, res) => {
 
 export const handleGetUserByFirstCharater = async (req, res) => {
 
+const {id}=req.params;
 
-
-  const data = await userServices.getUserByFirstCharater();
+  const data = await userServices.getUserByFirstCharater(id);
   if (data) {
     return res.status(200).json(data);
   }
