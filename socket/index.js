@@ -1,6 +1,6 @@
 const io = require("socket.io")(9000, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "exp://192.168.1.2:8081"],
   },
 });
 
@@ -22,7 +22,6 @@ const getUserIdBySocketId = (socketId) => {
   return users.find((user) => user.socketId === socketId)?.userId;
 };
 
-
 io.on("connection", (socket) => {
   //when user connect
   console.log("a user connected.");
@@ -35,36 +34,26 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
-  socket.on("sendMessage",
-    ({
-      senderId,
-      conversationId,
-      new_message,
+  socket.on(
+    "sendMessage",
+    ({ senderId, conversationId, new_message, members }) => {
       members
-    }) => {
-
-      members.filter((member => member != senderId)).forEach((member) => {
-        const reciever = getUser(member);
-        if (reciever) {
-          io.to(reciever.socketId).emit("getMessage", {
-            conversationId,
-            new_message,
-          });
-
-        }
-      });
+        .filter((member) => member != senderId)
+        .forEach((member) => {
+          const reciever = getUser(member);
+          if (reciever) {
+            io.to(reciever.socketId).emit("getMessage", {
+              conversationId,
+              new_message,
+            });
+          }
+        });
     }
   );
 
-  socket.on("sendEmojiMessage",
-    ({
-      senderId,
-      conversationId,
-      new_message,
-      members
-    }) => {
-
-
+  socket.on(
+    "sendEmojiMessage",
+    ({ senderId, conversationId, new_message, members }) => {
       //.filter((member => member != senderId))
       members.forEach((member) => {
         const reciever = getUser(member);
@@ -73,86 +62,67 @@ io.on("connection", (socket) => {
             conversationId,
             new_message,
           });
-
         }
       });
     }
   );
 
-
-  socket.on("delete-message",
-    ({
-      senderId,
-      conversationId,
-      new_message,
-      members
-    }) => {
+  socket.on(
+    "delete-message",
+    ({ senderId, conversationId, new_message, members }) => {
       members.forEach((member) => {
         const reciever = getUser(member);
         if (reciever) {
           io.to(reciever.socketId).emit("getMessageDelete", {
             conversationId,
             new_message,
-            senderId
+            senderId,
           });
-
         }
       });
     }
   );
 
-  socket.on("recall-message",
-    ({
-      senderId,
-      conversationId,
-      new_message,
-      members
-    }) => {
+  socket.on(
+    "recall-message",
+    ({ senderId, conversationId, new_message, members }) => {
       members.forEach((member) => {
         const reciever = getUser(member);
         if (reciever) {
           io.to(reciever.socketId).emit("getRecallMessage", {
             conversationId,
             new_message,
-            senderId
+            senderId,
           });
-
         }
       });
     }
   );
 
-  socket.on("addUserToGroup",
-    ({
-      userInvited,
-      members,
-      newMembers
-    }) => {
-      console.log("userInvited", userInvited);
-      console.log("members", members);
+  socket.on("addUserToGroup", ({ userInvited, members, newMembers }) => {
+    console.log("userInvited", userInvited);
+    console.log("members", members);
 
-      console.log("newMembers", newMembers);
-      members.filter(id => id != getUserIdBySocketId(socket.id)).forEach((member) => {
+    console.log("newMembers", newMembers);
+    members
+      .filter((id) => id != getUserIdBySocketId(socket.id))
+      .forEach((member) => {
         const reciever = getUser(member);
         if (reciever) {
           io.to(reciever.socketId).emit("getNotyfiAddUserToGroup", {
             userInvited,
             members,
-            newMembers
+            newMembers,
           });
-
         }
       });
-    }
-  );
+  });
   socket.on("reRenderConversations", (members) => {
-
-
-    users.filter(user => members.includes(user.userId)).forEach((user) => {
-      io.to(user.socketId).emit("reRenderConversations");
-    });
-
-
+    users
+      .filter((user) => members.includes(user.userId))
+      .forEach((user) => {
+        io.to(user.socketId).emit("reRenderConversations");
+      });
   });
   socket.on("sendRequestFriend", ({ recieverId }) => {
     const reciever = getUser(recieverId);
