@@ -1,13 +1,13 @@
-#wp_search {
+.wp_search {
     height: 64px;
-    
+
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     overflow: visible;
     padding: 0 16px;
-    gap:5px;
+    gap: 5px;
 
     .search_input_conversation {
         width: 208px;
@@ -39,7 +39,7 @@
         width: 0.875rem;
         height: 0.875rem;
     }
- 
+
     .btn_close {
         height: 32px;
         color: black;
@@ -53,7 +53,6 @@
         cursor: pointer;
 
         font-size: 1rem;
-   
 
         &:hover {
             background-color: #eaedf0;

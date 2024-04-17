@@ -33,7 +33,7 @@ function UserPopper() {
     ];
     return (
         <div id="wp_popper_user">
-            <h5 className="fw-bold ps-1">{user.username}</h5>
+            <h5 className="fw-bold ps-3">{user.username}</h5>
             <div className="zmenu-separator"></div>
             {main_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />

@@ -12,6 +12,7 @@ import * as userServices from '..//..//../services/userService';
 import * as conversationServices from '..//..//../services/conversationService';
 import * as groupServices from '..//..//../services/groupService';
 import * as messageService from '..//..//../services/messageService';
+import { useInfor } from '../../../hooks';
 function ModalCreateGroup({ onHide, user, group }) {
     const [groupName, setGroupName] = useState('');
     const [selectUser, setSelectUser] = useState(() => {
@@ -23,7 +24,8 @@ function ModalCreateGroup({ onHide, user, group }) {
     const [search, setSearch] = useState('');
     const [searhDebouce] = useDebounce(search, 200);
     const { socket, currentUserId } = useContext(socketContext);
-    const { conversation, setCurrentConversation } = useContext(ConversationContext);
+    const currentUser = useInfor();
+    const { conversation, setCurrentConversation, setMembers, getMembers } = useContext(ConversationContext);
     const [showModalSetImageGroup, setShowModalSetImageGroup] = useState(true);
     const [imgGroup, setImgGroup] = useState('');
     const [fileImage, setFileImage] = useState(null);
@@ -73,28 +75,51 @@ function ModalCreateGroup({ onHide, user, group }) {
     };
     const createConversation = async () => {
         try {
-            const members = [currentUserId, ...selectUser];
-            const imageGroupFromDevice = await handleFileImageChange();
-            const group = await groupServices.addGroup(
-                groupName,
-                members,
-                currentUserId,
-                imageGroupFromDevice ||
+            let members;
+            let userIds = selectUser.map((m) => m._id);
+            if (group) {
+                try {
+                    members = [...userIds];
+                    const groupid = group._id;
+                    await groupServices.addUserToGroup(groupid, members);
+
+                    setMembers(members)
+
+                    socket.emit('addUserToGroup',
+                        {
+                            userInvited: currentUser.username,
+                            members: [...members, ...getMembers()],
+                            newMembers: selectUser
+                        });
+                    toast.success('Thêm thành viên vào nhóm thành công !!');
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                members = [currentUserId, ...userIds];
+                const imageGroupFromDevice = await handleFileImageChange();
+                const group = await groupServices.addGroup(
+                    groupName,
+                    members,
+                    currentUserId,
+                    imageGroupFromDevice ||
                     imgGroup ||
                     'https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png',
-            );
-            const conversation = await conversationServices.createConversation(group._id, members, 1);
-            setCurrentConversation(
-                group.groupPicture,
-                group.groupName,
-                group._id,
-                true,
-                group.members,
-                conversation._id,
-            );
+                );
+                const conversation = await conversationServices.createConversation(group._id, members, 1);
+                setCurrentConversation(
+                    group.groupPicture,
+                    group.groupName,
+                    group._id,
+                    true,
+                    group.members,
+                    conversation._id,
+                );
+                toast.success('Tạo nhóm thành công');
+            }
 
             socket.emit('reRenderConversations', members);
-            toast.success('Tạo nhóm thành công');
+
         } catch (error) {
             console.log(error);
             toast.error(error);
@@ -109,7 +134,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                     onHide={() => setShowModalSetImageGroup(false)}
                 />
             )}
-            <div id="modalCreateGroup">
+            <div id="modalCreateGroup" className='modalGroup'>
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -124,7 +149,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                         </div>
 
                         <div className="modal-body">
-                            {!group  && (
+                            {!group && (
                                 <div className="name-group-wp d-flex align-items-center gap-3">
                                     <button
                                         onClick={() => setShowModalSetImageGroup(true)}
@@ -175,7 +200,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                                 <div className={clsx('right_result_search', selectUser.length > 0 ? 'show' : '')}>
                                     <h6 className="fw-bold mb-2">
                                         đã chọn{' '}
-                                        <strong className="total_members_select">{`1/ ${selectUser.length}`}</strong>
+                                        <strong className="total_members_select">{`${selectUser.length}/100`}</strong>
                                     </h6>
 
                                     {selectUser.map((u, index) => {
@@ -211,7 +236,7 @@ function ModalCreateGroup({ onHide, user, group }) {
                                 }}
                                 type="button"
                                 className="btn btn-primary"
-                                disabled={groupName.length === 0 || selectUser.length < 2}
+                                disabled={group ? selectUser.length < 1 : groupName.length === 0 || selectUser.length < 2}
                             >
                                 Save changes
                             </button>

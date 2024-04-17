@@ -4,22 +4,23 @@ const MessageSchema = new mongoose.Schema(
     groupName: {
       type: String,
     },
-     groupPicture: {
+    groupPicture: {
       type: String,
       default: "https://cdn4.iconfinder.com/data/icons/avatar-1-2/100/Avatar-16-512.png",
     },
     members: {
       type: Array,
       default: [],
+      ref: "User",
     },
     keywords: {
       type: Array,
       default: [],
     },
     createdBy: {
-        type: String,
-        ref: "User",
-      },
+      type: String,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

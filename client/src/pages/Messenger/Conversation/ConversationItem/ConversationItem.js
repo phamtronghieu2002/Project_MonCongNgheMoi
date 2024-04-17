@@ -78,7 +78,7 @@ function ConversationItem({
                 onActiveConversation(conversationId);
             }}
             className={
-                'd-flex position-relative account_item_chat' +
+                'd-flex position-relative conversation_item_chat' +
                 (conversationId === activeConversation ? ' backgroundActive' : '')
             }
         >

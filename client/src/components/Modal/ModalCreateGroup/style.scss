@@ -1,5 +1,4 @@
-
-#modalCreateGroup {
+.modalGroup {
     .search_icon {
         position: absolute;
         top: 50%;
@@ -67,6 +66,9 @@
             line-height: 1.5;
         }
     }
+}
+
+#modalCreateGroup {
     .modal-body {
         overflow: auto;
     }
@@ -90,8 +92,7 @@
             transform: translateX(110%);
             transition: all 0.5s;
 
-            
-            &.show{
+            &.show {
                 display: block;
                 transform: translateX(0%);
             }

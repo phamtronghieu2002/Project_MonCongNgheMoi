@@ -11,4 +11,5 @@ router.get("/:conversationId", messageController.handleGetMessageByConverationId
 router.post("/updateStatus", messageController.handleUpdateStatusSeenMessage);
 router.put("/updateReaction", messageController.handleUpdateReactionMessage);
 router.delete("/:id", messageController.handleDeleteMessage);
+router.delete("/recall/:id", messageController.handleRecallMessage);
 export default router;

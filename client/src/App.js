@@ -5,8 +5,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PrivateRoutes, PublicRoutes } from './routes';
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import { Toaster } from 'react-hot-toast';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import DownloadLink from "react-download-link";
 import ModalInformationUser from './components/Modal/ModalInforationUser/ModalInformationUser';
+
 
 function App() {
 
@@ -36,7 +39,8 @@ function App() {
                     ))}
                 </Routes>
             </BrowserRouter>
-            <Toaster duration={4000} />
+            <Toaster duration={8000} />
+            <ToastContainer />
         </div>
     );
 }

@@ -130,12 +130,12 @@ export const createFreshToken = async (freshToken, res, req) => {
       res
         .cookie("accessToken", new_access_token, {
           expires: new Date(new Date().getTime() + 31557600000),
-          sameSite: "strict",
+          sameSite: "lax",
           httpOnly: true,
         })
         .cookie("freshToken", new_fresh_token, {
           expires: new Date(new Date().getTime() + 31557600000),
-          sameSite: "strict",
+          sameSite: "lax",
           httpOnly: true,
         });
       user.freshToken = new_fresh_token;

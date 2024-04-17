@@ -33,7 +33,7 @@ export const handleCheckFriend = async (req, res) => {
   try {
     const data = await userServices.checkFriend(senderId, friendId);
 
-    return res.status(200).json(data);
+    return res.status(200).json({ isFriend: data });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -54,7 +54,7 @@ export const handleAddFriend = async (req, res) => {
 
 export const handleGetUserByFirstCharater = async (req, res) => {
 
-const {id}=req.params;
+  const { id } = req.params;
 
   const data = await userServices.getUserByFirstCharater(id);
   if (data) {

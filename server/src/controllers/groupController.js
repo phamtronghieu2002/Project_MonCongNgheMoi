@@ -28,3 +28,15 @@ export const handleGetGroupById = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 };
+
+export const handleAddUserToGroup = async (req, res) => {
+  const { id_group, members } = req.body;
+  if (!id_group || !members) {
+    return res.status(400).json({ message: "missing param" });
+  }
+  const data = await groupServices.addUserToGroup(id_group, members);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}

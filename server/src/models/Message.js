@@ -51,6 +51,10 @@ const MessageSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isRecall: {
+      type: Boolean,
+      default: false,
+    },
     isSeen: {
       type: Array,
       default: [],

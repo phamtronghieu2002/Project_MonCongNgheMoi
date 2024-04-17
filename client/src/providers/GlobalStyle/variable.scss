@@ -1,35 +1,45 @@
 :root {
     --primary-blue: rgb(0, 0, 255);
     --secondary-blue: rgb(96, 96, 182);
-  
+
     --text-primary-light: black;
     --text-primary-dark: white;
-  
+
     --text-secondary-light: rgb(70, 70, 70);
     --text-secondary-dark: rgb(160, 160, 160);
-  
-    --bg-primary-light: white;
-    --bg-primary-dark: black;
-  
-    --bg-secondary-light: rgb(212, 212, 212);
-    --bg-secondary-dark: rgb(34, 34, 34);
-  
-    --bg-navbar-light: rgb(104, 104, 255);
-    --bg-navbar-dark: rgb(29, 29, 58);
-  }
-  
-  .light-theme {
+
+    --bg-primary-light: #ffffff;
+    --bg-primary-dark: #313131;
+
+    --bg-secondary-light: white;
+    --bg-secondary-dark: #00304d;
+
+    --bg-navbar-light: #0091ff;
+    --bg-navbar-dark: #191919;
+
+    --bg-active-dark: #404952;
+    --bg-active-light: #006edc;
+
+    --bg-hover-conversationItem-light: #f3f5f6;
+    --bg-hover-conversationItem-dark: #080808;
+}
+
+.light-theme {
     --text-primary: var(--text-primary-light);
     --text-secondary: var(--text-secondary-light);
     --bg-primary: var(--bg-primary-light);
     --bg-secondary: var(--bg-secondary-light);
     --bg-navbar: var(--bg-navbar-light);
-  }
-  
-  .dark-theme {
+    --bg-active: var(--bg-active-light);
+    --bg-hover-conversationItem: var(--bg-hover-conversationItem-light);
+}
+
+.dark-theme {
     --text-primary: var(--text-primary-dark);
     --text-secondary: var(--text-secondary-dark);
     --bg-primary: var(--bg-primary-dark);
     --bg-secondary: var(--bg-secondary-dark);
     --bg-navbar: var(--bg-navbar-dark);
-  }
+    --bg-active: var(--bg-active-dark);
+    --bg-hover-conversationItem: var(--bg-hover-conversationItem-dark);
+}

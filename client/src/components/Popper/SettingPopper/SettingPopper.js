@@ -10,8 +10,8 @@ import ManuItemPopper from '../MenuItemPopper/MenuItemPopper';
 function SettingPopper() {
 
     const { t, i18n } = useLang();
-    const { toggleTheme } = useContext(ThemeContext);
- 
+    const { toggleTheme, theme } = useContext(ThemeContext);
+
     const handleChangeLanguage = (lang) => {
         i18n.changeLanguage(lang);
     }
@@ -38,16 +38,16 @@ function SettingPopper() {
             Icon: <i className="fa-solid fa-desktop"></i>,
             callback: () => { },
             subMenu: [
-                { title: 'Tối', Icon: <i className="fa-solid fa-moon"></i>, callback: () => toggleTheme() },
-                { title: 'Sáng', Icon: <i className="fa-regular fa-sun"></i>, callback: () => toggleTheme() }],
+                { title: 'Tối', Icon: <i className="fa-solid fa-moon"></i>, callback: () => toggleTheme(), active: theme === 'dark-theme' },
+                { title: 'Sáng', Icon: <i className="fa-regular fa-sun"></i>, callback: () => toggleTheme(), active: theme === 'light-theme' },],
         },
         {
             title: t('messenger.popper.setting.language'),
             Icon: <i className="fa-solid fa-earth-americas"></i>,
             callback: () => { },
             subMenu: [
-                { title: 'tiếng việt', Icon: <VI className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.default) },active:i18n.language === configs.i18n.default},
-                { title: 'tiếng anh', Icon: <US className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.supportedLangs.en) },type:"changeLangue",active:i18n.language === configs.i18n.supportedLangs.en},
+                { title: 'tiếng việt', Icon: <VI className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.default) }, active: i18n.language === configs.i18n.default },
+                { title: 'tiếng anh', Icon: <US className="flag_language" />, callback: () => { handleChangeLanguage(configs.i18n.supportedLangs.en) }, type: "changeLangue", active: i18n.language === configs.i18n.supportedLangs.en },
             ],
         },
     ];

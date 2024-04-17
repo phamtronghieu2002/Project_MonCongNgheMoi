@@ -55,3 +55,8 @@ export const updateReactionMessage = (messageId, emoji) => {
 export const deleteMessage = (id) => {
     return axios.delete(`/message/${id}`);
 }
+
+
+export const recallMessage = (id) => {
+    return axios.delete(`/message/recall/${id}`);
+}

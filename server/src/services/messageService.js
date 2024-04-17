@@ -89,3 +89,13 @@ export const deleteMessage = async (id) => {
   }
 }
 
+export const recallMessage = async (id) => {
+  try {
+    const message = await MessageModel
+      .findByIdAndUpdate({ _id: id }, { isRecall: true }, { new: true })
+    return message;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}

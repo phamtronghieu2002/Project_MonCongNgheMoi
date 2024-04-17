@@ -22,7 +22,7 @@ function UserItem({ label, users, onSetUser, selectUser, group }) {
                         <input
                             disabled={isMembers}
                             checked={selectUser.some((u) => u._id === user._id) || isMembers}
-                            onChange={() => {}}
+                            onChange={() => { }}
                             type="checkbox"
                             className="form-check-input me-2"
                         />

@@ -9,7 +9,14 @@ function ConversationProvider({ children }) {
     const setCurrentConversation = (avatar, name, _id, isGroup, members, conversationId) => {
         setConversation({ recieveInfor: { avatar, name, _id, isGroup, members }, _id: conversationId })
     }
-    return <ConversationContext.Provider value={{ conversation, setCurrentConversation }}>{children}</ConversationContext.Provider>;
+    const setMembers = (members) => {
+        setConversation({ ...conversation, recieveInfor: { ...conversation.recieveInfor, members: [...conversation.recieveInfor.members, ...members] } });
+    }
+
+    const getMembers = () => {
+        return conversation.recieveInfor.members;
+    }
+    return <ConversationContext.Provider value={{ conversation, setMembers, setCurrentConversation, getMembers }}>{children}</ConversationContext.Provider>;
 }
 
 export default ConversationProvider;

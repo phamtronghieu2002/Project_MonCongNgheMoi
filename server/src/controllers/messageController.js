@@ -104,3 +104,12 @@ export const handleDeleteMessage = async (req, res) => {
   }
   return res.status(500).json({ message: "Internal Server Error" });
 }
+
+export const handleRecallMessage = async (req, res) => {
+  const { id } = req.params;
+  const data = await messageService.recallMessage(id);
+  if (data) {
+    return res.status(200).json(data);
+  }
+  return res.status(500).json({ message: "Internal Server Error" });
+}

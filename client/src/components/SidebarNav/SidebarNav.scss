@@ -3,10 +3,10 @@
     display: flex;
     width: 58px;
     height: 100%;
-    background-color: #0091ff;
+    background-color: var(--bg-navbar);
 
     .active {
-        background-color: #006edc;
+        background-color: var(--bg-active);
     }
 
     .wp_avt {

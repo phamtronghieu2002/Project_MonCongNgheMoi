@@ -1,9 +1,9 @@
 import './Search.scss';
+import ModalCreateGroup from '../Modal/ModalCreateGroup/ModalCreateGroup';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { searchUser } from '../../services/userService';
 import SearchPopper from '../Popper/SearchPopper/SearchPopper';
-import ModalCreateGroup from '../Modal/ModalCreateGroup/ModalCreateGroup';
 import { useInfor } from '../../hooks';
 export default function Search() {
 
@@ -40,7 +40,7 @@ export default function Search() {
         setIsSearch(false);
     };
     return (
-        <div id="wp_search">
+        <div className="wp_search">
             {showModal && <ModalCreateGroup onHide={() => { setShowModal(false) }} />}
             {isSearch && <SearchPopper searchCoversations={searchCoversations} />}
             <input

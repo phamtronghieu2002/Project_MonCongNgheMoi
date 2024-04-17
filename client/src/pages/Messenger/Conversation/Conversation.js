@@ -7,6 +7,7 @@ import * as messageService from '../../../services/messageService';
 import { useEffect, useState, useContext, useRef } from 'react';
 import { socketContext } from '../../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
+import { useLang } from '../../../hooks';
 
 const Conversation = () => {
     const { socket, currentUserId } = useContext(socketContext);
@@ -15,7 +16,7 @@ const Conversation = () => {
     const [conversations, setConversations] = useState([]);
     const [activeFilter, setActiveFilter] = useState(1);
     const [activeConversation, setActiveConversation] = useState(conversation._id);
-
+    const { t } = useLang();
     const fetchConversations = async () => {
         try {
             //get toàn bộ conversation
@@ -71,10 +72,10 @@ const Conversation = () => {
             <Search />
             <div className="filter_conversations">
                 <span onClick={() => setActiveFilter(1)} className={clsx('filter_item', activeFilter ? 'active' : '')}>
-                    Tất cả
+                    {t('messenger.filter.all')}
                 </span>
                 <span onClick={() => setActiveFilter(0)} className={clsx('filter_item', !activeFilter ? 'active' : '')}>
-                    Chưa đọc
+                    {t('messenger.filter.unread')}
                 </span>
             </div>
             <div className="conversations">

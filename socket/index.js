@@ -18,6 +18,10 @@ const removeUser = (socketId) => {
 const getUser = (userId) => {
   return users.find((user) => user.userId === userId);
 };
+const getUserIdBySocketId = (socketId) => {
+  return users.find((user) => user.socketId === socketId)?.userId;
+};
+
 
 io.on("connection", (socket) => {
   //when user connect
@@ -31,8 +35,7 @@ io.on("connection", (socket) => {
   });
 
   //send and get message
-  socket.on(
-    "sendMessage",
+  socket.on("sendMessage",
     ({
       senderId,
       conversationId,
@@ -53,8 +56,7 @@ io.on("connection", (socket) => {
     }
   );
 
-  socket.on(
-    "sendEmojiMessage",
+  socket.on("sendEmojiMessage",
     ({
       senderId,
       conversationId,
@@ -78,8 +80,7 @@ io.on("connection", (socket) => {
   );
 
 
-  socket.on(
-    "delete-message",
+  socket.on("delete-message",
     ({
       senderId,
       conversationId,
@@ -93,6 +94,51 @@ io.on("connection", (socket) => {
             conversationId,
             new_message,
             senderId
+          });
+
+        }
+      });
+    }
+  );
+
+  socket.on("recall-message",
+    ({
+      senderId,
+      conversationId,
+      new_message,
+      members
+    }) => {
+      members.forEach((member) => {
+        const reciever = getUser(member);
+        if (reciever) {
+          io.to(reciever.socketId).emit("getRecallMessage", {
+            conversationId,
+            new_message,
+            senderId
+          });
+
+        }
+      });
+    }
+  );
+
+  socket.on("addUserToGroup",
+    ({
+      userInvited,
+      members,
+      newMembers
+    }) => {
+      console.log("userInvited", userInvited);
+      console.log("members", members);
+
+      console.log("newMembers", newMembers);
+      members.filter(id => id != getUserIdBySocketId(socket.id)).forEach((member) => {
+        const reciever = getUser(member);
+        if (reciever) {
+          io.to(reciever.socketId).emit("getNotyfiAddUserToGroup", {
+            userInvited,
+            members,
+            newMembers
           });
 
         }

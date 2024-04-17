@@ -1,32 +1,29 @@
-.account_item_chat{
+.conversation_item_chat {
     cursor: pointer;
-    &.backgroundActive
-    {
+    &.backgroundActive {
         background-color: #f5f5f5;
-    
     }
-    &:hover{
-        background-color: #f5f5f5;
-        .timer_message{
+    &:hover {
+        background-color: var(--bg-hover-conversationItem);
+        .timer_message {
             display: none;
         }
-        .detail_btn{
+        .detail_btn {
             display: block;
-          
         }
     }
-    span{
+    span {
         cursor: pointer;
     }
     height: 74px;
     padding: 0 16px;
     align-items: center;
-    .avatar{
+    .avatar {
         width: 60px;
-        .single_chat_avatar{
+        .single_chat_avatar {
             width: 44px;
             height: 44px;
-    
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -39,56 +36,43 @@
             box-sizing: border-box;
             border-radius: 50%;
         }
-
-        
     }
-    .infor{
-
-
-        
+    .infor {
     }
-    .display_name{
+    .display_name {
         font-size: 1rem;
         font-weight: 400;
         line-height: 1.5;
-
-        
     }
-    .last_message{
-
-        font-size: .875rem;
+    .last_message {
+        font-size: 0.875rem;
         font-weight: 400;
         line-height: 1.5;
-        
     }
-    .timer_message{
+    .timer_message {
         font-size: 0.75rem;
         position: absolute;
         right: 15px;
         top: 7px;
-
-        
     }
-    .detail_btn{
-
+    .detail_btn {
         display: none;
         outline: none;
         border: none;
         text-align: center;
-  
+
         font-size: 11px;
         font-weight: bold;
         position: absolute;
         background: none;
         right: 23px;
         top: 5px;
-        &:hover{
+        &:hover {
             background: #d8eff0;
         }
-        
     }
-  
-    .num_message_miss{
+
+    .num_message_miss {
         position: absolute;
         right: 24px;
         width: 17px;
@@ -101,9 +85,5 @@
         font-size: 10px;
         color: white;
         bottom: 23px;
-        
     }
-
-
-
 }

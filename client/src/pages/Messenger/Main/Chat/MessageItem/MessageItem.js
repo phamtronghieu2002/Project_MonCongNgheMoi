@@ -50,9 +50,12 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                 )}
                 <div className="message-content">
                     {content.map((item, index) => {
+                        console.log(index);
                         let type = item.type;
                         console.log('content.isDeleted>>', content.isDeleted);
-
+                        if (own && item.isRecall) {
+                            return <></>;
+                        }
                         if (type == 'image') {
                             images.push(item.content);
                         }
@@ -60,12 +63,12 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                             <div className='message'>
                                 <div
                                     key={index}
-                                    className={clsx(handleStyleTypeMessage(item.type), 'mb-3', 'position-relative','m')}
+                                    className={clsx(handleStyleTypeMessage(item.type), 'mb-3', 'position-relative', 'm')}
                                 >
                                     {!own && index == 0 && <p className="senderName">{senderName}</p>}
 
-                                    {item.isDeleted ? 'Tin nhắn đã bị thu hồi': type == 'text' ? (
-                                        <p>{ item.content}</p>
+                                    {item.isDeleted ? 'Tin nhắn đã bị thu hồi' : type == 'text' ? (
+                                        <p>{item.content}</p>
                                     ) : type === 'image' || type === 'icon' ? (
                                         <img
                                             onClick={() => openImageViewer(index)}
@@ -79,8 +82,8 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                                     <p className="time_stamp">{index == content.length - 1 && item.messageTime}</p>
                                     {item.isDeleted || (
                                         <>
-                                            { (
-                                                <span className={clsx("feeling",item.reaction ? "active_reaction":"")}>
+                                            {(
+                                                <span className={clsx("feeling", item.reaction ? "active_reaction" : "")}>
                                                     {(emojis.index === index && emojis.emojis) || item.reaction || (
                                                         <i class="fa-regular fa-thumbs-up"></i>
                                                     )}
@@ -117,7 +120,7 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                                                     <ActionMessagePopper
                                                         own={own}
                                                         content={item.content}
-                                                        id={item._id}
+                                                        idMessage={item._id}
                                                         data={{
                                                             conversationId: conversation._id,
                                                             members: conversation.recieveInfor.members,

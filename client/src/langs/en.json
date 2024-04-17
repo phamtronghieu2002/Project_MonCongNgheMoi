@@ -18,7 +18,7 @@
         },
         "modal": {
             "title": "Enter the OTP code",
-            "changePhone":"Change your phone number",
+            "changePhone": "Change your phone number",
             "content": "Please enter the OTP code sent to your phone number",
             "button": {
                 "cancel": "Cancel",
@@ -49,7 +49,7 @@
                 "logout": "Logout"
             }
         },
-        "fillter": {
+        "filter": {
             "all": "All",
             "unread": "Unread",
             "read": "Read",
@@ -62,7 +62,7 @@
         "account_chat_item": {
             "timmer": {
                 "day": "day",
-                          "hour": "hour",
+                "hour": "hour",
                 "minute": "minute",
                 "second": "second"
             },
@@ -76,5 +76,5 @@
             "group": "Group list",
             "request_invite": "Request invite"
         }
-    }   
+    }
 }

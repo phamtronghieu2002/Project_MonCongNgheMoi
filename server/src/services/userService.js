@@ -100,11 +100,11 @@ export const getUserByFirstCharater = async (userId) => {
   try {
     const users = await UserModel.find(
       {
-      //  friends: { $in: [userId] }
+        //  friends: { $in: [userId] }
       },
       "_id username avatarPicture phonenumber groups"
     ).sort({ username: 1 });
- 
+
 
 
     const result = [];
@@ -112,7 +112,7 @@ export const getUserByFirstCharater = async (userId) => {
     let currentGroup = null;
 
     users.forEach((user) => {
-    
+
       const firstLetter = user.username[0].toUpperCase();
 
       if (firstLetter !== currentLetter) {

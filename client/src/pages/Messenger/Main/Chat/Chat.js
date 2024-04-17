@@ -6,6 +6,7 @@ import * as messageService from '..//..//..//..//services//messageService';
 import * as userService from '..//..//..//..//services//userService';
 import * as friendService from '..//..//..//..//services//requestFriendService';
 import { toast, Toaster } from 'react-hot-toast';
+import { ToastContainer, toast as toastify } from 'react-toastify';
 import { useLang } from '../../../../hooks';
 import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { ConversationContext } from '../../../../providers/ConversationProvider/ConversationProvider';
@@ -14,13 +15,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { formatDateString, chuyenDoiThoiGian } from '../../../../utils/chatUtil';
 import axios from 'axios';
 import ModalCreateGroup from '../../../../components/Modal/ModalCreateGroup/ModalCreateGroup';
+import ModalMemberGroup from '../../../../components/Modal/ModalMembersGroup/ModalMemberGroup';
 function Chat() {
     const [isOpenModalCreateGroup, setIsOpenModalCreateGroup] = useState({
         user: false,
         group: false,
     });
 
-    const { conversation } = useContext(ConversationContext);
+    const { conversation, setMembers } = useContext(ConversationContext);
     const { currentUserId, socket } = useContext(socketContext);
     const { t } = useLang();
 
@@ -28,9 +30,12 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [messagesComponent, setMessagesComponent] = useState([]);
     const [textMessage, setTextMessage] = useState('');
+
     const [isFriend, setIsFriend] = useState(false);
     const [statusRequest, setStatusRequest] = useState(false);
     const [request_id, setRequestId] = useState(0);
+
+    const [isOpenMembersModal, setIsOpenMembersModal] = useState(false);
     const [isOpenSticker, setIsOpenSticker] = useState(false);
 
     const refInput = useRef();
@@ -178,17 +183,17 @@ function Chat() {
                 i + 1 === messages.length &&
                     (sendMessage.length > 0
                         ? components.push(
-                              <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
-                          )
+                            <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
+                        )
                         : components.push(
-                              <MessageItem
-                                  timeStamp={curentTime}
-                                  key={uuidv4()}
-                                  content={ReceivedMessage}
-                                  avatar={avatar}
-                                  senderName={messages[i].senderId.username}
-                              />,
-                          ));
+                            <MessageItem
+                                timeStamp={curentTime}
+                                key={uuidv4()}
+                                content={ReceivedMessage}
+                                avatar={avatar}
+                                senderName={messages[i].senderId.username}
+                            />,
+                        ));
             }
 
             // update status seen message
@@ -216,8 +221,8 @@ function Chat() {
         const friendId = conversation.recieveInfor._id;
         const isGroup = conversation.recieveInfor.isGroup;
         if (!isGroup) {
-            const isFriend = await userService.isFriend(senderId, friendId);
-            setIsFriend(typeof isFriend === 'boolean' ? isFriend : isFriend.data === 2);
+            const res = await userService.isFriend(senderId, friendId);
+            setIsFriend(res.isFriend);
             return;
         }
         setIsFriend(true);
@@ -306,6 +311,59 @@ function Chat() {
             socket.off('getMessageDelete', onMessageDelete);
         };
     }, [conversation._id]);
+    // đăng kí socket nhận tin nhắn đã thu hồi
+    useEffect(() => {
+        const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
+            console.log('new_message', new_message);
+
+            await messageService.updateLastMessage(conversationId, 'đã thu hồi 1 tin nhắn', senderId);
+            socket.emit('reRenderConversations', conversation.recieveInfor.members);
+            setMessages((prev) => {
+                prev.forEach((message) => {
+                    if (message._id === new_message._id) {
+                        message.isRecall = new_message.isRecall;
+                    }
+                });
+                console.log('prev', [...prev]);
+                return [...prev];
+            });
+        }
+
+        socket.on('getRecallMessage', onRecallMessage);
+        return () => {
+            socket.off('getRecallMessage', onRecallMessage);
+        };
+    }, []);
+    //đăng kí socket nhận thông báo có người thêm user vào nhóm
+
+    useEffect(() => {
+        const onNotify = ({ userInvited,
+            members,
+            newMembers }) => {
+            console.log('userInvited', userInvited);
+            console.log('members', members);
+            console.log('newMembers', newMembers);
+            if (newMembers.some((member) => member._id === currentUserId)) {
+                toastify('Bạn đã được thêm vào nhóm', { type: 'success' })
+            } else {
+                setMembers(members)
+                newMembers.forEach((member) => {
+                    if (member !== currentUserId) {
+                        toastify(`${userInvited} đã thêm ${member.username} vào nhóm`, { type: 'success' })
+
+                    }
+                });
+            }
+        }
+        socket.on('getNotyfiAddUserToGroup', onNotify);
+        return () => {
+            socket.off('getNotyfiAddUserToGroup', onNotify);
+        };
+    }, []);
+
+
+
+
     useEffect(() => {
         handleDataMessages(messages);
     }, [messages]);
@@ -364,6 +422,7 @@ function Chat() {
                 />
             )}
             {isLoading && <div className="loading_pending_messageSend"> </div>}
+            {isOpenMembersModal && <ModalMemberGroup onHide={() => { setIsOpenMembersModal(false) }} />}
             <div
                 className="background_conversation"
                 style={{
@@ -387,9 +446,13 @@ function Chat() {
                             <span>{conversation.recieveInfor.name}</span>
                         </div>
 
-                        <div className="status">
+                        <div
+
+                            className="status">
                             {conversation.recieveInfor.isGroup ? (
-                                <p className='d-flex align-items-center gap-1'>
+                                <p
+                                    onClick={() => { setIsOpenMembersModal(true) }}
+                                    className='d-flex align-items-center gap-1'>
                                     <i class="fa-regular fa-user"></i>
                                     <span>{`${conversation.recieveInfor.members.length} thành viên`}</span>
                                 </p>
