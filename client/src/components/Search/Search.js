@@ -59,23 +59,13 @@ export default function Search() {
             ) : (
                 <>
                     <button className="user_plus action_btn">
-                        <img
-                            width="24"
-                            height="24"
-                            src="https://img.icons8.com/external-thin-kawalan-studio/24/external-user-plus-users-thin-kawalan-studio.png"
-                            alt="external-user-plus-users-thin-kawalan-studio"
-                        />{' '}
+                        <i class="fa-solid fa-user-plus"></i>
                     </button>
                     <button
                         onClick={() => setShowModal(true)}
                         className="group_plus action_btn" type='button' >
 
-                        <img
-                            width="80"
-                            height="80"
-                            src="https://img.icons8.com/dotty/80/add-user-group-man-woman.png"
-                            alt="add-user-group-man-woman"
-                        />
+                        <i class="fa-solid fa-users"></i>
                     </button>
                 </>
             )}

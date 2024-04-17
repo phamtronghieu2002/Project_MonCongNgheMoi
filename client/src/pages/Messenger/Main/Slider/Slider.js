@@ -1,3 +1,4 @@
+
 import "./slider.scss";
 import React, { useEffect } from 'react'; // Import React and useEffect hook
 

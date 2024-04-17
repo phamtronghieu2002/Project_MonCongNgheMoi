@@ -22,9 +22,37 @@
 
     --bg-hover-conversationItem-light: #f3f5f6;
     --bg-hover-conversationItem-dark: #080808;
+
+    --bg-search-input-light: #eaedf0;
+    --bg-search-input-dark: #919191;
+
+    --bg-btn-close--light: #ffffff;
+    --bg-btn-close--dark: 606060;
+
+    --bg-btn-close-hover--light: #eaedf0;
+    --bg-btn-close-hover--dark: #606060;
+
+    --text-btn-close--light: #000000;
+    --text-btn-close--dark: #ffffff;
+
+    --bg-active-conversation-item--light: #f5f5f5;
+    --bg-active-conversation-item--dark: #757575;
+
+    --color-icon-dark: #ffffff;
+    --color-icon-light: #000000;
+
+    --text-hover-icon-light: #000000;
+    --text-hover-icon-dark: #757575;
 }
 
 .light-theme {
+    --color-icon: var(--color-icon-light);
+    --text-hover-icon: var(--text-hover-icon-light);
+    --bg-active-conversation-item: var(--bg-active-conversation-item--light);
+    --text-btn-close: var(--text-btn-close--light);
+    --bg-btn-close-hover: var(--bg-btn-close-hover--light);
+    --bg-btn-close: var(--bg-btn-close--light);
+    --bg-input-search: var(--bg-search-input-light);
     --text-primary: var(--text-primary-light);
     --text-secondary: var(--text-secondary-light);
     --bg-primary: var(--bg-primary-light);
@@ -35,6 +63,13 @@
 }
 
 .dark-theme {
+    --color-icon: var(--color-icon-dark);
+    --text-hover-icon: var(--text-hover-icon-dark);
+    --bg-active-conversation-item: var(--bg-active-conversation-item--dark);
+    --text-btn-close: var(--text-btn-close--dark);
+    --bg-btn-close-hover: var(--bg-btn-close-hover--dark);
+    --bg-btn-close: var(--bg-btn-close--dark);
+    --bg-input-search: var(--bg-search-input-dark);
     --text-primary: var(--text-primary-dark);
     --text-secondary: var(--text-secondary-dark);
     --bg-primary: var(--bg-primary-dark);

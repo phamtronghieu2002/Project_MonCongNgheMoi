@@ -32,7 +32,7 @@ const Conversation = () => {
                     //duyệt từng messages của conversation đó->nếu người gửi không phải mình
                     // và  mảng isSeen  chưa có mình  thì tăng biến totalUnseen lên 1
                     if (messages[j].senderId._id !== currentUserId && !messages[j].isSeen.includes(currentUserId)) {
-                        console.log("hello");
+
                         totalUnseen = totalUnseen + 1;
                     }
                 }

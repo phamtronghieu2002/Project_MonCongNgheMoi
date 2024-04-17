@@ -1,7 +1,7 @@
 .conversation_item_chat {
     cursor: pointer;
     &.backgroundActive {
-        background-color: #f5f5f5;
+        background-color: var(--bg-active-conversation-item);
     }
     &:hover {
         background-color: var(--bg-hover-conversationItem);

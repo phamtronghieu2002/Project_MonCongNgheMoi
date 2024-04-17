@@ -54,7 +54,7 @@ function SettingPopper() {
 
     const foot_menu = [{ title: t('messenger.popper.setting.logout'), callback: () => { }, titleStyle: 'text-danger fw-bold' }];
     return (
-        <div id="wp_popper_setting">
+        <div id="wp_popper_setting" className='popper'>
             {header_menu.map((item, index) => (
                 <ManuItemPopper key={index} {...item} />
             ))}

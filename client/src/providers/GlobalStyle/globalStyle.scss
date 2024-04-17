@@ -1,5 +1,5 @@
-@import './reset.scss';
 @import './variable.scss';
+@import './reset.scss';
 ::-webkit-scrollbar {
     width: 19px;
 }
@@ -18,10 +18,12 @@
     background: #d6dbe1;
     margin: 4px;
 }
-
+.popper {
+    background: var(--bg-primary) !important;
+}
 .menu_item_poper {
     &.active {
-        background-color: #f5f5f5;
+        background-color: var(--bg-active-conversation-item);
         color: #fff;
     }
     display: flex;
@@ -45,13 +47,13 @@
     color: #081c36;
     position: relative;
     margin: 0 -8px;
-    background-color: #fff;
+    background-color: var(--bg-primary);
     font-size: 0.8rem;
     font-weight: 400;
     line-height: 1.5;
 
     &:hover {
-        background-color: #f5f5f5;
+        background-color: var(--bg-hover-conversationItem);
         .sub_menu_poper {
             display: block;
         }
