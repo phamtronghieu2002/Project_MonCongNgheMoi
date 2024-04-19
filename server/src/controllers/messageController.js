@@ -13,7 +13,6 @@ export const uploadImageMessage = async (req, res) => {
 
 export const handleCreateMessage = async (req, res) => {
   const { senderId, content, conversationId } = req.body;
-  console.log("req.body>>>", req.query);
   const typeMessages = req.query.type;
 
   if (!senderId || !content || !conversationId || !typeMessages) {
@@ -35,7 +34,6 @@ export const handleCreateMessage = async (req, res) => {
 
 export const handleGetMessageByConverationId = async (req, res) => {
   const { conversationId } = req.params;
-  console.log("req.params>>>", req.params);
   if (!conversationId) {
     return res.status(400).json({ message: "missing param" });
   }
@@ -69,7 +67,6 @@ export const uploadFileMessage = async (req, res) => {
 
   const fileName = req.file.filename;
   const file_size = (req.file.size) / (1024 * 1000);
-  console.log("req.file>>>", req.file);
   if (fileName) {
     return res.status(200).json({ fileName: fileName + "/" + file_size.toFixed(2) + "mb" });
   }

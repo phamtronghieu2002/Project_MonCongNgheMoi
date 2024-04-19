@@ -37,6 +37,11 @@ io.on("connection", (socket) => {
   socket.on(
     "sendMessage",
     ({ senderId, conversationId, new_message, members }) => {
+
+      console.log("members :>>>", members);
+      console.log("senderId :>>>", senderId);
+      console.log("conversationId :>>>", conversationId);
+      console.log("new_message :>>>", new_message);
       members
         .filter((member) => member != senderId)
         .forEach((member) => {
@@ -100,10 +105,7 @@ io.on("connection", (socket) => {
   );
 
   socket.on("addUserToGroup", ({ userInvited, members, newMembers }) => {
-    console.log("userInvited", userInvited);
-    console.log("members", members);
 
-    console.log("newMembers", newMembers);
     members
       .filter((id) => id != getUserIdBySocketId(socket.id))
       .forEach((member) => {

@@ -10,13 +10,13 @@ export default function File({ messageTime, content }) {
     const FileName = extraTimeStamp(extractFileName(content))
     const fileExtension = extractFileExtension(FileName)
     const fileSize = extractFileSize(content)
-    console.log(fileExtension);
+
     const iconFile = fileIcons.find(item => item?.type.includes(fileExtension))?.icon
 
     const [isPreview, setIsPreview] = useState(false)
     return (
         <div
-            onClick={() => setIsPreview(true)}
+            onClick={() => { setIsPreview(true) }}
             className="">
             <div className="file_main d-flex">
                 <img src={iconFile} />

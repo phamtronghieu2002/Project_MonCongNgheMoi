@@ -1,5 +1,4 @@
 #wp_login {
-
     .bg-svg {
         position: absolute;
         top: 0;
@@ -52,6 +51,10 @@
     .body {
         form {
             padding: 30px 45px;
+            .btn,
+            button {
+                color: #fff !important;
+            }
         }
         background-color: #fff;
         border-radius: 2px;
@@ -59,18 +62,17 @@
         .tab_select {
             .active {
                 position: relative;
-                font-weight: bold ;
-                color: #333 ;
+                font-weight: bold;
+                color: #333;
                 &::before {
                     position: absolute;
                     bottom: -1px;
                     left: 20%;
                     right: 20%;
-                    content: "";
+                    content: '';
                     background-color: #333;
                     height: 1px;
                 }
-              
             }
             display: flex;
             background-color: #fff;
@@ -91,7 +93,7 @@
         .active {
             font-weight: bold !important;
         }
-       z-index: 0;
+        z-index: 0;
         span {
             color: #0190f3 !important;
             outline: 0;

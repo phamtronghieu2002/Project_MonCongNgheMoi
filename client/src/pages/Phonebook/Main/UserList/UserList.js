@@ -30,7 +30,6 @@ function UserList() {
    const [data, setData] = useState([]);
 
    const handleSearchUser = () => {
-      console.log("call api");
    }
 
    return (

@@ -27,13 +27,12 @@ instance.interceptors.response.use(
       };
       const status = res.status;
       if (status === 401) {
-          axios
+        axios
           .post("http://localhost:8080/api/v1/refresh_token")
           .then((response) => {
-        
+
           })
           .catch((error) => {
-            console.log("error fresh>>>");
             const path = window.location.pathname;
             if (path !== "/login") {
               window.location.href = "/login";
@@ -54,7 +53,7 @@ axiosRetry(instance, {
     return retryCount * 500; // time interval between retries
   },
   retryCondition(error) {
-    return error.status === 401 
+    return error.status === 401
   },
 });
 export default instance;

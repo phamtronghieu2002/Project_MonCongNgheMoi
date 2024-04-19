@@ -8,8 +8,16 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import { socketContext } from '../../../providers/Socket/SocketProvider';
 import { ConversationContext } from '../../../providers/ConversationProvider/ConversationProvider';
 import { useLang } from '../../../hooks';
+import { timeDuaration } from '../../../utils/chatUtil';
+import useViewport from '../../../hooks/useViewPort';
+import { ViewPortContext } from '../../../providers/ViewPort/ViewPortProvider';
 
 const Conversation = () => {
+
+
+    const { view } = useContext(ViewPortContext);
+
+
     const { socket, currentUserId } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext)
     const [openPopper, setOpenPopper] = useState('');
@@ -17,15 +25,18 @@ const Conversation = () => {
     const [activeFilter, setActiveFilter] = useState(1);
     const [activeConversation, setActiveConversation] = useState(conversation._id);
     const { t } = useLang();
+
+
+
     const fetchConversations = async () => {
         try {
             //get toàn bộ conversation
             const conversations = await conversationService.getConversationByUserId(currentUserId);
             for (let i = 0; i < conversations.length; i++) {
                 const conversationID = conversations[i]._id;
+                conversations[i].timeDuaration = timeDuaration(conversations[i].updatedAt);
                 //get toàn bộ message của conversation tương ứng
                 const messages = await messageService.getMessageByConversationId(conversationID);
-                console.log("message >>", messages);
                 let totalUnseen = 0;
 
                 for (let j = 0; j < messages.length; j++) {
@@ -46,7 +57,15 @@ const Conversation = () => {
     };
 
 
+    // useEffect(() => {
+    //     let timeOut = setTimeout(() => {
+    //         fetchConversations();
+    //     }, 60000);
 
+    //     return () => {
+    //         clearTimeout(timeOut);
+    //     }
+    // }, []);
     useEffect(() => {
         const onRerenderConversations = () => {
             fetchConversations();
@@ -68,7 +87,7 @@ const Conversation = () => {
         }
     }, [activeFilter]);
     return (
-        <div id="wp_conversation" className='bg-white'>
+        <div id="wp_conversation" className={clsx('bg-white', !view.conversation ? "d-none" : !view.chat ? "w-100" : "")}>
             <Search />
             <div className="filter_conversations">
                 <span onClick={() => setActiveFilter(1)} className={clsx('filter_item', activeFilter ? 'active' : '')}>

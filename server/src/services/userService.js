@@ -9,7 +9,6 @@ export const searchUser = async (userId, keyword) => {
     const resultSearch = [];
     const user = await UserModel.findOne({ _id: userId });
 
-    console.log("user id", user._doc._id);
     const userFriends = user._doc.friends;
     const userGroups = user._doc.groups;
 
@@ -30,10 +29,7 @@ export const searchUser = async (userId, keyword) => {
       } else {
         userFriends.forEach((friendid) => {
           users.forEach((user) => {
-            console.log("user._id", user._id.toString(), friendid);
-            console.log(user.backgroundPicture);
             if (user._id.toString() === friendid) {
-              console.log("ok");
               resultSearch.push({ ...user._doc, isGroup: 0 });
             }
           });
@@ -100,7 +96,7 @@ export const getUserByFirstCharater = async (userId) => {
   try {
     const users = await UserModel.find(
       {
-        //  friends: { $in: [userId] }
+        friends: { $in: [userId] }
       },
       "_id username avatarPicture phonenumber groups"
     ).sort({ username: 1 });
@@ -133,7 +129,6 @@ export const getUserByFirstCharater = async (userId) => {
       result.push(currentGroup);
     }
 
-    console.log("result>>", result);
     return result;
   } catch (error) {
     console.log(error);

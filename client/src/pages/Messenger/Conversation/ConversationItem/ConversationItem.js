@@ -7,6 +7,7 @@ import { ConversationContext } from '../../../../providers/ConversationProvider/
 import * as userService from '../../../../services/userService';
 import * as groupService from '../../../../services/groupService';
 import clsx from 'clsx';
+import { ViewPortContext } from '../../../../providers/ViewPort/ViewPortProvider';
 function ConversationItem({
     activeConversation,
     conversationId,
@@ -17,6 +18,7 @@ function ConversationItem({
     currentUserId,
     lastMessage,
     totalUnseen,
+    timeDuaration,
     onActiveConversation,
     lastSenderid,
 }) {
@@ -24,7 +26,7 @@ function ConversationItem({
     const [openDetail, setOpenDetail] = useState(false);
     const [userOrGroup, setUserOrGroup] = useState(null);
     const { setCurrentConversation } = useContext(ConversationContext);
-
+    const { isViewChat } = useContext(ViewPortContext);
     useEffect(() => {
         window.addEventListener('click', () => setOpenDetail(false));
         if (openPopper === conversationId) {
@@ -64,7 +66,7 @@ function ConversationItem({
                 const avatar = userOrGroup.avatarPicture || userOrGroup.groupPicture;
                 const name = userOrGroup.username || userOrGroup.groupName;
                 const _id = userOrGroup._id;
-                const members = userOrGroup.members ? userOrGroup.members : [currentUserId, userOrGroup._id];
+                const members = userOrGroup.members ? userOrGroup.members.map(item => item._id) : [currentUserId, userOrGroup._id];
 
                 setCurrentConversation(
                     avatar,
@@ -74,7 +76,7 @@ function ConversationItem({
                     members,
                     conversationId,
                 );
-
+                isViewChat();
                 onActiveConversation(conversationId);
             }}
             className={
@@ -98,7 +100,7 @@ function ConversationItem({
                     { }
                 </p>
             </div>
-            <span className="timer_message">{`5 ${t('messenger.account_chat_item.timmer.day')}`}</span>
+            <span className="timer_message">{`${timeDuaration}`}</span>
             <button onClick={onDetail} className="detail_btn">
                 ...
             </button>

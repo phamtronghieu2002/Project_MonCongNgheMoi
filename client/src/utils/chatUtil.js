@@ -27,4 +27,47 @@ function chuyenDoiThoiGian(timeString) {
 
     return chuoiThoiGian;
 }
-export { formatDateString, chuyenDoiThoiGian }
+
+
+function formatTimeDifference(timeDifference) {
+    let seconds = Math.floor(timeDifference / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+
+    seconds %= 60;
+    minutes %= 60;
+    hours %= 24;
+    let lang = localStorage.getItem('language')
+    const day = lang === 'en' ? 'day' : 'ngày'
+    const hour = lang === 'en' ? 'hour' : 'giờ'
+    const minute = lang === 'en' ? 'minute' : 'phút'
+    const second = lang === 'en' ? 'second' : 'giây'
+    if (days > 0) {
+        return `${days} ${day}`;
+    } else if (hours > 0) {
+        return `${hours} ${hour}`;
+    } else if (minutes > 0) {
+        return `${minutes} ${minute}`;
+    } else {
+        return `${seconds} ${second}`;
+    }
+
+
+}
+
+
+const timeDuaration = (time) => {
+    let currentTime = new Date(time);
+    let now = new Date();
+
+    let timeDifference = now - currentTime;
+
+    return formatTimeDifference(timeDifference);
+}
+
+
+
+
+
+export { formatDateString, chuyenDoiThoiGian, timeDuaration }

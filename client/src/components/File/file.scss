@@ -36,11 +36,21 @@
         position: fixed;
         z-index: 9999;
         inset: 0;
+        color: #fff !important;
     }
     button-close {
         position: fixed;
         top: 0px;
         right: 10px;
         cursor: pointer;
+    }
+}
+#ReactSimpleImageViewer {
+    .styles-module_navigation__1pqAE {
+        color: white !important;
+    }
+
+    .styles-module_close__2I1sI {
+        color: white !important;
     }
 }

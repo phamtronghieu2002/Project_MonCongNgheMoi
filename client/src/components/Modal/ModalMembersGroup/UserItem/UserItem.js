@@ -16,8 +16,6 @@ export default function UserItem({ username, _id, avatarPicture }) {
             const senderId = currentUserId;
             const friendId = _id;
             const res = await userService.isFriend(senderId, friendId);
-            console.log("isFriend", isFriend);
-            console.log("type of friend", typeof isFriend);
             setIsFriend(res.isFriend);
         } catch (error) {
             console.log(error);

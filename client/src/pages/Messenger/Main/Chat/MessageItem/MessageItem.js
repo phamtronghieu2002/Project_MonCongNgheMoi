@@ -9,7 +9,6 @@ import * as messageService from '../..//..//..//..//services/messageService';
 import { ConversationContext } from '../../../../../providers/ConversationProvider/ConversationProvider';
 import ActionMessagePopper from '../../../../../components/Popper/ActionMessagePopper/ActionMessagePopper';
 function MessageItem({ content, own, avatar, senderName, timeStamp }) {
-    console.log('content>>', content);
     const { socket, currentUserId } = useContext(socketContext);
     const { conversation } = useContext(ConversationContext);
     const [emojis, setEmojis] = useState({ emojis: '', index: 0 });
@@ -50,9 +49,7 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                 )}
                 <div className="message-content">
                     {content.map((item, index) => {
-                        console.log(index);
                         let type = item.type;
-                        console.log('content.isDeleted>>', content.isDeleted);
                         if (own && item.isRecall) {
                             return <></>;
                         }
@@ -60,9 +57,11 @@ function MessageItem({ content, own, avatar, senderName, timeStamp }) {
                             images.push(item.content);
                         }
                         return (
-                            <div className='message'>
+                            <div
+                                key={index}
+                                className='message'>
                                 <div
-                                    key={index}
+
                                     className={clsx(handleStyleTypeMessage(item.type), 'mb-3', 'position-relative', 'm')}
                                 >
                                     {!own && index == 0 && <p className="senderName">{senderName}</p>}

@@ -49,7 +49,7 @@ export default function ActionMessagePopper({ content, idMessage, data, own }) {
         <div className="action_message_popper_container">
             {menus.map((item, index) => {
                 if (!own && index === menus.length - 2) {
-                    return <> </>;
+                    return <div key={index}> </div>;
                 }
                 return <ManuItemPopper key={index} {...item} />;
             })}

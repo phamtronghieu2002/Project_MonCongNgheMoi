@@ -16,7 +16,15 @@ import { formatDateString, chuyenDoiThoiGian } from '../../../../utils/chatUtil'
 import axios from 'axios';
 import ModalCreateGroup from '../../../../components/Modal/ModalCreateGroup/ModalCreateGroup';
 import ModalMemberGroup from '../../../../components/Modal/ModalMembersGroup/ModalMemberGroup';
+import useViewport from '../../../../hooks/useViewPort';
+import { ViewPortContext } from '../../../../providers/ViewPort/ViewPortProvider';
+import clsx from 'clsx';
 function Chat() {
+
+    const { view, isViewConversation } = useContext(ViewPortContext);
+
+
+
     const [isOpenModalCreateGroup, setIsOpenModalCreateGroup] = useState({
         user: false,
         group: false,
@@ -48,6 +56,8 @@ function Chat() {
     const onUploadFile = () => {
         fileRef.current.click();
     };
+
+
     // xử lí gửi ảnh
     const handleFileImageChange = async (e) => {
         try {
@@ -246,6 +256,8 @@ function Chat() {
     //đăng kí socket nhận tin nhắn
     useEffect(() => {
         const onMessage = ({ conversationId, new_message }) => {
+            console.log('new_message', new_message);
+            console.log(conversationId, conversation._id);
             if (conversationId === conversation._id) {
                 setMessages((prev) => [...prev, new_message]);
             }
@@ -274,7 +286,6 @@ function Chat() {
                             message.reaction = new_message.reaction;
                         }
                     });
-                    console.log('prev', [...prev]);
                     return [...prev];
                 });
             }
@@ -289,7 +300,6 @@ function Chat() {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
-            console.log('new_message', new_message);
 
             if (conversationId === conversation._id) {
                 //
@@ -301,7 +311,6 @@ function Chat() {
                             message.isDeleted = new_message.isDeleted;
                         }
                     });
-                    console.log('prev', [...prev]);
                     return [...prev];
                 });
             }
@@ -314,7 +323,6 @@ function Chat() {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
-            console.log('new_message', new_message);
 
             await messageService.updateLastMessage(conversationId, 'đã thu hồi 1 tin nhắn', senderId);
             socket.emit('reRenderConversations', conversation.recieveInfor.members);
@@ -324,7 +332,6 @@ function Chat() {
                         message.isRecall = new_message.isRecall;
                     }
                 });
-                console.log('prev', [...prev]);
                 return [...prev];
             });
         }
@@ -340,9 +347,6 @@ function Chat() {
         const onNotify = ({ userInvited,
             members,
             newMembers }) => {
-            console.log('userInvited', userInvited);
-            console.log('members', members);
-            console.log('newMembers', newMembers);
             if (newMembers.some((member) => member._id === currentUserId)) {
                 toastify('Bạn đã được thêm vào nhóm', { type: 'success' })
             } else {
@@ -404,7 +408,7 @@ function Chat() {
         }
     };
     return (
-        <div id="chat_container" className=" position-relative">
+        <div id="chat_container" className={clsx("position-relative", !view.chat ? "d-none" : "")}>
             {isOpenModalCreateGroup.group && (
                 <ModalCreateGroup
                     onHide={() => {
@@ -438,6 +442,21 @@ function Chat() {
             ></div>
             <div className="header position-relative bg-white">
                 <div className="infor">
+                    {!view.conversation
+                        && <button
+                            style={{
+                                border: "none",
+                                borderRadius: "50%",
+                                fontSize: "18px",
+                                width: "30px",
+                                height: "30px",
+                                background: 'none'
+                            }}
+                            onClick={isViewConversation}
+                        >
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    }
                     <div className="avatar">
                         <img src={conversation.recieveInfor.avatar} alt="avatar" />
                     </div>
@@ -567,7 +586,7 @@ function Chat() {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

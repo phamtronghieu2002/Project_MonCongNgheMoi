@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import i18n from './i18n/I18n';
+import ViewPortProvider from './providers/ViewPort/ViewPortProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,7 +19,9 @@ root.render(
             <SocketProvider>
                 <ThemeProvider>
                     <ConversationProvider>
-                        <App />
+                        <ViewPortProvider>
+                            <App />
+                        </ViewPortProvider>
                     </ConversationProvider>
                 </ThemeProvider>
             </SocketProvider>

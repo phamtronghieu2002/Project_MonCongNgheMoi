@@ -22,9 +22,9 @@ export default function EditUser({ hasTransitionedIn, editing }) {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            console.log('submit');
+
             const currentUserId = currentUser._id;
-            console.log(currentUserId);
+
             const data = {
                 username,
                 birth,
@@ -35,7 +35,7 @@ export default function EditUser({ hasTransitionedIn, editing }) {
             setLoading(false);
             updateUser(user);
             toast.success('Cập nhật thông tin thành công');
-            
+
         } catch (error) {
             console.log(error);
             if (error.status == 400) {
@@ -44,69 +44,69 @@ export default function EditUser({ hasTransitionedIn, editing }) {
         }
     };
     return (
-     <>
-       {loading && <Loading pendingAction />}
-           <form onSubmit={handleSubmit} className={`infor ${hasTransitionedIn && 'in'} ${editing && 'visible'}`}>
-            
-               <div className="mb-3">
-                   <label className="form-label">Họ và Tên:</label>
-                   <input
-                       type="text"
-                       className="form-control"
-                       id="username"
-                       name="username"
-                       value={username}
-                       onChange={(e) => {
-                           SetUsername(e.target.value);
-                       }}
-                   />
-               </div>
-               <div className="mb-3">
-                   <label className="form-label">Giới tính:</label>
-                   <div className="form-check form-check-inline  ms-3">
-                       <input
-                           onChange={(e) => {
-                               setGender(e.target.value);
-                           }}
-                           checked={gender == 0}
-                           className="form-check-input"
-                           type="radio"
-                           name="gender"
-                           id="inlineRadio1"
-                           value="0"
-                       />
-                       <label className="form-check-label" for="inlineRadio1">
-                           nam
-                       </label>
-                   </div>
-                   <div className="form-check form-check-inline">
-                       <input
-                           onChange={(e) => {
-                               setGender(e.target.value);
-                           }}
-                           checked={gender == 1}
-                           className="form-check-input"
-                           type="radio"
-                           name="gender"
-                           id="inlineRadio2"
-                           value="1"
-                       />
-                       <label className="form-check-label" for="inlineRadio2">
-                           nữ
-                       </label>
-                   </div>
-               </div>
-               <div className="mb-3">
-                   <label className="form-label">Ngày sinh:</label>
-                   <DatePicker selected={birth} onChange={(date) => setBirth(date)} />
-               </div>
-        
-               <div className="text-end">
-                   <button type="submit" className="btn btn-primary position-relative end-0">
-                       <i className="fas fa-save me-1"></i> Lưu
-                   </button>
-               </div>
-           </form>
-     </>
+        <>
+            {loading && <Loading pendingAction />}
+            <form onSubmit={handleSubmit} className={`infor ${hasTransitionedIn && 'in'} ${editing && 'visible'}`}>
+
+                <div className="mb-3">
+                    <label className="form-label">Họ và Tên:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="username"
+                        name="username"
+                        value={username}
+                        onChange={(e) => {
+                            SetUsername(e.target.value);
+                        }}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Giới tính:</label>
+                    <div className="form-check form-check-inline  ms-3">
+                        <input
+                            onChange={(e) => {
+                                setGender(e.target.value);
+                            }}
+                            checked={gender == 0}
+                            className="form-check-input"
+                            type="radio"
+                            name="gender"
+                            id="inlineRadio1"
+                            value="0"
+                        />
+                        <label className="form-check-label" for="inlineRadio1">
+                            nam
+                        </label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            onChange={(e) => {
+                                setGender(e.target.value);
+                            }}
+                            checked={gender == 1}
+                            className="form-check-input"
+                            type="radio"
+                            name="gender"
+                            id="inlineRadio2"
+                            value="1"
+                        />
+                        <label className="form-check-label" for="inlineRadio2">
+                            nữ
+                        </label>
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Ngày sinh:</label>
+                    <DatePicker selected={birth} onChange={(date) => setBirth(date)} />
+                </div>
+
+                <div className="text-end">
+                    <button type="submit" className="btn btn-primary position-relative end-0">
+                        <i className="fas fa-save me-1"></i> Lưu
+                    </button>
+                </div>
+            </form>
+        </>
     );
 }

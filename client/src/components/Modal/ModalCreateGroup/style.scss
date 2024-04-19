@@ -83,7 +83,7 @@
             border: 1px solid #d6dbe1;
             border-radius: 4px;
             padding: 12px 5px;
-            width: 170px;
+            width: 180px;
             min-width: 170px;
             margin-top: 12px;
             overflow: auto;
@@ -118,7 +118,8 @@
                     display: flex;
                     align-items: center;
                     flex: 1;
-                    gap: 2px;
+                    gap: 5px;
+                    font-size: 12px;
                 }
                 img {
                     width: 23px;
