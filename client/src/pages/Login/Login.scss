@@ -1,4 +1,10 @@
 #wp_login {
+    *{
+        color: black !important;
+    }
+    button span{
+        color: white !important;
+    }
     .bg-svg {
         position: absolute;
         top: 0;

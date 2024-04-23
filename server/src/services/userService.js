@@ -20,7 +20,7 @@ export const searchUser = async (userId, keyword) => {
           { phonenumber: `+84${keyword.slice(1)}` },
         ],
       },
-      "_id avatarPicture username backgroundPicture friends"
+      "_id avatarPicture username backgroundPicture friends groups"
     );
     if (users.length > 0) {
       if (isPhoneNumber) {

@@ -41,7 +41,6 @@ tt,
 var,
 b,
 u,
-i,
 center,
 dl,
 dt,
@@ -87,6 +86,9 @@ video {
     box-sizing: border-box;
     user-select: none;
     color: var(--text-primary) !important;
+
+   
+
 }
 
 ul {
@@ -140,6 +142,7 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-.modal .modal-content {
+.modal-content {
     background: var(--bg-primary) !important;
 }
+

@@ -63,9 +63,9 @@ const handlUploadAvatarImage =(e)=>{
                          onClick={onuploadImage}
                             className="chose_image_from_computer">
                                 <span>
-                                    <i class="fa-regular fa-image"></i>
+                                    <i className="fa-regular fa-image text-light"></i>
                                 </span>
-                                <h4>Tải ảnh lên từ máy tính</h4>
+                                <h4 className='text-light'>Tải ảnh lên từ máy tính</h4>
                             </div>
 
                             <p className="image_title"> Bộ sưu tập </p>

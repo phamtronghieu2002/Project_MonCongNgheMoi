@@ -20,10 +20,7 @@ import useViewport from '../../../../hooks/useViewPort';
 import { ViewPortContext } from '../../../../providers/ViewPort/ViewPortProvider';
 import clsx from 'clsx';
 function Chat() {
-
     const { view, isViewConversation } = useContext(ViewPortContext);
-
-
 
     const [isOpenModalCreateGroup, setIsOpenModalCreateGroup] = useState({
         user: false,
@@ -56,7 +53,6 @@ function Chat() {
     const onUploadFile = () => {
         fileRef.current.click();
     };
-
 
     // xử lí gửi ảnh
     const handleFileImageChange = async (e) => {
@@ -193,17 +189,17 @@ function Chat() {
                 i + 1 === messages.length &&
                     (sendMessage.length > 0
                         ? components.push(
-                            <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
-                        )
+                              <MessageItem timeStamp={curentTime} key={uuidv4()} content={sendMessage} own />,
+                          )
                         : components.push(
-                            <MessageItem
-                                timeStamp={curentTime}
-                                key={uuidv4()}
-                                content={ReceivedMessage}
-                                avatar={avatar}
-                                senderName={messages[i].senderId.username}
-                            />,
-                        ));
+                              <MessageItem
+                                  timeStamp={curentTime}
+                                  key={uuidv4()}
+                                  content={ReceivedMessage}
+                                  avatar={avatar}
+                                  senderName={messages[i].senderId.username}
+                              />,
+                          ));
             }
 
             // update status seen message
@@ -300,7 +296,6 @@ function Chat() {
     //đăng kí socket nhận tin nhắn đã xóa
     useEffect(() => {
         const onMessageDelete = async ({ conversationId, new_message, senderId }) => {
-
             if (conversationId === conversation._id) {
                 //
                 await messageService.updateLastMessage(conversationId, 'đã xóa 1 tin nhắn', senderId);
@@ -323,7 +318,6 @@ function Chat() {
     // đăng kí socket nhận tin nhắn đã thu hồi
     useEffect(() => {
         const onRecallMessage = async ({ conversationId, new_message, senderId }) => {
-
             await messageService.updateLastMessage(conversationId, 'đã thu hồi 1 tin nhắn', senderId);
             socket.emit('reRenderConversations', conversation.recieveInfor.members);
             setMessages((prev) => {
@@ -334,7 +328,7 @@ function Chat() {
                 });
                 return [...prev];
             });
-        }
+        };
 
         socket.on('getRecallMessage', onRecallMessage);
         return () => {
@@ -344,29 +338,23 @@ function Chat() {
     //đăng kí socket nhận thông báo có người thêm user vào nhóm
 
     useEffect(() => {
-        const onNotify = ({ userInvited,
-            members,
-            newMembers }) => {
+        const onNotify = ({ userInvited, members, newMembers }) => {
             if (newMembers.some((member) => member._id === currentUserId)) {
-                toastify('Bạn đã được thêm vào nhóm', { type: 'success' })
+                toastify('Bạn đã được thêm vào nhóm', { type: 'success' });
             } else {
-                setMembers(members)
+                setMembers(members);
                 newMembers.forEach((member) => {
                     if (member !== currentUserId) {
-                        toastify(`${userInvited} đã thêm ${member.username} vào nhóm`, { type: 'success' })
-
+                        toastify(`${userInvited} đã thêm ${member.username} vào nhóm`, { type: 'success' });
                     }
                 });
             }
-        }
+        };
         socket.on('getNotyfiAddUserToGroup', onNotify);
         return () => {
             socket.off('getNotyfiAddUserToGroup', onNotify);
         };
     }, []);
-
-
-
 
     useEffect(() => {
         handleDataMessages(messages);
@@ -408,7 +396,7 @@ function Chat() {
         }
     };
     return (
-        <div id="chat_container" className={clsx("position-relative", !view.chat ? "d-none" : "")}>
+        <div id="chat_container" className={clsx('position-relative', !view.chat ? 'd-none' : '')}>
             {isOpenModalCreateGroup.group && (
                 <ModalCreateGroup
                     onHide={() => {
@@ -426,7 +414,13 @@ function Chat() {
                 />
             )}
             {isLoading && <div className="loading_pending_messageSend"> </div>}
-            {isOpenMembersModal && <ModalMemberGroup onHide={() => { setIsOpenMembersModal(false) }} />}
+            {isOpenMembersModal && (
+                <ModalMemberGroup
+                    onHide={() => {
+                        setIsOpenMembersModal(false);
+                    }}
+                />
+            )}
             <div
                 className="background_conversation"
                 style={{
@@ -442,21 +436,21 @@ function Chat() {
             ></div>
             <div className="header position-relative bg-white">
                 <div className="infor">
-                    {!view.conversation
-                        && <button
+                    {!view.conversation && (
+                        <button
                             style={{
-                                border: "none",
-                                borderRadius: "50%",
-                                fontSize: "18px",
-                                width: "30px",
-                                height: "30px",
-                                background: 'none'
+                                border: 'none',
+                                borderRadius: '50%',
+                                fontSize: '18px',
+                                width: '30px',
+                                height: '30px',
+                                background: 'none',
                             }}
                             onClick={isViewConversation}
                         >
                             <i class="fa-solid fa-arrow-left"></i>
                         </button>
-                    }
+                    )}
                     <div className="avatar">
                         <img src={conversation.recieveInfor.avatar} alt="avatar" />
                     </div>
@@ -465,13 +459,14 @@ function Chat() {
                             <span>{conversation.recieveInfor.name}</span>
                         </div>
 
-                        <div
-
-                            className="status">
+                        <div className="status">
                             {conversation.recieveInfor.isGroup ? (
                                 <p
-                                    onClick={() => { setIsOpenMembersModal(true) }}
-                                    className='d-flex align-items-center gap-1'>
+                                    onClick={() => {
+                                        setIsOpenMembersModal(true);
+                                    }}
+                                    className="d-flex align-items-center gap-1"
+                                >
                                     <i class="fa-regular fa-user"></i>
                                     <span>{`${conversation.recieveInfor.members.length} thành viên`}</span>
                                 </p>
@@ -483,7 +478,7 @@ function Chat() {
                 </div>
                 <div className="actions">
                     <button className="group_plus action_btn">
-                        <img
+                        <i
                             onClick={() => {
                                 if (conversation.recieveInfor.isGroup) {
                                     setIsOpenModalCreateGroup({ ...isOpenModalCreateGroup, group: true });
@@ -491,27 +486,14 @@ function Chat() {
                                     setIsOpenModalCreateGroup({ ...isOpenModalCreateGroup, user: true });
                                 }
                             }}
-                            width="80"
-                            height="80"
-                            src="https://img.icons8.com/dotty/80/add-user-group-man-woman.png"
-                            alt="add-user-group-man-woman"
-                        />
+                            className="fa-solid fa-user-group"
+                        ></i>
                     </button>
                     <button className=" action_btn">
-                        <img
-                            width="50"
-                            height="50"
-                            src="https://img.icons8.com/ios/50/search--v1.png"
-                            alt="search--v1"
-                        />
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                     <button className=" action_btn">
-                        <img
-                            width="50"
-                            height="50"
-                            src="https://img.icons8.com/ios/50/video-call.png"
-                            alt="video-call"
-                        />
+                        <i class="fa-solid fa-video"></i>
                     </button>
                     <button className=" action_btn">
                         <img
@@ -574,19 +556,14 @@ function Chat() {
                     />
 
                     <button onClick={() => setIsOpenSticker(!isOpenSticker)} className="action_btn position-relative">
-                        <i class="fa-regular fa-face-smile"></i>
+                        <i className="fa-regular fa-face-smile"></i>
                     </button>
                     <button onClick={handleSendMessage} className="action_btn">
-                        <img
-                            width="30"
-                            height="30"
-                            src="https://img.icons8.com/ios-glyphs/30/000000/sent.png"
-                            alt="sent"
-                        />
+                        <i className="fa-solid fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 

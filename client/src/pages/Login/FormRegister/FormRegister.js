@@ -215,6 +215,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone }) {
                 />
             </div>
             <button
+       
                     disabled={dataForm.username.length < 3 || dataForm.password.length < 0 || dataForm.confirmPassword.length < 0 || phone.length < 3}
                     type="button"
                     onClick={() => {
@@ -225,7 +226,7 @@ export default function FormRegister({ onSuccess,setIsAuthPhone }) {
                         phone.length < 3 ? 'disabled' : '',
                     )}
                 >
-                    <span> {t('Login.button.send_otp')}</span>
+                    <span  style={{color:"white !important"}} > {t('Login.button.send_otp')}</span>
                     {loading && <span className="loader"></span>}
                 </button>
         </div>

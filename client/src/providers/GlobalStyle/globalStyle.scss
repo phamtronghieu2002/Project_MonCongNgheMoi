@@ -32,7 +32,7 @@
         display: none;
         width: 100px;
         box-shadow: 4px 3px 10px 3px rgb(0 0 0 / 20%);
-        border: 1px solid #d6dbe1;
+       
         border-radius: 4px;
         position: absolute;
         left: 226px;
@@ -93,4 +93,18 @@
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
+}
+
+.modal-header .btn-close {
+    color: var(--text-primary) !important;
+}
+#modalSetAvatarGroup {
+    .chose_image_from_computer,
+    .filter_user_selected {
+        background: var(--bg-btn-choose-image) !important;
+   
+    }
+}
+.notify_no_friend,.notyfy_friend{
+    background: var(--bg-primary) !important;
 }

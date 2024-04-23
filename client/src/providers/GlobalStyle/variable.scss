@@ -42,7 +42,11 @@
     --color-icon-light: #000000;
 
     --text-hover-icon-light: #000000;
-    --text-hover-icon-dark: #757575;
+
+
+    --bg-btn-choose-image-light:#005ae0;
+    --bg-btn-choose-image-dark: #171717;
+
 }
 
 .light-theme {
@@ -60,11 +64,12 @@
     --bg-navbar: var(--bg-navbar-light);
     --bg-active: var(--bg-active-light);
     --bg-hover-conversationItem: var(--bg-hover-conversationItem-light);
+    --bg-btn-choose-image:var(--bg-btn-choose-image-light);
 }
 
 .dark-theme {
     --color-icon: var(--color-icon-dark);
-    --text-hover-icon: var(--text-hover-icon-dark);
+    --text-hover-icon: var(--text-hover-icon-light);
     --bg-active-conversation-item: var(--bg-active-conversation-item--dark);
     --text-btn-close: var(--text-btn-close--dark);
     --bg-btn-close-hover: var(--bg-btn-close-hover--dark);
@@ -77,4 +82,5 @@
     --bg-navbar: var(--bg-navbar-dark);
     --bg-active: var(--bg-active-dark);
     --bg-hover-conversationItem: var(--bg-hover-conversationItem-dark);
+    --bg-btn-choose-image:var(--bg-btn-choose-image-dark);
 }

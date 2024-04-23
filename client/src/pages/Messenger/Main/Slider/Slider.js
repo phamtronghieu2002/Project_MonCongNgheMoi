@@ -24,7 +24,7 @@ export default function Slider() {
         </div>
         <div className="carousel-inner">
           <div className="carousel-item active" data-bs-interval="5000">
-            <img src="https://chat.zalo.me/assets/inapp-welcome-screen-0.19afb7ab96c7506bb92b41134c4e334c.jpg" className="d-block w-100" alt="..." />
+            <img src="https://github.com/phamtronghieu2002/Project_MonCongNgheMoi/assets/109363404/91346cfc-cea8-4e2a-904f-452e6c8f75ff" className="d-block w-100" alt="..." />
             <div className="carousel-caption d-none d-md-block">
               <h5 className="text-primary mb-2 fw-bold">Nhắn tin nhiều hơn, soạn thảo ít hơn</h5>
               <p>Sử dụng <strong>tin nhắn nhanh</strong> để lưu sẵn các tin nhắn cần dùng,và soạn thảo nhanh hơn</p>

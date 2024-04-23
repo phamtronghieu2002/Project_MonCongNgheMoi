@@ -8,6 +8,7 @@ import path from "path";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import { error } from "console";
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -26,17 +27,16 @@ app.use(morgan("common"));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 const filesDirectory = path.join(__dirname, "files");
 app.use("/files", express.static(filesDirectory));
-
+  
 //connect to db
 mongoose
-  .connect("mongodb://127.0.0.1:27017/zaloClone", {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to MongoDB");
-  });
-
+  })
 //routes
 InitApiRoute(app);
 

@@ -1,11 +1,9 @@
-#wp_search_popper{
+#wp_search_popper {
     position: absolute;
     width: 100%;
     left: 0;
-  background: #fff;
-    top:62px;
+    background-color: var(--bg-primary) !important;
+    top: 62px;
     height: 100vh;
-z-index: 9  ;
-
-    
+    z-index: 9;
 }

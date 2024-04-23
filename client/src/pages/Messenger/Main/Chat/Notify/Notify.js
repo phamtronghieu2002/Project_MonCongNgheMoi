@@ -4,7 +4,7 @@ export default function Notify({ onSendRequestFriend, onCancelRequestFriend, sta
  
     return (
         <div
-            className="d-flex pe-3 ps-3 pt-1 align-items-center w-100"
+            className="d-flex pe-3 ps-3 pt-1 align-items-center w-100 notyfy_friend"
             style={{
                 position: 'absolute',
                 background: '#fff',
